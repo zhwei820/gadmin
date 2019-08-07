@@ -14,8 +14,8 @@ logpath = "log"
 [database]
     [[database.default]]
         host     = "localhost"
-        port     = "33061"
+        port     = "3306"
         user     = "root"
-        pass     = "root123"
+        pass     = "rootroot"
         name     = "gadmin"
         type     = "mysql"

@@ -13,3 +13,6 @@ debug
 .idea/*
 run.bat
 mod.bat
+
+__pycache__
+*.pyc

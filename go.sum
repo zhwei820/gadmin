@@ -5,16 +5,11 @@ github.com/casbin/casbin v1.8.2/go.mod h1:z8uPsfBJGUsnkagrt3G8QvjgTKFMBJ32UP8HpZ
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible/go.mod h1:E3ru+11k8xSBh+hMPgOLZmtrrCbhqsmaPHjLKYnJCaQ=
 github.com/gogf/gf v1.6.2/go.mod h1:qboeF6kS9EQu2Z1IECeApNF0/N7Sw4wc0RUAwAfT6Mg=
-github.com/gogf/gf v1.7.0 h1:wYYJDmupjFYu7MySIAbyW04k2Yt4YA8JfP4RlQPpVSY=
+github.com/gogf/gf v1.7.0 h1:hhfawnjEiQLPuIXhX+7l+1mqc5ZYvJqvphq1YmpYDyk=
 github.com/gogf/gf v1.7.0/go.mod h1:41x91y5T+itylJH0NsW/CfTD87qeBoPe/BX3DZAwP0U=
 github.com/gogf/gf-jwt v1.0.5 h1:zNfnOeRSoT9p062R2DN5wkdT3BTw/K9jyf2f4axF73c=
 github.com/gogf/gf-jwt v1.0.5/go.mod h1:VlFL7YaPDbyFy96HNr0EDLGm9MyvscE3xLVEVpeyhiU=
-github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/lib/pq v1.1.0 h1:/5u4a+KGJptBRqGzPvYQL9p0d/tPR4S31+Tnzj9lEO4=
 github.com/lib/pq v1.1.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/mattn/go-sqlite3 v1.10.0 h1:jbhqpg7tQe4SupckyijYiy0mJJ/pRyHvXf7JdWK860o=
 github.com/mattn/go-sqlite3 v1.10.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
-golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
-golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
-google.golang.org/appengine v1.5.0 h1:KxkO13IPW4Lslp2bz+KHP2E3gtFlrIGNThxkZQ3g+4c=
-google.golang.org/appengine v1.5.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
