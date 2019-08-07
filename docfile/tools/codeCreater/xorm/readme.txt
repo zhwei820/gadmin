@@ -22,3 +22,7 @@ created.bat即可
 
 
 
+
+
+export GOPROXY=https://goproxy.io
+
