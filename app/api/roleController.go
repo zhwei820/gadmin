@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
+	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/library/code"
 )
 
@@ -19,9 +20,9 @@ func (c *RoleController) Get() {
 		UserRoleList []model.Role `json:"role_items"`
 		Total        int          `json:"total"`
 	}
-	list.List, list.Total = model.GetRoleList(page, limit, UNDEFIND_POLICY_NAME)
+	list.List, list.Total = service.GetRoleList(page, limit, UNDEFIND_POLICY_NAME)
 	if username != "" {
-		list.UserRoleList = model.GetRoleByUserName(username)
+		list.UserRoleList = service.GetRoleByUserName(username)
 	}
 
 	Success(c.Request, list)

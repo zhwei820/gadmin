@@ -7,10 +7,10 @@ import (
 // PolicyName 表名：policy_name
 // 由数据库自动生成的结构体
 type PolicyName struct {
-	Id         int64  `json:"id"`         //
-	FullPath   string `json:"full_path"`  //权限完整路径
-	Name       string `json:"name"`       //权限名称
-	Descrption string `json:"descrption"` //描述
+	Id         int    `json:"id" xorm:"not null pk autoincr INT(11)"`
+	FullPath   string `json:"full_path" xorm:"not null unique VARCHAR(255)"`
+	Name       string `json:"name" xorm:"not null VARCHAR(255)"`
+	Descrption string `json:"descrption" xorm:"VARCHAR(255)"`
 }
 
 // TableName 获取表名

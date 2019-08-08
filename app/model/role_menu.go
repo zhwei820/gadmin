@@ -1,27 +1,57 @@
 package model
 
 import (
-	"github.com/gogf/gf/g/database/gdb"
+	"errors"
 )
 
-// DeleteRoleMenus description
-//
-// createTime:2019年05月21日 17:52:06
-// author:hailaz
-func DeleteRoleMenus(role string) {
-	defDB.Delete("role_menu", "role_key=?", role)
+// RoleMenu 表名：role_menu
+// 由数据库自动生成的结构体
+type RoleMenu struct {
+	Id       int    `json:"id" xorm:"not null pk autoincr INT(11)"`
+	RoleKey  string `json:"role_key" xorm:"not null VARCHAR(255)"`
+	MenuName string `json:"menu_name" xorm:"not null VARCHAR(255)"`
 }
 
-// SetRoleMenus description
-//
-// createTime:2019年05月21日 17:54:38
-// author:hailaz
-func SetRoleMenus(role string, menus []string) {
-	DeleteRoleMenus(role)
-	ms := make(gdb.List, 0)
-	for _, item := range menus {
-		ms = append(ms, gdb.Map{"role_key": role, "menu_name": item})
-	}
+// TableName 获取表名
+func (t *RoleMenu) TableName() string {
+	return "role_menu"
+}
 
-	defDB.Table("role_menu").Data(ms).Insert()
+// Insert 插入一条记录
+func (t *RoleMenu) Insert() (int64, error) {
+	r, err := defDB.Insert("role_menu", t)
+	if err != nil {
+		return 0, err
+	}
+	id, err := r.LastInsertId()
+	t.Id = id
+	return id, err
+}
+
+// Update 更新对象
+func (t *RoleMenu) Update() (int64, error) {
+	if t.Id <= 0 {
+		return 0, errors.New("primary_key <= 0")
+	}
+	r, err := defDB.Update("role_menu", t, "id=?", t.Id)
+	if err != nil {
+		return 0, err
+	}
+	return r.RowsAffected()
+}
+
+// DeleteById 删除一条记录
+func (t *RoleMenu) DeleteById(id int64) (int64, error) {
+	r, err := defDB.Delete("role_menu", "id=?", id)
+	if err != nil {
+		return 0, err
+	}
+	return r.RowsAffected()
+}
+
+// GetById 通过id查询记录
+func (t *RoleMenu) GetById(id int64) (RoleMenu, error) {
+	obj := RoleMenu{}
+	err := defDB.Table("role_menu").Where("id", id).Struct(&obj)
+	return obj, err
 }

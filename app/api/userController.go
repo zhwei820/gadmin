@@ -21,22 +21,22 @@ func (c *UserController) Info() {
 }
 
 func (c *UserController) Menu() {
-	rolename := c.Request.GetString("rolename")
-	if rolename != "" {
+	RoleConfig := c.Request.GetString("RoleConfig")
+	if RoleConfig != "" {
 		var list struct {
 			Menus     []model.MenuOut `json:"menus"`
 			RoleMenus []model.MenuOut `json:"role_menus"`
 		}
-		list.Menus = model.GetMenuByRoleName([]string{model.ADMIN_NAME})
-		list.RoleMenus = model.GetMenuByRoleName([]string{rolename})
+		list.Menus = model.GetMenuByRoleConfig([]string{model.ADMIN_NAME})
+		list.RoleMenus = model.GetMenuByRoleConfig([]string{RoleConfig})
 		Success(c.Request, list)
 	}
 	u := c.GetUser()
 	if u != nil {
 		if u.UserName == model.ADMIN_NAME {
-			Success(c.Request, model.GetMenuByRoleName([]string{model.ADMIN_NAME}))
+			Success(c.Request, model.GetMenuByRoleConfig([]string{model.ADMIN_NAME}))
 		} else {
-			Success(c.Request, model.GetMenuByRoleName(model.Enforcer.GetRolesForUser(u.UserName)))
+			Success(c.Request, model.GetMenuByRoleConfig(model.Enforcer.GetRolesForUser(u.UserName)))
 		}
 
 	}

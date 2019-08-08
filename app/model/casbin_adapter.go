@@ -9,17 +9,6 @@ import (
 	"github.com/gogf/gf/g/database/gdb"
 )
 
-type CasbinRule struct {
-	Id    int64  `json:"id"`     //
-	PType string `json:"p_type"` //
-	V0    string `json:"v0"`     //
-	V1    string `json:"v1"`     //
-	V2    string `json:"v2"`     //
-	V3    string `json:"v3"`     //
-	V4    string `json:"v4"`     //
-	V5    string `json:"v5"`     //
-}
-
 const (
 	CASBINRULE_TABLE_NAME = "casbin_rule"
 )

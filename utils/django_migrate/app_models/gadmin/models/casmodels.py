@@ -68,14 +68,14 @@ class RoleMenu(models.Model):
         db_table = 'role_menu'
 
 
-class RoleName(models.Model):
+class RoleConfig(models.Model):
     role_key = models.CharField(unique=True, max_length=255)
     name = models.CharField(max_length=255)
     descrption = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         # managed = False
-        db_table = 'role_name'
+        db_table = 'role_config'
 
 
 class User(models.Model):
