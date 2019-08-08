@@ -125,7 +125,7 @@ func DeleteRole(role string) error {
 		return errors.New("delete fail")
 	}
 	model.Enforcer.DeleteRole(role)
-	DeleteRoleMenus(role)
+	model.DeleteRoleMenus(role)
 	i, _ := p.DeleteById(int64(p.Id))
 	if i > 0 {
 		return nil
@@ -138,8 +138,8 @@ func DeleteRole(role string) error {
 // createTime:2019年05月08日 15:22:05
 // author:hailaz
 func SetRoleByUserName(userName string, roles []string) {
-	Enforcer.DeleteRolesForUser(userName)
+	model.Enforcer.DeleteRolesForUser(userName)
 	for _, item := range roles {
-		Enforcer.AddRoleForUser(userName, item)
+		model.Enforcer.AddRoleForUser(userName, item)
 	}
 }

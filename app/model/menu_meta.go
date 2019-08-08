@@ -26,7 +26,7 @@ func (t *MenuMeta) Insert() (int64, error) {
 		return 0, err
 	}
 	id, err := r.LastInsertId()
-	t.Id = id
+	t.Id = int(id)
 	return id, err
 }
 
