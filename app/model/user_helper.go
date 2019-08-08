@@ -2,7 +2,6 @@ package model
 
 import (
 	"errors"
-	"github.com/gogf/gf/g/crypto/gmd5"
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/os/gtime"
 )
