@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	CASBINRULE_TABLE_NAME = "casbin_rule"
+	CASBINRULE_TABLE_NAME = "gadmin_casbinrule"
 )
 
 // Adapter represents the Xorm adapter for policy storage.
@@ -48,7 +48,7 @@ func (a *Adapter) createTable() {
 func (a *Adapter) dropTable() {
 }
 
-func loadPolicyLine(line CasbinRule, model model.Model) {
+func loadPolicyLine(line GadminCasbinrule, model model.Model) {
 	lineText := line.PType
 	if line.V0 != "" {
 		lineText += ", " + line.V0
@@ -74,7 +74,7 @@ func loadPolicyLine(line CasbinRule, model model.Model) {
 
 // LoadPolicy loads policy from database.
 func (a *Adapter) LoadPolicy(model model.Model) error {
-	var lines []CasbinRule
+	var lines []GadminCasbinrule
 	err := a.o.Table(CASBINRULE_TABLE_NAME).Structs(&lines)
 
 	if err != nil {
@@ -88,8 +88,8 @@ func (a *Adapter) LoadPolicy(model model.Model) error {
 	return nil
 }
 
-func savePolicyLine(ptype string, rule []string) CasbinRule {
-	line := CasbinRule{}
+func savePolicyLine(ptype string, rule []string) GadminCasbinrule {
+	line := GadminCasbinrule{}
 
 	line.PType = ptype
 	if len(rule) > 0 {
@@ -117,7 +117,7 @@ func savePolicyLine(ptype string, rule []string) CasbinRule {
 // SavePolicy saves policy to database.
 func (a *Adapter) SavePolicy(model model.Model) error {
 
-	var lines []CasbinRule
+	var lines []GadminCasbinrule
 
 	for ptype, ast := range model["p"] {
 		for _, rule := range ast.Policy {

@@ -8,7 +8,7 @@
 from django.db import models
 
 
-class CasbinRule(models.Model):
+class GadminCasbinrule(models.Model):
     p_type = models.CharField(max_length=255)
     v0 = models.CharField(max_length=255)
     v1 = models.CharField(max_length=255)
@@ -19,7 +19,8 @@ class CasbinRule(models.Model):
 
     class Meta:
         # managed = False
-        db_table = 'casbin_rule'
+        #db_table = 'casbin_rule'
+        pass
 
 
 class Menu(models.Model):
@@ -35,7 +36,8 @@ class Menu(models.Model):
 
     class Meta:
         # managed = False
-        db_table = 'menu'
+        #db_table = 'menu'
+        pass
 
 
 class MenuMeta(models.Model):
@@ -46,17 +48,19 @@ class MenuMeta(models.Model):
 
     class Meta:
         # managed = False
-        db_table = 'menu_meta'
+        #db_table = 'menu_meta'
+        pass
 
 
-class PolicyName(models.Model):
+class PolicyConfig(models.Model):
     full_path = models.CharField(unique=True, max_length=255)
     name = models.CharField(max_length=255)
     descrption = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         # managed = False
-        db_table = 'policy_name'
+        #db_table = 'policy_name'
+        pass
 
 
 class RoleMenu(models.Model):
@@ -65,7 +69,8 @@ class RoleMenu(models.Model):
 
     class Meta:
         # managed = False
-        db_table = 'role_menu'
+        #db_table = 'role_menu'
+        pass
 
 
 class RoleConfig(models.Model):
@@ -75,7 +80,8 @@ class RoleConfig(models.Model):
 
     class Meta:
         # managed = False
-        db_table = 'role_config'
+        #db_table = 'role_name'
+        pass
 
 
 class User(models.Model):
@@ -95,4 +101,5 @@ class User(models.Model):
 
     class Meta:
         # managed = False
-        db_table = 'user'
+        #db_table = 'user'
+        pass

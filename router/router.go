@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/hailaz/gadmin/app/service"
 
 	"github.com/gogf/gf/g"
 	"github.com/gogf/gf/g/encoding/gparser"
@@ -31,7 +32,7 @@ func InitRouter(s *ghttp.Server) {
 	s.BindHookHandler("/*", ghttp.HOOK_BEFORE_SERVE, showURL)
 	InitV1(s)
 
-	model.ReSetPolicy("system", routerMap)
+	service.ReSetPolicy("system", routerMap)
 }
 
 // authHook 鉴权钩子

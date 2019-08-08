@@ -10,19 +10,19 @@ import (
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
-func GetRoleList(page, limit int, defaultname string) ([]model.RoleConfig, int) {
+func GetRoleList(page, limit int, defaultname string) ([]model.GadminRoleconfig, int) {
 	if page < 1 {
 		page = 1
 	}
-	roleList := make([]model.RoleConfig, 0)
+	roleList := make([]model.GadminRoleconfig, 0)
 	roles := model.Enforcer.GetAllRoles()
 	total := len(roles)
 	r, _ := model.GetAllRole()
-	pn := make([]model.RoleConfig, 0)
+	pn := make([]model.GadminRoleconfig, 0)
 	r.ToStructs(&pn)
 
 	for _, item := range roles {
-		p := model.RoleConfig{RoleKey: item, Name: defaultname}
+		p := model.GadminRoleconfig{RoleKey: item, Name: defaultname}
 		for _, itempn := range pn {
 			if itempn.RoleKey == item {
 				p.Name = itempn.Name
@@ -51,11 +51,11 @@ func GetRoleList(page, limit int, defaultname string) ([]model.RoleConfig, int) 
 //
 // createTime:2019年05月08日 15:08:19
 // author:hailaz
-func GetRoleByUserName(userName string) []model.RoleConfig {
+func GetRoleByUserName(userName string) []model.GadminRoleconfig {
 	roles := model.Enforcer.GetRolesForUser(userName)
-	roleList := make([]model.RoleConfig, 0)
+	roleList := make([]model.GadminRoleconfig, 0)
 	for _, item := range roles {
-		p := model.RoleConfig{RoleKey: item}
+		p := model.GadminRoleconfig{RoleKey: item}
 		roleList = append(roleList, p)
 	}
 	return roleList
@@ -126,7 +126,7 @@ func DeleteRole(role string) error {
 	}
 	model.Enforcer.DeleteRole(role)
 	model.DeleteRoleMenus(role)
-	i, _ := p.DeleteById(int64(p.Id))
+	i, _ := p.DeleteById(p.Id)
 	if i > 0 {
 		return nil
 	}

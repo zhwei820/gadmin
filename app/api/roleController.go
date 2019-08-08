@@ -16,8 +16,8 @@ func (c *RoleController) Get() {
 	limit := c.Request.GetInt("limit", 10)
 	username := c.Request.GetString("username")
 	var list struct {
-		List         []model.Role `json:"items"`
-		UserRoleList []model.Role `json:"role_items"`
+		List         []model.GadminRoleconfig `json:"items"`
+		UserRoleList []model.GadminRoleconfig `json:"role_items"`
 		Total        int          `json:"total"`
 	}
 	list.List, list.Total = service.GetRoleList(page, limit, UNDEFIND_POLICY_NAME)
@@ -33,7 +33,7 @@ func (c *RoleController) Post() {
 	name := data.GetString("name")
 	role := data.GetString("role")
 
-	err := model.AddRole(role, name)
+	err := service.AddRole(role, name)
 	if err != nil {
 		Fail(c.Request, code.RESPONSE_ERROR, err.Error())
 	}
@@ -49,7 +49,7 @@ func (c *RoleController) Put() {
 	if name == UNDEFIND_POLICY_NAME {
 		Fail(c.Request, code.RESPONSE_ERROR)
 	} else {
-		err := model.UpdateRoleByRoleKey(role, name)
+		err := service.UpdateRoleByRoleKey(role, name)
 		if err != nil {
 			Fail(c.Request, code.RESPONSE_ERROR, err.Error())
 		}
@@ -61,7 +61,7 @@ func (c *RoleController) Delete() {
 	data := c.Request.GetJson()
 	role := data.GetString("role")
 
-	err := model.DeleteRole(role)
+	err := service.DeleteRole(role)
 	if err != nil {
 		Fail(c.Request, code.RESPONSE_ERROR, err.Error())
 	}
@@ -72,7 +72,7 @@ func (c *RoleController) SetRoleByUserName() {
 	data := c.Request.GetJson()
 	roles := data.GetStrings("roles")
 	username := data.GetString("username")
-	model.SetRoleByUserName(username, roles)
+	service.SetRoleByUserName(username, roles)
 
 	Success(c.Request, "success")
 }

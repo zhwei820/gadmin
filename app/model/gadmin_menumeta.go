@@ -4,9 +4,9 @@ import (
 	"errors"
 )
 
-// MenuMeta 表名：menu_meta
+// GadminMenumeta 表名：gadmin_menumeta
 // 由数据库自动生成的结构体
-type MenuMeta struct {
+type GadminMenumeta struct {
 	Id       int    `json:"id" xorm:"not null pk autoincr INT(11)"`
 	MenuName string `json:"menu_name" xorm:"not null unique VARCHAR(255)"`
 	Title    string `json:"title" xorm:"not null VARCHAR(255)"`
@@ -15,13 +15,13 @@ type MenuMeta struct {
 }
 
 // TableName 获取表名
-func (t *MenuMeta) TableName() string {
-	return "menu_meta"
+func (t *GadminMenumeta) TableName() string {
+	return "gadmin_menumeta"
 }
 
 // Insert 插入一条记录
-func (t *MenuMeta) Insert() (int64, error) {
-	r, err := defDB.Insert("menu_meta", t)
+func (t *GadminMenumeta) Insert() (int64, error) {
+	r, err := defDB.Insert("gadmin_menumeta", t)
 	if err != nil {
 		return 0, err
 	}
@@ -31,11 +31,11 @@ func (t *MenuMeta) Insert() (int64, error) {
 }
 
 // Update 更新对象
-func (t *MenuMeta) Update() (int64, error) {
+func (t *GadminMenumeta) Update() (int64, error) {
 	if t.Id <= 0 {
 		return 0, errors.New("primary_key <= 0")
 	}
-	r, err := defDB.Update("menu_meta", t, "id=?", t.Id)
+	r, err := defDB.Update("gadmin_menumeta", t, "id=?", t.Id)
 	if err != nil {
 		return 0, err
 	}
@@ -43,8 +43,8 @@ func (t *MenuMeta) Update() (int64, error) {
 }
 
 // DeleteById 删除一条记录
-func (t *MenuMeta) DeleteById(id int64) (int64, error) {
-	r, err := defDB.Delete("menu_meta", "id=?", id)
+func (t *GadminMenumeta) DeleteById(id int) (int64, error) {
+	r, err := defDB.Delete("gadmin_menumeta", "id=?", id)
 	if err != nil {
 		return 0, err
 	}
@@ -52,8 +52,8 @@ func (t *MenuMeta) DeleteById(id int64) (int64, error) {
 }
 
 // GetById 通过id查询记录
-func (t *MenuMeta) GetById(id int64) (MenuMeta, error) {
-	obj := MenuMeta{}
-	err := defDB.Table("menu_meta").Where("id", id).Struct(&obj)
+func (t *GadminMenumeta) GetById(id int) (GadminMenumeta, error) {
+	obj := GadminMenumeta{}
+	err := defDB.Table("gadmin_menumeta").Where("id", id).Struct(&obj)
 	return obj, err
 }

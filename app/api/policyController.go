@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"github.com/hailaz/gadmin/app/service"
 	"strings"
 
 	"github.com/hailaz/gadmin/app/model"
@@ -16,24 +17,34 @@ type PolicyController struct {
 	BaseController
 }
 
+// @Summary policy list
+// @Description policy list
+// @Tags auth
+// @Param	page	query 	integer	false		"page"
+// @Param	limit	query 	integer	false		"limit"
+// @Success 200 {string} string	"ok"
+// @router /policy [get]
 func (c *PolicyController) Get() {
 	page := c.Request.GetInt("page", 1)
 	limit := c.Request.GetInt("limit", 10)
 
 	var list struct {
-		List  []model.Policy `json:"items"`
-		Total int            `json:"total"`
+		List  []model.GadminPolicyconfig `json:"items"`
+		Total int                        `json:"total"`
 	}
 
-	list.List, list.Total = model.GetPolicyList(page, limit, UNDEFIND_POLICY_NAME)
+	list.List, list.Total = service.GetPolicyList(page, limit, UNDEFIND_POLICY_NAME)
 
 	Success(c.Request, list)
 }
 
-func (c *PolicyController) Post() {
-	Success(c.Request, "Post")
-}
-
+//
+// @Summary update menu
+// @Description update menu
+// @Tags user
+// @Param   SignInInfo  body model.MenuOut true "MenuOut"
+// @Success 200 {string} string	"ok"
+// @router /menu [put]
 func (c *PolicyController) Put() {
 	data := c.Request.GetJson()
 	name := data.GetString("name")
@@ -41,7 +52,7 @@ func (c *PolicyController) Put() {
 	if name == UNDEFIND_POLICY_NAME {
 		Fail(c.Request, code.RESPONSE_ERROR)
 	} else {
-		err := model.UpdatePolicyByFullPath(path, name)
+		err := service.UpdatePolicyByFullPath(path, name)
 		if err != nil {
 			Fail(c.Request, code.RESPONSE_ERROR, err.Error())
 		}
@@ -49,20 +60,16 @@ func (c *PolicyController) Put() {
 	Success(c.Request, "修改成功")
 }
 
-func (c *PolicyController) Delete() {
-	Success(c.Request, "Delete")
-}
-
 func (c *PolicyController) GetPolicyByRole() {
 	role := c.Request.GetString("role")
 	var list struct {
-		List           []model.Policy `json:"all_policy_items"`
-		RolePolicyList []model.Policy `json:"role_policy_items"`
-		Total          int            `json:"total"`
+		List           []model.GadminPolicyconfig `json:"all_policy_items"`
+		RolePolicyList []model.GadminPolicyconfig `json:"role_policy_items"`
+		Total          int                        `json:"total"`
 	}
 
-	list.List, list.Total = model.GetPolicyList(1, -1, "")
-	list.RolePolicyList = model.GetPolicyByRole(role)
+	list.List, list.Total = service.GetPolicyList(1, -1, "")
+	list.RolePolicyList = service.GetPolicyByRole(role)
 
 	Success(c.Request, list)
 }
@@ -80,7 +87,7 @@ func (c *PolicyController) SetPolicyByRole() {
 		routerMap[fmt.Sprintf("%v %v %v", role, path, atc)] = model.RolePolicy{Role: role, Path: path, Atc: atc}
 	}
 
-	model.ReSetPolicy(role, routerMap)
+	service.ReSetPolicy(role, routerMap)
 
 	Success(c.Request, "success")
 }

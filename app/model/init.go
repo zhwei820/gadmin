@@ -43,7 +43,7 @@ func initUser() {
 	if err != nil || u.Id != 0 {
 		return
 	}
-	admin := User{
+	admin := GadminUser{
 		UserName: ADMIN_NAME,
 		NickName: ADMIN_NICK_NAME,
 		Password: ADMIN_DEFAULT_PASSWORD,

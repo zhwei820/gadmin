@@ -45,7 +45,7 @@ func (t *{{Mapper .Name}}) Update() (int64, error) {
 }
 
 // DeleteById 删除一条记录
-func (t *{{Mapper .Name}}) DeleteById(id int64) (int64, error) {
+func (t *{{Mapper .Name}}) DeleteById(id int) (int64, error) {
 	r, err := defDB.Delete("{{.Name}}", "id=?", id)
 	if err != nil {
 		return 0, err
@@ -55,7 +55,7 @@ func (t *{{Mapper .Name}}) DeleteById(id int64) (int64, error) {
 
 
 // GetById 通过id查询记录
-func (t *{{Mapper .Name}}) GetById(id int64) ({{Mapper .Name}}, error) {
+func (t *{{Mapper .Name}}) GetById(id int) ({{Mapper .Name}}, error) {
 	obj := {{Mapper .Name}}{}
 	err := defDB.Table("{{.Name}}").Where("id", id).Struct(&obj)
 	return obj, err

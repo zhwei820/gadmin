@@ -1,7 +1,7 @@
 package api
 
 import (
-	jwt "github.com/gogf/gf-jwt"
+	"github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/g/frame/gmvc"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/hailaz/gadmin/app/model"
@@ -57,7 +57,7 @@ func Fail(r *ghttp.Request, errCode int, msg ...string) {
 //
 // createTime:2019年05月13日 10:01:17
 // author:hailaz
-func (c *BaseController) GetUser() *model.User {
+func (c *BaseController) GetUser() *model.GadminUser {
 	claims := jwt.ExtractClaims(c.Request)
 	user, _ := model.GetUserByName(claims["username"].(string))
 	return user

@@ -4,22 +4,22 @@ import (
 	"errors"
 )
 
-// RoleMenu 表名：role_menu
+// GadminRolemenu 表名：gadmin_rolemenu
 // 由数据库自动生成的结构体
-type RoleMenu struct {
+type GadminRolemenu struct {
 	Id       int    `json:"id" xorm:"not null pk autoincr INT(11)"`
 	RoleKey  string `json:"role_key" xorm:"not null VARCHAR(255)"`
 	MenuName string `json:"menu_name" xorm:"not null VARCHAR(255)"`
 }
 
 // TableName 获取表名
-func (t *RoleMenu) TableName() string {
-	return "role_menu"
+func (t *GadminRolemenu) TableName() string {
+	return "gadmin_rolemenu"
 }
 
 // Insert 插入一条记录
-func (t *RoleMenu) Insert() (int64, error) {
-	r, err := defDB.Insert("role_menu", t)
+func (t *GadminRolemenu) Insert() (int64, error) {
+	r, err := defDB.Insert("gadmin_rolemenu", t)
 	if err != nil {
 		return 0, err
 	}
@@ -29,11 +29,11 @@ func (t *RoleMenu) Insert() (int64, error) {
 }
 
 // Update 更新对象
-func (t *RoleMenu) Update() (int64, error) {
+func (t *GadminRolemenu) Update() (int64, error) {
 	if t.Id <= 0 {
 		return 0, errors.New("primary_key <= 0")
 	}
-	r, err := defDB.Update("role_menu", t, "id=?", t.Id)
+	r, err := defDB.Update("gadmin_rolemenu", t, "id=?", t.Id)
 	if err != nil {
 		return 0, err
 	}
@@ -41,8 +41,8 @@ func (t *RoleMenu) Update() (int64, error) {
 }
 
 // DeleteById 删除一条记录
-func (t *RoleMenu) DeleteById(id int64) (int64, error) {
-	r, err := defDB.Delete("role_menu", "id=?", id)
+func (t *GadminRolemenu) DeleteById(id int) (int64, error) {
+	r, err := defDB.Delete("gadmin_rolemenu", "id=?", id)
 	if err != nil {
 		return 0, err
 	}
@@ -50,8 +50,8 @@ func (t *RoleMenu) DeleteById(id int64) (int64, error) {
 }
 
 // GetById 通过id查询记录
-func (t *RoleMenu) GetById(id int64) (RoleMenu, error) {
-	obj := RoleMenu{}
-	err := defDB.Table("role_menu").Where("id", id).Struct(&obj)
+func (t *GadminRolemenu) GetById(id int) (GadminRolemenu, error) {
+	obj := GadminRolemenu{}
+	err := defDB.Table("gadmin_rolemenu").Where("id", id).Struct(&obj)
 	return obj, err
 }

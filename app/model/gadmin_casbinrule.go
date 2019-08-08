@@ -4,9 +4,9 @@ import (
 	"errors"
 )
 
-// CasbinRule 表名：casbin_rule
+// GadminCasbinrule 表名：gadmin_casbinrule
 // 由数据库自动生成的结构体
-type CasbinRule struct {
+type GadminCasbinrule struct {
 	Id    int    `json:"id" xorm:"not null pk autoincr INT(11)"`
 	PType string `json:"p_type" xorm:"not null VARCHAR(255)"`
 	V0    string `json:"v0" xorm:"not null VARCHAR(255)"`
@@ -18,13 +18,13 @@ type CasbinRule struct {
 }
 
 // TableName 获取表名
-func (t *CasbinRule) TableName() string {
-	return "casbin_rule"
+func (t *GadminCasbinrule) TableName() string {
+	return "gadmin_casbinrule"
 }
 
 // Insert 插入一条记录
-func (t *CasbinRule) Insert() (int64, error) {
-	r, err := defDB.Insert("casbin_rule", t)
+func (t *GadminCasbinrule) Insert() (int64, error) {
+	r, err := defDB.Insert("gadmin_casbinrule", t)
 	if err != nil {
 		return 0, err
 	}
@@ -34,11 +34,11 @@ func (t *CasbinRule) Insert() (int64, error) {
 }
 
 // Update 更新对象
-func (t *CasbinRule) Update() (int64, error) {
+func (t *GadminCasbinrule) Update() (int64, error) {
 	if t.Id <= 0 {
 		return 0, errors.New("primary_key <= 0")
 	}
-	r, err := defDB.Update("casbin_rule", t, "id=?", t.Id)
+	r, err := defDB.Update("gadmin_casbinrule", t, "id=?", t.Id)
 	if err != nil {
 		return 0, err
 	}
@@ -46,8 +46,8 @@ func (t *CasbinRule) Update() (int64, error) {
 }
 
 // DeleteById 删除一条记录
-func (t *CasbinRule) DeleteById(id int64) (int64, error) {
-	r, err := defDB.Delete("casbin_rule", "id=?", id)
+func (t *GadminCasbinrule) DeleteById(id int) (int64, error) {
+	r, err := defDB.Delete("gadmin_casbinrule", "id=?", id)
 	if err != nil {
 		return 0, err
 	}
@@ -55,8 +55,8 @@ func (t *CasbinRule) DeleteById(id int64) (int64, error) {
 }
 
 // GetById 通过id查询记录
-func (t *CasbinRule) GetById(id int64) (CasbinRule, error) {
-	obj := CasbinRule{}
-	err := defDB.Table("casbin_rule").Where("id", id).Struct(&obj)
+func (t *GadminCasbinrule) GetById(id int) (GadminCasbinrule, error) {
+	obj := GadminCasbinrule{}
+	err := defDB.Table("gadmin_casbinrule").Where("id", id).Struct(&obj)
 	return obj, err
 }

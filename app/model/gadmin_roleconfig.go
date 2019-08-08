@@ -4,9 +4,9 @@ import (
 	"errors"
 )
 
-// RoleConfig 表名：role_config
+// GadminRoleconfig 表名：gadmin_roleconfig
 // 由数据库自动生成的结构体
-type RoleConfig struct {
+type GadminRoleconfig struct {
 	Id         int    `json:"id" xorm:"not null pk autoincr INT(11)"`
 	RoleKey    string `json:"role_key" xorm:"not null unique VARCHAR(255)"`
 	Name       string `json:"name" xorm:"not null VARCHAR(255)"`
@@ -14,13 +14,13 @@ type RoleConfig struct {
 }
 
 // TableName 获取表名
-func (t *RoleConfig) TableName() string {
-	return "role_config"
+func (t *GadminRoleconfig) TableName() string {
+	return "gadmin_roleconfig"
 }
 
 // Insert 插入一条记录
-func (t *RoleConfig) Insert() (int64, error) {
-	r, err := defDB.Insert("role_config", t)
+func (t *GadminRoleconfig) Insert() (int64, error) {
+	r, err := defDB.Insert("gadmin_roleconfig", t)
 	if err != nil {
 		return 0, err
 	}
@@ -30,11 +30,11 @@ func (t *RoleConfig) Insert() (int64, error) {
 }
 
 // Update 更新对象
-func (t *RoleConfig) Update() (int64, error) {
+func (t *GadminRoleconfig) Update() (int64, error) {
 	if t.Id <= 0 {
 		return 0, errors.New("primary_key <= 0")
 	}
-	r, err := defDB.Update("role_config", t, "id=?", t.Id)
+	r, err := defDB.Update("gadmin_roleconfig", t, "id=?", t.Id)
 	if err != nil {
 		return 0, err
 	}
@@ -42,8 +42,8 @@ func (t *RoleConfig) Update() (int64, error) {
 }
 
 // DeleteById 删除一条记录
-func (t *RoleConfig) DeleteById(id int64) (int64, error) {
-	r, err := defDB.Delete("role_config", "id=?", id)
+func (t *GadminRoleconfig) DeleteById(id int) (int64, error) {
+	r, err := defDB.Delete("gadmin_roleconfig", "id=?", id)
 	if err != nil {
 		return 0, err
 	}
@@ -51,8 +51,8 @@ func (t *RoleConfig) DeleteById(id int64) (int64, error) {
 }
 
 // GetById 通过id查询记录
-func (t *RoleConfig) GetById(id int64) (RoleConfig, error) {
-	obj := RoleConfig{}
-	err := defDB.Table("role_config").Where("id", id).Struct(&obj)
+func (t *GadminRoleconfig) GetById(id int) (GadminRoleconfig, error) {
+	obj := GadminRoleconfig{}
+	err := defDB.Table("gadmin_roleconfig").Where("id", id).Struct(&obj)
 	return obj, err
 }

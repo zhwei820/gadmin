@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/gogf/gf/g/database/gdb"
-
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
+	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/library/code"
 )
 
@@ -47,8 +47,8 @@ func (c *UserController) Get() {
 	page := c.Request.GetInt("page", 1)
 	limit := c.Request.GetInt("limit", 10)
 	var userList struct {
-		List  []model.UserOut `json:"items"`
-		Total int             `json:"total"`
+		List  []model.GadminUser `json:"items"`
+		Total int                `json:"total"`
 	}
 	userList.List, userList.Total = model.GetUserByPageLimt(page, limit)
 	Success(c.Request, userList)
@@ -73,11 +73,11 @@ func (c *UserController) Post() {
 		Fail(c.Request, code.RESPONSE_ERROR, "输入密码不一致")
 	}
 	addu := c.GetUser()
-	var addUserId int64 = 0
+	var addUserId = 0
 	if addu != nil {
 		addUserId = addu.Id
 	}
-	user := model.User{UserName: username, Password: password, NickName: nickname, Email: email, Phone: phone, AddUserId: addUserId}
+	user := model.GadminUser{UserName: username, Password: password, NickName: nickname, Email: email, Phone: phone, AddUserId: addUserId}
 	uid, _ := user.Insert()
 	if uid > 0 {
 		Success(c.Request, "success")
@@ -119,7 +119,7 @@ func (c *UserController) Put() {
 		if password != passwordconfirm {
 			Fail(c.Request, code.RESPONSE_ERROR, "输入密码不一致")
 		}
-		umap["password"] = model.EncryptPassword(password)
+		umap["password"] = service.EncryptPassword(password)
 		err := model.UpdateUserById(u.Id, umap)
 		if err != nil {
 			Fail(c.Request, code.RESPONSE_ERROR, err.Error())
@@ -130,11 +130,11 @@ func (c *UserController) Put() {
 }
 func (c *UserController) Delete() {
 	data := c.Request.GetJson()
-	id := data.GetInt64("id")
+	id := data.GetInt("id")
 	if id < 1 {
 		Fail(c.Request, code.RESPONSE_ERROR)
 	}
-	u := new(model.User)
+	u := new(model.GadminUser)
 	user, err := u.GetById(id)
 	if err != nil {
 		Fail(c.Request, code.RESPONSE_ERROR, err.Error())

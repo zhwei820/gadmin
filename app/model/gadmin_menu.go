@@ -4,9 +4,9 @@ import (
 	"errors"
 )
 
-// Menu 表名：menu
+// GadminMenu 表名：gadmin_menu
 // 由数据库自动生成的结构体
-type Menu struct {
+type GadminMenu struct {
 	Id         int    `json:"id" xorm:"not null pk autoincr INT(11)"`
 	MenuPath   string `json:"menu_path" xorm:"not null VARCHAR(255)"`
 	Component  string `json:"component" xorm:"not null VARCHAR(255)"`
@@ -20,13 +20,13 @@ type Menu struct {
 }
 
 // TableName 获取表名
-func (t *Menu) TableName() string {
-	return "menu"
+func (t *GadminMenu) TableName() string {
+	return "gadmin_menu"
 }
 
 // Insert 插入一条记录
-func (t *Menu) Insert() (int64, error) {
-	r, err := defDB.Insert("menu", t)
+func (t *GadminMenu) Insert() (int64, error) {
+	r, err := defDB.Insert("gadmin_menu", t)
 	if err != nil {
 		return 0, err
 	}
@@ -36,11 +36,11 @@ func (t *Menu) Insert() (int64, error) {
 }
 
 // Update 更新对象
-func (t *Menu) Update() (int64, error) {
+func (t *GadminMenu) Update() (int64, error) {
 	if t.Id <= 0 {
 		return 0, errors.New("primary_key <= 0")
 	}
-	r, err := defDB.Update("menu", t, "id=?", t.Id)
+	r, err := defDB.Update("gadmin_menu", t, "id=?", t.Id)
 	if err != nil {
 		return 0, err
 	}
@@ -48,8 +48,8 @@ func (t *Menu) Update() (int64, error) {
 }
 
 // DeleteById 删除一条记录
-func (t *Menu) DeleteById(id int64) (int64, error) {
-	r, err := defDB.Delete("menu", "id=?", id)
+func (t *GadminMenu) DeleteById(id int) (int64, error) {
+	r, err := defDB.Delete("gadmin_menu", "id=?", id)
 	if err != nil {
 		return 0, err
 	}
@@ -57,8 +57,8 @@ func (t *Menu) DeleteById(id int64) (int64, error) {
 }
 
 // GetById 通过id查询记录
-func (t *Menu) GetById(id int64) (Menu, error) {
-	obj := Menu{}
-	err := defDB.Table("menu").Where("id", id).Struct(&obj)
+func (t *GadminMenu) GetById(id int) (GadminMenu, error) {
+	obj := GadminMenu{}
+	err := defDB.Table("gadmin_menu").Where("id", id).Struct(&obj)
 	return obj, err
 }
