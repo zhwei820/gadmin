@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/hailaz/gadmin/app/model"
+	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/library/code"
 )
 
@@ -14,10 +15,10 @@ func (c *MenuController) Get() {
 	page := c.Request.GetInt("page", 1)
 	limit := c.Request.GetInt("limit", 10)
 	var list struct {
-		List  []model.MenuOut `json:"items"`
-		Total int             `json:"total"`
+		List  []model.Menu `json:"items"`
+		Total int          `json:"total"`
 	}
-	list.List, list.Total = model.GetMenuList(page, limit)
+	list.List, list.Total = service.GetMenuList(page, limit)
 
 	Success(c.Request, list)
 }

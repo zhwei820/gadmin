@@ -2,9 +2,10 @@ package api
 
 import (
 	"encoding/base64"
+	"github.com/hailaz/gadmin/app/service"
 	"time"
 
-	jwt "github.com/gogf/gf-jwt"
+	"github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/g"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
@@ -150,7 +151,7 @@ func Authenticator(r *ghttp.Request) (interface{}, error) {
 			if err != nil {
 				return nil, err
 			}
-			if u.Password == model.EncryptPassword(password) {
+			if u.Password == service.EncryptPassword(password) {
 				return g.Map{
 					"username": u.UserName,
 					"id":       u.Id,

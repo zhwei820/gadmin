@@ -10,14 +10,14 @@ import (
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
-func GetRoleList(page, limit int, defaultname string) ([]model.RoleC, int) {
+func GetRoleList(page, limit int, defaultname string) ([]model.RoleConfig, int) {
 	if page < 1 {
 		page = 1
 	}
 	roleList := make([]model.RoleConfig, 0)
 	roles := model.Enforcer.GetAllRoles()
 	total := len(roles)
-	r, _ := GetAllRole()
+	r, _ := model.GetAllRole()
 	pn := make([]model.RoleConfig, 0)
 	r.ToStructs(&pn)
 
