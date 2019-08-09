@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gogf/gf/g/os/glog"
+	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/library/code"
@@ -11,6 +12,14 @@ type RoleController struct {
 	BaseController
 }
 
+// @Summary role list
+// @Description role list
+// @Tags role
+// @Param	page	query 	integer	false		"page"
+// @Param	limit	query 	integer	false		"limit"
+// @Param	username	query 	string	true		"username"
+// @Success 200 {string} string	"ok"
+// @router /role [get]
 func (c *RoleController) Get() {
 	page := c.Request.GetInt("page", 1)
 	limit := c.Request.GetInt("limit", 10)
@@ -18,7 +27,7 @@ func (c *RoleController) Get() {
 	var list struct {
 		List         []model.GadminRoleconfig `json:"items"`
 		UserRoleList []model.GadminRoleconfig `json:"role_items"`
-		Total        int          `json:"total"`
+		Total        int                      `json:"total"`
 	}
 	list.List, list.Total = service.GetRoleList(page, limit, UNDEFIND_POLICY_NAME)
 	if username != "" {
@@ -28,12 +37,19 @@ func (c *RoleController) Get() {
 	Success(c.Request, list)
 }
 
+//
+// @Summary create role
+// @Description create role
+// @Tags role
+// @Param   PostRole  body api_model.PostRole true "PostRole"
+// @Success 200 {string} string	"ok"
+// @router /policy [post]
 func (c *RoleController) Post() {
-	data := c.Request.GetJson()
-	name := data.GetString("name")
-	role := data.GetString("role")
+	j := c.Request.GetJson()
+	m := api_model.PostRole{}
+	j.ToStruct(&m)
 
-	err := service.AddRole(role, name)
+	err := service.AddRole(m.Role, m.Name)
 	if err != nil {
 		Fail(c.Request, code.RESPONSE_ERROR, err.Error())
 	}
@@ -41,15 +57,23 @@ func (c *RoleController) Post() {
 	Success(c.Request, "Post")
 }
 
+//
+// @Summary Update role
+// @Description Update role
+// @Tags role
+// @Param   PostRole  body api_model.PostRole true "PostRole"
+// @Success 200 {string} string	"ok"
+// @router /role [put]
 func (c *RoleController) Put() {
-	data := c.Request.GetJson()
-	name := data.GetString("name")
-	role := data.GetString("role")
-	glog.Debug(name, role)
-	if name == UNDEFIND_POLICY_NAME {
+	j := c.Request.GetJson()
+	m := api_model.PostRole{}
+	j.ToStruct(&m)
+
+	glog.Debug(m)
+	if m.Name == UNDEFIND_POLICY_NAME {
 		Fail(c.Request, code.RESPONSE_ERROR)
 	} else {
-		err := service.UpdateRoleByRoleKey(role, name)
+		err := service.UpdateRoleByRoleKey(m.Role, m.Name)
 		if err != nil {
 			Fail(c.Request, code.RESPONSE_ERROR, err.Error())
 		}
@@ -57,9 +81,15 @@ func (c *RoleController) Put() {
 	Success(c.Request, "修改成功")
 }
 
+//
+// @Summary delete role
+// @Description delete role
+// @Tags role
+// @Param	role	query 	string	true		"role"
+// @Success 200 {string} string	"ok"
+// @router /role [delete]
 func (c *RoleController) Delete() {
-	data := c.Request.GetJson()
-	role := data.GetString("role")
+	role := c.Request.GetString("role")
 
 	err := service.DeleteRole(role)
 	if err != nil {
@@ -68,19 +98,35 @@ func (c *RoleController) Delete() {
 	Success(c.Request, "Delete")
 }
 
+//
+// @Summary SetRoleByUserName
+// @Description SetRoleByUserName
+// @Tags role
+// @Param   SetRoleByUserName  body api_model.SetRoleByUserName true "SetRoleByUserName"
+// @Success 200 {string} string	"ok"
+// @router /role/byuser [put]
 func (c *RoleController) SetRoleByUserName() {
-	data := c.Request.GetJson()
-	roles := data.GetStrings("roles")
-	username := data.GetString("username")
-	service.SetRoleByUserName(username, roles)
+	j := c.Request.GetJson()
+	m := api_model.SetRoleByUserName{}
+	j.ToStruct(&m)
+
+	service.SetRoleByUserName(m.Username, m.Roles)
 
 	Success(c.Request, "success")
 }
 
+//
+// @Summary SetRoleMenus
+// @Description SetRoleMenus
+// @Tags role
+// @Param   SetRoleMenus  body api_model.SetRoleMenus true "SetRoleMenus"
+// @Success 200 {string} string	"ok"
+// @router /role/menu [put]
 func (c *RoleController) SetRoleMenus() {
-	data := c.Request.GetJson()
-	role := data.GetString("role")
-	menus := data.GetStrings("menus")
-	model.SetRoleMenus(role, menus)
+	j := c.Request.GetJson()
+	m := api_model.SetRoleMenus{}
+	j.ToStruct(&m)
+
+	model.SetRoleMenus(m.Role, m.Menus)
 	Success(c.Request, "success")
 }

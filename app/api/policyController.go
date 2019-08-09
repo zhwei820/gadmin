@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/service"
 	"strings"
 
@@ -19,7 +20,7 @@ type PolicyController struct {
 
 // @Summary policy list
 // @Description policy list
-// @Tags auth
+// @Tags policy
 // @Param	page	query 	integer	false		"page"
 // @Param	limit	query 	integer	false		"limit"
 // @Success 200 {string} string	"ok"
@@ -39,20 +40,22 @@ func (c *PolicyController) Get() {
 }
 
 //
-// @Summary update menu
-// @Description update menu
-// @Tags user
-// @Param   SignInInfo  body model.MenuOut true "MenuOut"
+// @Summary UpdatePolicy
+// @Description UpdatePolicy
+// @Tags policy
+// @Param	name	query 	string	true		"name"
+// @Param	policy	query 	string	true		"policy"
 // @Success 200 {string} string	"ok"
-// @router /menu [put]
+// @router /policy [put]
 func (c *PolicyController) Put() {
-	data := c.Request.GetJson()
-	name := data.GetString("name")
-	path := data.GetString("policy")
-	if name == UNDEFIND_POLICY_NAME {
+	j := c.Request.GetJson()
+	m := api_model.UpdatePolicy{}
+	j.ToStruct(&m)
+
+	if m.Name == UNDEFIND_POLICY_NAME {
 		Fail(c.Request, code.RESPONSE_ERROR)
 	} else {
-		err := service.UpdatePolicyByFullPath(path, name)
+		err := service.UpdatePolicyByFullPath(m.Path, m.Name)
 		if err != nil {
 			Fail(c.Request, code.RESPONSE_ERROR, err.Error())
 		}
@@ -60,6 +63,13 @@ func (c *PolicyController) Put() {
 	Success(c.Request, "修改成功")
 }
 
+//
+// @Summary GetPolicyByRole
+// @Description GetPolicyByRole
+// @Tags policy
+// @Param	role	query 	string	role		"role"
+// @Success 200 {string} string	"ok"
+// @router /policy/byrole [get]
 func (c *PolicyController) GetPolicyByRole() {
 	role := c.Request.GetString("role")
 	var list struct {
@@ -74,20 +84,27 @@ func (c *PolicyController) GetPolicyByRole() {
 	Success(c.Request, list)
 }
 
+//
+// @Summary SetPolicyByRole
+// @Description SetPolicyByRole
+// @Tags policy
+// @Param   PostRole  body api_model.PostRole true "PostRole"
+// @Success 200 {string} string	"ok"
+// @router /policy [put]
 func (c *PolicyController) SetPolicyByRole() {
-	data := c.Request.GetJson()
-	role := data.GetString("role")
-	policys := data.GetStrings("policys")
+	j := c.Request.GetJson()
+	m := api_model.SetPolicyByRole{}
+	j.ToStruct(&m)
 
 	var routerMap = make(map[string]model.RolePolicy)
-	for _, item := range policys {
+	for _, item := range m.Policys {
 		list := strings.Split(item, ":")
 		path := list[0]
 		atc := list[1]
-		routerMap[fmt.Sprintf("%v %v %v", role, path, atc)] = model.RolePolicy{Role: role, Path: path, Atc: atc}
+		routerMap[fmt.Sprintf("%v %v %v", m.Role, path, atc)] = model.RolePolicy{Role: m.Role, Path: path, Atc: atc}
 	}
 
-	service.ReSetPolicy(role, routerMap)
+	service.ReSetPolicy(m.Role, routerMap)
 
 	Success(c.Request, "success")
 }

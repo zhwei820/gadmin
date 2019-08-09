@@ -42,6 +42,9 @@ func main() {
 	// 初始化路由
 	router.InitRouter(s)
 
+	url := gogfSwagger.URL("http://localhost:8199/swagger/doc.json") //The url pointing to API definition
+	s.BindHandler("/swagger/*any", gogfSwagger.WrapHandler(swaggerFiles.Handler, url))
+
 	s.SetPort(g.Config().GetInt("port", 8080))
 	s.Run()
 

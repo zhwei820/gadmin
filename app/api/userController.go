@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/os/glog"
+	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/library/code"
@@ -12,6 +13,11 @@ type UserController struct {
 	BaseController
 }
 
+// @Summary user info
+// @Description user info
+// @Tags user
+// @Success 200 {string} string	"ok"
+// @router /user/info [get]
 func (c *UserController) Info() {
 	u := c.GetUser()
 	if u != nil {
@@ -20,6 +26,12 @@ func (c *UserController) Info() {
 	Fail(c.Request, code.RESPONSE_ERROR, "获取用户信息失败")
 }
 
+// @Summary user menu
+// @Description user menu
+// @Tags user
+// @Param	RoleConfig	query 	string	false		"RoleConfig"
+// @Success 200 {string} string	"ok"
+// @router /user/menu [get]
 func (c *UserController) Menu() {
 	RoleConfig := c.Request.GetString("RoleConfig")
 	if RoleConfig != "" {
@@ -43,6 +55,13 @@ func (c *UserController) Menu() {
 	Fail(c.Request, code.RESPONSE_ERROR, "获取用户菜单失败")
 }
 
+// @Summary user list
+// @Description user list
+// @Tags user
+// @Param	page	query 	integer	false		"page"
+// @Param	limit	query 	integer	false		"limit"
+// @Success 200 {string} string	"ok"
+// @router /user [get]
 func (c *UserController) Get() {
 	page := c.Request.GetInt("page", 1)
 	limit := c.Request.GetInt("limit", 10)
@@ -53,73 +72,70 @@ func (c *UserController) Get() {
 	userList.List, userList.Total = model.GetUserByPageLimt(page, limit)
 	Success(c.Request, userList)
 }
-func (c *UserController) Post() {
-	data := c.Request.GetJson()
-	username := data.GetString("user_name")
-	nickname := data.GetString("nick_name")
-	email := data.GetString("email")
-	password := data.GetString("password")
-	passwordconfirm := data.GetString("passwordconfirm")
-	phone := data.GetString("phone")
 
-	u, err := model.GetUserByName(username)
+//
+// @Summary CreateUser
+// @Description CreateUser
+// @Tags user
+// @Param   CreateUser  body api_model.CreateUser true "CreateUser"
+// @Success 200 {string} string	"ok"
+// @router /user [post]
+func (c *UserController) Post() {
+	j := c.Request.GetJson()
+	m := api_model.CreateUser{}
+	j.ToStruct(&m)
+
+	u, err := model.GetUserByName(m.Username)
 	if err != nil || u.Id != 0 {
 		Fail(c.Request, code.RESPONSE_ERROR, "用户已存在")
-	}
-	if password == "" {
-		Fail(c.Request, code.RESPONSE_ERROR, "密码为空")
-	}
-	if password != passwordconfirm {
-		Fail(c.Request, code.RESPONSE_ERROR, "输入密码不一致")
 	}
 	addu := c.GetUser()
 	var addUserId = 0
 	if addu != nil {
 		addUserId = addu.Id
 	}
-	user := model.GadminUser{UserName: username, Password: password, NickName: nickname, Email: email, Phone: phone, AddUserId: addUserId}
+	user := model.GadminUser{UserName: m.Username, Password: m.Password, NickName: m.Nickname, Email: m.Email, Phone: m.Phone, AddUserId: addUserId}
 	uid, _ := user.Insert()
 	if uid > 0 {
 		Success(c.Request, "success")
 	}
 
 	glog.Debug(uid)
-	glog.Debug(data.ToJsonString())
+	glog.Debug(j.ToJsonString())
 	Fail(c.Request, code.RESPONSE_ERROR)
 }
-func (c *UserController) Put() {
-	data := c.Request.GetJson()
-	username := data.GetString("user_name")
-	nickname := data.GetString("nick_name")
-	email := data.GetString("email")
-	password := data.GetString("password")
-	passwordconfirm := data.GetString("passwordconfirm")
-	phone := data.GetString("phone")
 
-	u, err := model.GetUserByName(username)
+//
+// @Summary UpdateUser
+// @Description UpdateUser
+// @Tags user
+// @Param   UpdateUser  body api_model.UpdateUser true "UpdateUser"
+// @Success 200 {string} string	"ok"
+// @router /user [put]
+func (c *UserController) Put() {
+	j := c.Request.GetJson()
+	m := api_model.UpdateUser{}
+	j.ToStruct(&m)
+
+	u, err := model.GetUserByName(m.Username)
 	if err != nil || u.Id == 0 {
 		Fail(c.Request, code.RESPONSE_ERROR, "用户不存在")
 	}
 	umap := gdb.Map{}
-	if nickname != u.NickName && nickname != "" {
-		umap["nick_name"] = nickname
-	}
-	if email != u.Email && email != "" {
-		umap["email"] = email
-	}
-	if phone != u.Phone && phone != "" {
-		umap["phone"] = phone
-	}
-	if password == "" {
+	umap = j.ToMap()
+	delete(umap, "password")
+
+	if m.Password == "" {
+		delete(umap, "password")
 		err := model.UpdateUserById(u.Id, umap)
 		if err != nil {
 			Fail(c.Request, code.RESPONSE_ERROR, err.Error())
 		}
 	} else {
-		if password != passwordconfirm {
+		if m.Password != m.Passwordconfirm {
 			Fail(c.Request, code.RESPONSE_ERROR, "输入密码不一致")
 		}
-		umap["password"] = service.EncryptPassword(password)
+		umap["password"] = service.EncryptPassword(m.Password)
 		err := model.UpdateUserById(u.Id, umap)
 		if err != nil {
 			Fail(c.Request, code.RESPONSE_ERROR, err.Error())
@@ -128,6 +144,14 @@ func (c *UserController) Put() {
 
 	Success(c.Request, "success")
 }
+
+//
+// @Summary delete user
+// @Description delete user
+// @Tags user
+// @Param	id	query 	integer	true		"id"
+// @Success 200 {string} string	"ok"
+// @router /user [delete]
 func (c *UserController) Delete() {
 	data := c.Request.GetJson()
 	id := data.GetInt("id")

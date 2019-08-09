@@ -3,7 +3,6 @@ package model
 import (
 	"errors"
 	"github.com/gogf/gf/g/database/gdb"
-	"github.com/gogf/gf/g/os/gtime"
 )
 
 type UserInfo struct {
@@ -54,7 +53,6 @@ func GetUserByName(name string) (*GadminUser, error) {
 // createTime:2019年05月08日 14:28:18
 // author:hailaz
 func UpdateUserById(id int, udmap gdb.Map) error {
-	udmap["update_time"] = gtime.Now().String()
 	r, err := defDB.Table("user").Data(udmap).Where("id=?", id).Update()
 	if err != nil {
 		return err

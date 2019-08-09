@@ -101,8 +101,7 @@ func (c *MenuController) Put() {
 // @Success 200 {string} string	"ok"
 // @router /menu [delete]
 func (c *MenuController) Delete() {
-	data := c.Request.GetJson()
-	name := data.GetString("name")
+	name := c.Request.GetString("name")
 	m, err := model.GetMenuByName(name)
 	if err != nil {
 		Fail(c.Request, code.RESPONSE_ERROR, err.Error())
