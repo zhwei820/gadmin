@@ -8,7 +8,7 @@
 from django.db import models
 
 
-class GadminCasbinrule(models.Model):
+class Casbinrule(models.Model):
     p_type = models.CharField(max_length=255)
     v0 = models.CharField(max_length=255)
     v1 = models.CharField(max_length=255)

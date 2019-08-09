@@ -6,6 +6,9 @@ import (
 	"github.com/hailaz/gadmin/library/logger"
 	"github.com/hailaz/gadmin/library/timer"
 	"github.com/hailaz/gadmin/router"
+	"github.com/zhwei820/gogf-swagger"
+	"github.com/zhwei820/gogf-swagger/swaggerFiles"
+	_ "github.com/hailaz/gadmin/docs"
 )
 
 func init() {
@@ -36,16 +39,13 @@ func init() {
 // @BasePath /
 func main() {
 	s := g.Server()
-	s.SetIndexFolder(false)
-	s.SetIndexFiles([]string{"index.html"})
-	s.SetServerRoot(".")
 	// 初始化路由
 	router.InitRouter(s)
 
 	url := gogfSwagger.URL("http://localhost:8199/swagger/doc.json") //The url pointing to API definition
 	s.BindHandler("/swagger/*any", gogfSwagger.WrapHandler(swaggerFiles.Handler, url))
 
-	s.SetPort(g.Config().GetInt("port", 8080))
+	s.SetPort(g.Config().GetInt("port", 8199))
 	s.Run()
 
 }

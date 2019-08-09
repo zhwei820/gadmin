@@ -2,19 +2,12 @@ package api
 
 import (
 	"github.com/gogf/gf-jwt"
-	"github.com/gogf/gf/g/frame/gmvc"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/library/code"
 )
 
 type BaseController struct {
-	gmvc.Controller
-}
-
-// "析构函数"控制器方法
-func (c *BaseController) Shut() {
-
 }
 
 type BaseResult struct {
@@ -57,8 +50,8 @@ func Fail(r *ghttp.Request, errCode int, msg ...string) {
 //
 // createTime:2019年05月13日 10:01:17
 // author:hailaz
-func (c *BaseController) GetUser() *model.GadminUser {
-	claims := jwt.ExtractClaims(c.Request)
+func GetUser(r *ghttp.Request) *model.GadminUser {
+	claims := jwt.ExtractClaims(r)
 	user, _ := model.GetUserByName(claims["username"].(string))
 	return user
 }

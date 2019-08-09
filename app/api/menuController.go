@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gogf/gf/g/database/gdb"
+	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/library/code"
 )
@@ -12,21 +13,21 @@ type MenuController struct {
 
 // @Summary menu list
 // @Description menu list
-// @Tags auth
+// @Tags menu
 // @Param	page	query 	integer	false		"page"
 // @Param	limit	query 	integer	false		"limit"
 // @Success 200 {string} string	"ok"
 // @router /menu [get]
-func (c *MenuController) Get() {
-	page := c.Request.GetInt("page", 1)
-	limit := c.Request.GetInt("limit", 10)
+func (c *MenuController) Get(r *ghttp.Request) {
+	page := r.GetInt("page", 1)
+	limit := r.GetInt("limit", 10)
 	var list struct {
 		List  []model.MenuOut `json:"items"`
 		Total int             `json:"total"`
 	}
 	list.List, list.Total = model.GetMenuList(page, limit)
 
-	Success(c.Request, list)
+	Success(r, list)
 }
 
 //
@@ -36,8 +37,8 @@ func (c *MenuController) Get() {
 // @Param   SignInInfo  body model.MenuOut true "MenuOut"
 // @Success 200 {string} string	"ok"
 // @router /menu [post]
-func (c *MenuController) Post() {
-	data := c.Request.GetJson()
+func (c *MenuController) Post(r *ghttp.Request) {
+	data := r.GetJson()
 	m := model.MenuOut{}
 	data.ToStruct(&m)
 	model.InsertMenuWithMeta(gdb.List{
@@ -57,7 +58,7 @@ func (c *MenuController) Post() {
 			},
 		},
 	})
-	Success(c.Request, "添加成功")
+	Success(r, "添加成功")
 }
 
 //
@@ -67,8 +68,8 @@ func (c *MenuController) Post() {
 // @Param   SignInInfo  body model.MenuOut true "MenuOut"
 // @Success 200 {string} string	"ok"
 // @router /menu [put]
-func (c *MenuController) Put() {
-	data := c.Request.GetJson()
+func (c *MenuController) Put(r *ghttp.Request) {
+	data := r.GetJson()
 	m := model.MenuOut{}
 	data.ToStruct(&m)
 	err := model.UpdateMenuByName(
@@ -89,29 +90,29 @@ func (c *MenuController) Put() {
 		},
 	)
 	if err != nil {
-		Fail(c.Request, code.RESPONSE_ERROR, err.Error())
+		Fail(r, code.RESPONSE_ERROR, err.Error())
 	}
-	Success(c.Request, "修改成功")
+	Success(r, "修改成功")
 }
 
 // @Summary delete menu
 // @Description delete menu
-// @Tags auth
+// @Tags menu
 // @Param	name	query 	string	true		"name"
 // @Success 200 {string} string	"ok"
 // @router /menu [delete]
-func (c *MenuController) Delete() {
-	name := c.Request.GetString("name")
+func (c *MenuController) Delete(r *ghttp.Request) {
+	name := r.GetString("name")
 	m, err := model.GetMenuByName(name)
 	if err != nil {
-		Fail(c.Request, code.RESPONSE_ERROR, err.Error())
+		Fail(r, code.RESPONSE_ERROR, err.Error())
 	}
 	if m.AutoCreate > 0 {
-		Fail(c.Request, code.RESPONSE_ERROR)
+		Fail(r, code.RESPONSE_ERROR)
 	}
 	res, _ := m.DeleteById(m.Id)
 	if res <= 0 {
-		Fail(c.Request, code.RESPONSE_ERROR)
+		Fail(r, code.RESPONSE_ERROR)
 	}
-	Success(c.Request, "Delete")
+	Success(r, "Delete")
 }

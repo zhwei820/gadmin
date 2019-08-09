@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/model"
@@ -20,10 +21,10 @@ type RoleController struct {
 // @Param	username	query 	string	true		"username"
 // @Success 200 {string} string	"ok"
 // @router /role [get]
-func (c *RoleController) Get() {
-	page := c.Request.GetInt("page", 1)
-	limit := c.Request.GetInt("limit", 10)
-	username := c.Request.GetString("username")
+func (c *RoleController) Get(r *ghttp.Request) {
+	page := r.GetInt("page", 1)
+	limit := r.GetInt("limit", 10)
+	username := r.GetString("username")
 	var list struct {
 		List         []model.GadminRoleconfig `json:"items"`
 		UserRoleList []model.GadminRoleconfig `json:"role_items"`
@@ -34,7 +35,7 @@ func (c *RoleController) Get() {
 		list.UserRoleList = service.GetRoleByUserName(username)
 	}
 
-	Success(c.Request, list)
+	Success(r, list)
 }
 
 //
@@ -44,17 +45,17 @@ func (c *RoleController) Get() {
 // @Param   PostRole  body api_model.PostRole true "PostRole"
 // @Success 200 {string} string	"ok"
 // @router /policy [post]
-func (c *RoleController) Post() {
-	j := c.Request.GetJson()
+func (c *RoleController) Post(r *ghttp.Request) {
+	j := r.GetJson()
 	m := api_model.PostRole{}
 	j.ToStruct(&m)
 
 	err := service.AddRole(m.Role, m.Name)
 	if err != nil {
-		Fail(c.Request, code.RESPONSE_ERROR, err.Error())
+		Fail(r, code.RESPONSE_ERROR, err.Error())
 	}
 
-	Success(c.Request, "Post")
+	Success(r, "Post")
 }
 
 //
@@ -64,21 +65,21 @@ func (c *RoleController) Post() {
 // @Param   PostRole  body api_model.PostRole true "PostRole"
 // @Success 200 {string} string	"ok"
 // @router /role [put]
-func (c *RoleController) Put() {
-	j := c.Request.GetJson()
+func (c *RoleController) Put(r *ghttp.Request) {
+	j := r.GetJson()
 	m := api_model.PostRole{}
 	j.ToStruct(&m)
 
 	glog.Debug(m)
 	if m.Name == UNDEFIND_POLICY_NAME {
-		Fail(c.Request, code.RESPONSE_ERROR)
+		Fail(r, code.RESPONSE_ERROR)
 	} else {
 		err := service.UpdateRoleByRoleKey(m.Role, m.Name)
 		if err != nil {
-			Fail(c.Request, code.RESPONSE_ERROR, err.Error())
+			Fail(r, code.RESPONSE_ERROR, err.Error())
 		}
 	}
-	Success(c.Request, "修改成功")
+	Success(r, "修改成功")
 }
 
 //
@@ -88,14 +89,14 @@ func (c *RoleController) Put() {
 // @Param	role	query 	string	true		"role"
 // @Success 200 {string} string	"ok"
 // @router /role [delete]
-func (c *RoleController) Delete() {
-	role := c.Request.GetString("role")
+func (c *RoleController) Delete(r *ghttp.Request) {
+	role := r.GetString("role")
 
 	err := service.DeleteRole(role)
 	if err != nil {
-		Fail(c.Request, code.RESPONSE_ERROR, err.Error())
+		Fail(r, code.RESPONSE_ERROR, err.Error())
 	}
-	Success(c.Request, "Delete")
+	Success(r, "Delete")
 }
 
 //
@@ -105,14 +106,14 @@ func (c *RoleController) Delete() {
 // @Param   SetRoleByUserName  body api_model.SetRoleByUserName true "SetRoleByUserName"
 // @Success 200 {string} string	"ok"
 // @router /role/byuser [put]
-func (c *RoleController) SetRoleByUserName() {
-	j := c.Request.GetJson()
+func (c *RoleController) SetRoleByUserName(r *ghttp.Request) {
+	j := r.GetJson()
 	m := api_model.SetRoleByUserName{}
 	j.ToStruct(&m)
 
 	service.SetRoleByUserName(m.Username, m.Roles)
 
-	Success(c.Request, "success")
+	Success(r, "success")
 }
 
 //
@@ -122,11 +123,11 @@ func (c *RoleController) SetRoleByUserName() {
 // @Param   SetRoleMenus  body api_model.SetRoleMenus true "SetRoleMenus"
 // @Success 200 {string} string	"ok"
 // @router /role/menu [put]
-func (c *RoleController) SetRoleMenus() {
-	j := c.Request.GetJson()
+func (c *RoleController) SetRoleMenus(r *ghttp.Request) {
+	j := r.GetJson()
 	m := api_model.SetRoleMenus{}
 	j.ToStruct(&m)
 
 	model.SetRoleMenus(m.Role, m.Menus)
-	Success(c.Request, "success")
+	Success(r, "success")
 }

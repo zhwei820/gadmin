@@ -3,9 +3,7 @@ package router
 import (
 	"fmt"
 	"github.com/hailaz/gadmin/app/service"
-
-	"github.com/gogf/gf/g"
-	"github.com/gogf/gf/g/encoding/gparser"
+	"strings"
 
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
@@ -27,10 +25,9 @@ func showURL(r *ghttp.Request) {
 // createTime:2019年05月13日 09:32:58
 // author:hailaz
 func InitRouter(s *ghttp.Server) {
-	initApiDocRouter(s)
 
 	s.BindHookHandler("/*", ghttp.HOOK_BEFORE_SERVE, showURL)
-	InitV1(s)
+	Init(s)
 
 	service.ReSetPolicy("system", routerMap)
 }
@@ -41,40 +38,56 @@ func InitRouter(s *ghttp.Server) {
 // author:hailaz
 // authHook is the HOOK function implements JWT logistics.
 func authHook(r *ghttp.Request) {
-	switch r.Request.RequestURI { //登录相关免鉴权
-	case "/v1/loginkey":
-		return
-	case "/v1/login":
-		return
+	uri := strings.Split(r.Request.RequestURI, "/")
+	if len(uri) > 1 {
+		switch uri[1] { //登录相关免鉴权
+		case "loginkey":
+			return
+		case "login":
+			return
+		case "swagger":
+			return
+		}
 	}
+
 	r.Response.CORSDefault() //开启跨域
 	//r.Response.Header().Set("Access-Control-Allow-Origin", "*")
 	api.GfJWTMiddleware.MiddlewareFunc()(r) //鉴权中间件
 }
 
-// InitV1 初始化V1
+type Object struct{}
+
+func (o *Object) Show(r *ghttp.Request) {
+	r.Response.Writeln("Object Show")
+}
+
+func (o *Object) Delete(r *ghttp.Request) {
+	r.Response.Writeln("Object REST Delete")
+}
+
+// Init 初始化V1
 //
 // createTime:2019年04月25日 09:24:06
 // author:hailaz
-func InitV1(s *ghttp.Server) {
-	//v1 := s.Group("/v1")
+func Init(s *ghttp.Server) {
 	//权限验证
-	s.Group("/v1").ALL("/*any", authHook, ghttp.HOOK_BEFORE_SERVE)
+	s.Group("").ALL("/*any", authHook, ghttp.HOOK_BEFORE_SERVE)
 	userCtrl := new(api.UserController)
 	roleCtrl := new(api.RoleController)
 	policyCtrl := new(api.PolicyController)
 	menuCtrl := new(api.MenuController)
 
 	// user
-	BindGroup(s, "/v1", []ghttp.GroupItem{
+	BindGroup(s, "/", []ghttp.GroupItem{
+		//
 		//登录
-		{"GET", "/loginkey", api.GetLoginCryptoKey, "", "false"},                   //获取登录加密公钥
-		{"POST", "/login", api.GfJWTMiddleware.LoginHandler, "", "false"},          //登录
-		{"GET", "/refresh_token", api.GfJWTMiddleware.RefreshHandler, "", "false"}, //获取登录加密公钥
-		{"POST", "/logout", api.Logout, "", "false"},                               //登出
-		//menu
+		{"GET", "/loginkey", api.GetLoginCryptoKey},                   //获取登录加密公钥
+		{"POST", "/login", api.GfJWTMiddleware.LoginHandler},          //登录
+		{"GET", "/refresh_token", api.GfJWTMiddleware.RefreshHandler}, //获取登录加密公钥
+		{"POST", "/logout", api.Logout},                               //登出
+		////menu
 		{"REST", "/menu", menuCtrl},
-		// 用户
+		//// 用户
 		{"GET", "/user/info", userCtrl, "Info", "false"},
 		{"GET", "/user/menu", userCtrl, "Menu", "false"},
 		{"REST", "/user", userCtrl},
@@ -121,33 +134,4 @@ func BindGroup(s *ghttp.Server, path string, items []ghttp.GroupItem) {
 // author:hailaz
 func addPolicy(role, path, atc string) {
 	routerMap[fmt.Sprintf("%v %v %v", role, path, atc)] = model.RolePolicy{Role: role, Path: path, Atc: atc}
-}
-
-// initApiDocRouter 初始化api文档路由
-//
-// createTime:2019年05月14日 09:05:26
-// author:hailaz
-func initApiDocRouter(s *ghttp.Server) {
-	s.BindHandler("/swagger.{mime}", func(r *ghttp.Request) {
-		r.Response.CORSDefault()
-		r.Response.Header().Set("Access-Control-Allow-Origin", "*")
-		//r.Response.Writeln(r.Get("mime"))
-		p, err := gparser.Load("docfile/swagger.yaml")
-		if err != nil {
-			r.Response.Writeln(err.Error())
-		}
-
-		switch r.Get("mime") {
-		case "json":
-			j, _ := p.ToJson()
-			r.Response.WriteJson(j)
-		default:
-			y, _ := p.ToYaml()
-			r.Response.Write(y)
-		}
-
-	})
-	s.BindHandler("/swagger", func(r *ghttp.Request) {
-		r.Response.RedirectTo("https://petstore.swagger.io/?url=http://localhost:" + g.Config().GetString("port", "8080") + "/swagger.yaml")
-	})
 }

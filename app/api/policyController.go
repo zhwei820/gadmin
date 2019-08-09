@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/service"
 	"strings"
@@ -25,9 +26,9 @@ type PolicyController struct {
 // @Param	limit	query 	integer	false		"limit"
 // @Success 200 {string} string	"ok"
 // @router /policy [get]
-func (c *PolicyController) Get() {
-	page := c.Request.GetInt("page", 1)
-	limit := c.Request.GetInt("limit", 10)
+func (c *PolicyController) Get(r *ghttp.Request) {
+	page := r.GetInt("page", 1)
+	limit := r.GetInt("limit", 10)
 
 	var list struct {
 		List  []model.GadminPolicyconfig `json:"items"`
@@ -36,7 +37,7 @@ func (c *PolicyController) Get() {
 
 	list.List, list.Total = service.GetPolicyList(page, limit, UNDEFIND_POLICY_NAME)
 
-	Success(c.Request, list)
+	Success(r, list)
 }
 
 //
@@ -47,20 +48,20 @@ func (c *PolicyController) Get() {
 // @Param	policy	query 	string	true		"policy"
 // @Success 200 {string} string	"ok"
 // @router /policy [put]
-func (c *PolicyController) Put() {
-	j := c.Request.GetJson()
+func (c *PolicyController) Put(r *ghttp.Request) {
+	j := r.GetJson()
 	m := api_model.UpdatePolicy{}
 	j.ToStruct(&m)
 
 	if m.Name == UNDEFIND_POLICY_NAME {
-		Fail(c.Request, code.RESPONSE_ERROR)
+		Fail(r, code.RESPONSE_ERROR)
 	} else {
 		err := service.UpdatePolicyByFullPath(m.Path, m.Name)
 		if err != nil {
-			Fail(c.Request, code.RESPONSE_ERROR, err.Error())
+			Fail(r, code.RESPONSE_ERROR, err.Error())
 		}
 	}
-	Success(c.Request, "修改成功")
+	Success(r, "修改成功")
 }
 
 //
@@ -70,8 +71,8 @@ func (c *PolicyController) Put() {
 // @Param	role	query 	string	role		"role"
 // @Success 200 {string} string	"ok"
 // @router /policy/byrole [get]
-func (c *PolicyController) GetPolicyByRole() {
-	role := c.Request.GetString("role")
+func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {
+	role := r.GetString("role")
 	var list struct {
 		List           []model.GadminPolicyconfig `json:"all_policy_items"`
 		RolePolicyList []model.GadminPolicyconfig `json:"role_policy_items"`
@@ -81,7 +82,7 @@ func (c *PolicyController) GetPolicyByRole() {
 	list.List, list.Total = service.GetPolicyList(1, -1, "")
 	list.RolePolicyList = service.GetPolicyByRole(role)
 
-	Success(c.Request, list)
+	Success(r, list)
 }
 
 //
@@ -91,8 +92,8 @@ func (c *PolicyController) GetPolicyByRole() {
 // @Param   PostRole  body api_model.PostRole true "PostRole"
 // @Success 200 {string} string	"ok"
 // @router /policy [put]
-func (c *PolicyController) SetPolicyByRole() {
-	j := c.Request.GetJson()
+func (c *PolicyController) SetPolicyByRole(r *ghttp.Request) {
+	j := r.GetJson()
 	m := api_model.SetPolicyByRole{}
 	j.ToStruct(&m)
 
@@ -106,5 +107,5 @@ func (c *PolicyController) SetPolicyByRole() {
 
 	service.ReSetPolicy(m.Role, routerMap)
 
-	Success(c.Request, "success")
+	Success(r, "success")
 }
