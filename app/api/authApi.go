@@ -64,3 +64,24 @@ func GetLoginCryptoKey(r *ghttp.Request) {
 func Logout(r *ghttp.Request) {
 	Success(r, "success")
 }
+
+//
+// @Summary 登陆
+// @Description 登陆
+// @Tags auth
+// @Param   Login  body api_model.Login true "Login"
+// @Success 200 {string} string	"ok"
+// @router /login [post]
+func SwaggerLogin(r *ghttp.Request) {
+	Success(r, "success")
+}
+
+//
+// @Summary 刷新token
+// @Description 刷新token
+// @Tags auth
+// @Success 200 {string} string	"ok"
+// @router /refresh_token [get]
+func SwaggerRefreshToken(r *ghttp.Request) {
+	Success(r, "success")
+}

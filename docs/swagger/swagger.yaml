@@ -15,6 +15,15 @@ definitions:
       username:
         type: string
     type: object
+  api_model.Login:
+    properties:
+      kid:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
   api_model.PostRole:
     properties:
       name:
@@ -103,6 +112,25 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /login:
+    post:
+      description: 登陆
+      parameters:
+      - description: Login
+        in: body
+        name: Login
+        required: true
+        schema:
+          $ref: '#/definitions/api_model.Login'
+          type: object
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 登陆
+      tags:
+      - auth
   /loginkey:
     get:
       description: 获取登录的加密key
@@ -269,6 +297,17 @@ paths:
       summary: GetPolicyByRole
       tags:
       - policy
+  /refresh_token:
+    get:
+      description: 刷新token
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 刷新token
+      tags:
+      - auth
   /role:
     delete:
       description: delete role

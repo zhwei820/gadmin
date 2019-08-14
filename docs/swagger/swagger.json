@@ -17,6 +17,35 @@
     },
     "basePath": "/",
     "paths": {
+        "/login": {
+            "post": {
+                "description": "登陆",
+                "tags": [
+                    "auth"
+                ],
+                "summary": "登陆",
+                "parameters": [
+                    {
+                        "description": "Login",
+                        "name": "Login",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api_model.Login"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/loginkey": {
             "get": {
                 "description": "获取登录的加密key",
@@ -260,6 +289,23 @@
                         "in": "query"
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/refresh_token": {
+            "get": {
+                "description": "刷新token",
+                "tags": [
+                    "auth"
+                ],
+                "summary": "刷新token",
                 "responses": {
                     "200": {
                         "description": "ok",
@@ -586,6 +632,20 @@
                     "type": "string"
                 },
                 "phone": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "api_model.Login": {
+            "type": "object",
+            "properties": {
+                "kid": {
+                    "type": "string"
+                },
+                "password": {
                     "type": "string"
                 },
                 "username": {
