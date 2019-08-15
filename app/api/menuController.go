@@ -33,7 +33,7 @@ func (c *MenuController) Get(r *ghttp.Request) {
 //
 // @Summary create menu
 // @Description create menu
-// @Tags user
+// @Tags menu
 // @Param   SignInInfo  body model.MenuOut true "MenuOut"
 // @Success 200 {string} string	"ok"
 // @router /menu [post]
@@ -64,7 +64,7 @@ func (c *MenuController) Post(r *ghttp.Request) {
 //
 // @Summary update menu
 // @Description update menu
-// @Tags user
+// @Tags menu
 // @Param   SignInInfo  body model.MenuOut true "MenuOut"
 // @Success 200 {string} string	"ok"
 // @router /menu [put]

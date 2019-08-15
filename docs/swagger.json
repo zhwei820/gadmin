@@ -113,7 +113,7 @@
             "put": {
                 "description": "update menu",
                 "tags": [
-                    "user"
+                    "menu"
                 ],
                 "summary": "update menu",
                 "parameters": [
@@ -140,7 +140,7 @@
             "post": {
                 "description": "create menu",
                 "tags": [
-                    "user"
+                    "menu"
                 ],
                 "summary": "create menu",
                 "parameters": [
