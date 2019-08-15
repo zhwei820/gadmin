@@ -8,8 +8,8 @@ import (
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/gogf/gf/g/os/gtime"
 	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/library/common"
+	"github.com/hailaz/gadmin/utils"
 	"time"
 )
 
@@ -103,7 +103,7 @@ func Authenticator(r *ghttp.Request) (interface{}, error) {
 			if err != nil {
 				return nil, err
 			}
-			if u.Password == service.EncryptPassword(password) {
+			if u.Password == utils.EncryptPassword(password) {
 				return g.Map{
 					"username": u.UserName,
 					"id":       u.Id,
@@ -111,6 +111,31 @@ func Authenticator(r *ghttp.Request) (interface{}, error) {
 			}
 
 		}
+	}
+
+	return nil, jwt.ErrFailedAuthentication
+}
+
+// 简单 Authenticator 登录验证
+
+func SimpleAuthenticator(r *ghttp.Request) (interface{}, error) {
+	data := r.GetJson()
+	name := data.GetString("username")
+	password := data.GetString("password")
+
+	//glog.Debugfln("%v %v", name, password)
+	if password != "" {
+		u, err := model.GetUserByName(name)
+		if err != nil {
+			return nil, err
+		}
+		if u.Password == utils.EncryptPassword(password) {
+			return g.Map{
+				"username": u.UserName,
+				"id":       u.Id,
+			}, nil
+		}
+
 	}
 
 	return nil, jwt.ErrFailedAuthentication

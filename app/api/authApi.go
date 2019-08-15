@@ -24,9 +24,9 @@ func init() {
 		MaxRefresh:            time.Minute * 10,        //token刷新有效时间
 		IdentityKey:           "username",              // 用户关键字
 		TokenLookup:           "header: Authorization", // 捕抓请求的指定数据
-		TokenHeadName:         "gadmin",                // token 头名称
+		TokenHeadName:         "jwt",                   // token 头名称
 		TimeFunc:              time.Now,
-		Authenticator:         Authenticator,         //登录验证
+		Authenticator:         SimpleAuthenticator,   //登录验证
 		LoginResponse:         LoginResponse,         //登录返回token
 		RefreshResponse:       RefreshResponse,       //刷新token
 		Unauthorized:          Unauthorized,          //未登录返回

@@ -9,7 +9,7 @@ import (
 // createTime:2019年04月30日 10:20:50
 // author:hailaz
 func GetAllPolicy() (gdb.Result, error) {
-	return defDB.Table("policy_name").All()
+	return defDB.Table("gadmin_policyname").All()
 }
 
 // GetPolicyByFullPath 根据权限全路径获取权限
@@ -18,6 +18,6 @@ func GetAllPolicy() (gdb.Result, error) {
 // author:hailaz
 func GetPolicyByFullPath(path string) (GadminPolicyconfig, error) {
 	obj := GadminPolicyconfig{}
-	err := defDB.Table("policy_name").Where("full_path", path).Struct(&obj)
+	err := defDB.Table("gadmin_policyname").Where("full_path", path).Struct(&obj)
 	return obj, err
 }

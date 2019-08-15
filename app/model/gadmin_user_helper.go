@@ -41,7 +41,7 @@ func (u *GadminUser) GetUserInfo() UserInfo {
 // author:hailaz
 func GetUserByName(name string) (*GadminUser, error) {
 	u := GadminUser{}
-	err := defDB.Table("user").Where("user_name", name).Struct(&u)
+	err := defDB.Table("gadmin_user").Where("user_name", name).Struct(&u)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +53,7 @@ func GetUserByName(name string) (*GadminUser, error) {
 // createTime:2019年05月08日 14:28:18
 // author:hailaz
 func UpdateUserById(id int, udmap gdb.Map) error {
-	r, err := defDB.Table("user").Data(udmap).Where("id=?", id).Update()
+	r, err := defDB.Table("gadmin_user").Data(udmap).Where("id=?", id).Update()
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func GetUserByPageLimt(page, limit int) ([]GadminUser, int) {
 	if limit < 1 {
 		limit = 10
 	}
-	total, _ := defDB.Table("user").Count()
+	total, _ := defDB.Table("gadmin_user").Count()
 	if total == 0 {
 		return nil, 0
 	}
@@ -86,7 +86,7 @@ func GetUserByPageLimt(page, limit int) ([]GadminUser, int) {
 			page = 1
 		}
 	}
-	r, err := defDB.Table("user").Limit((page-1)*limit, (page-1)*limit+limit).Select()
+	r, err := defDB.Table("gadmin_user").Limit((page-1)*limit, (page-1)*limit+limit).Select()
 	if err != nil {
 		return nil, 0
 	}

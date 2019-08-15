@@ -3,12 +3,12 @@ package main
 import (
 	"github.com/gogf/gf/g"
 	"github.com/hailaz/gadmin/app/model"
+	_ "github.com/hailaz/gadmin/docs"
 	"github.com/hailaz/gadmin/library/logger"
 	"github.com/hailaz/gadmin/library/timer"
 	"github.com/hailaz/gadmin/router"
 	"github.com/zhwei820/gogf-swagger"
 	"github.com/zhwei820/gogf-swagger/swaggerFiles"
-	_ "github.com/hailaz/gadmin/docs"
 )
 
 func init() {
@@ -34,6 +34,10 @@ func init() {
 
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
 // @host
 // @BasePath /

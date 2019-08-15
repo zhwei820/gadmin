@@ -18,7 +18,7 @@ type MenuOut struct {
 // author:hailaz
 func IsMenuExist(name string) bool {
 	m := GadminMenu{}
-	defDB.Table("menu").Where("name", name).Struct(&m)
+	defDB.Table("gadmin_menu").Where("name", name).Struct(&m)
 	if m.Id > 0 {
 		return true
 	}
@@ -35,8 +35,8 @@ func InsertMenuWithMeta(list gdb.List) {
 			mate := item["meta"].(gdb.Map)
 			mate["menu_name"] = item["name"].(string)
 			delete(item, "meta")
-			defDB.Insert("menu", item)
-			defDB.Insert("menu_meta", mate)
+			defDB.Insert("gadmin_menu", item)
+			defDB.Insert("gadmin_menumeta", mate)
 		}
 	}
 }
@@ -52,7 +52,7 @@ func GetMenuList(page, limit int) ([]MenuOut, int) {
 	if limit < 1 {
 		limit = 10
 	}
-	total, _ := defDB.Table("menu").Count()
+	total, _ := defDB.Table("gadmin_menu").Count()
 	if total == 0 {
 		return nil, 0
 	}
@@ -63,14 +63,14 @@ func GetMenuList(page, limit int) ([]MenuOut, int) {
 			page = 1
 		}
 	}
-	r, err := defDB.Table("menu").Limit((page-1)*limit, (page-1)*limit+limit).Select()
+	r, err := defDB.Table("gadmin_menu").Limit((page-1)*limit, (page-1)*limit+limit).Select()
 	if err != nil {
 		return nil, 0
 	}
 	r.ToStructs(&menuList)
 	for index, item := range menuList {
 		meta := GadminMenumeta{}
-		r, _ := defDB.Table("menu_meta").Where("menu_name=?", item.Name).One()
+		r, _ := defDB.Table("gadmin_menumeta").Where("menu_name=?", item.Name).One()
 		r.ToStruct(&meta)
 		menuList[index].GadminMenumeta = meta
 	}
@@ -84,11 +84,11 @@ func GetMenuList(page, limit int) ([]MenuOut, int) {
 func UpdateMenuByName(name string, dataMap gdb.Map) error {
 	mate := dataMap["meta"].(gdb.Map)
 	delete(dataMap, "meta")
-	_, err := defDB.Update("menu", dataMap, "name=?", name)
+	_, err := defDB.Update("gadmin_menu", dataMap, "name=?", name)
 	if err != nil {
 		return err
 	}
-	_, err = defDB.Update("menu_meta", mate, "menu_name=?", name)
+	_, err = defDB.Update("gadmin_menumeta", mate, "menu_name=?", name)
 	if err != nil {
 		return err
 	}
@@ -102,7 +102,7 @@ func UpdateMenuByName(name string, dataMap gdb.Map) error {
 func GetMenuByRoleConfig(roles []string) []MenuOut {
 	menus := make([]MenuOut, 0)
 	if utils.IsStringInSlice(ADMIN_NAME, roles) {
-		r, _ := defDB.Table("menu").All()
+		r, _ := defDB.Table("gadmin_menu").All()
 		r.ToStructs(&menus)
 	} else {
 		roleSlice := make(g.Slice, 0)
@@ -115,7 +115,7 @@ func GetMenuByRoleConfig(roles []string) []MenuOut {
 
 	for index, item := range menus {
 		meta := GadminMenumeta{}
-		r, _ := defDB.Table("menu_meta").Where("menu_name=?", item.Name).One()
+		r, _ := defDB.Table("gadmin_menumeta").Where("menu_name=?", item.Name).One()
 		r.ToStruct(&meta)
 		menus[index].GadminMenumeta = meta
 	}
@@ -156,7 +156,7 @@ func FindChildren(mo *MenuOut, list []*MenuOut) {
 // author:hailaz
 func GetMenuByName(name string) (*GadminMenu, error) {
 	m := GadminMenu{}
-	err := defDB.Table("menu").Where("name", name).Struct(&m)
+	err := defDB.Table("gadmin_menu").Where("name", name).Struct(&m)
 	if err != nil {
 		return nil, err
 	}

@@ -4,6 +4,8 @@ import (
 	"github.com/casbin/casbin"
 	"github.com/gogf/gf/g"
 	"github.com/gogf/gf/g/database/gdb"
+	"github.com/gogf/gf/g/os/glog"
+	"github.com/hailaz/gadmin/utils"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -40,15 +42,17 @@ func InitModel() {
 // author:hailaz
 func initUser() {
 	u, err := GetUserByName(ADMIN_NAME)
-	if err != nil || u.Id != 0 {
+	if err == nil && u.Id != 0 {
 		return
 	}
 	admin := GadminUser{
 		UserName: ADMIN_NAME,
 		NickName: ADMIN_NICK_NAME,
-		Password: ADMIN_DEFAULT_PASSWORD,
+		Password: utils.EncryptPassword(ADMIN_DEFAULT_PASSWORD),
 	}
-	admin.Insert()
+	ii, err := admin.Insert()
+	glog.Debugfln("%v %v", ii, err)
+
 }
 
 // initMenu 初始化菜单数据

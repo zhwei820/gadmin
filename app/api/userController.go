@@ -6,8 +6,8 @@ import (
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/library/code"
+	"github.com/hailaz/gadmin/utils"
 )
 
 type UserController struct {
@@ -136,7 +136,7 @@ func (c *UserController) Put(r *ghttp.Request) {
 		if m.Password != m.Passwordconfirm {
 			Fail(r, code.RESPONSE_ERROR, "输入密码不一致")
 		}
-		umap["password"] = service.EncryptPassword(m.Password)
+		umap["password"] = utils.EncryptPassword(m.Password)
 		err := model.UpdateUserById(u.Id, umap)
 		if err != nil {
 			Fail(r, code.RESPONSE_ERROR, err.Error())
