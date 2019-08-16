@@ -245,33 +245,6 @@
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "create role",
-                "tags": [
-                    "role"
-                ],
-                "summary": "create role",
-                "parameters": [
-                    {
-                        "description": "PostRole",
-                        "name": "PostRole",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api_model.PostRole"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
             }
         },
         "/policy/byrole": {
@@ -285,7 +258,7 @@
                     {
                         "type": "string",
                         "description": "role",
-                        "name": "role",
+                        "name": "policy",
                         "in": "query"
                     }
                 ],
@@ -359,6 +332,33 @@
                     "role"
                 ],
                 "summary": "Update role",
+                "parameters": [
+                    {
+                        "description": "PostRole",
+                        "name": "PostRole",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api_model.PostRole"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create role",
+                "tags": [
+                    "role"
+                ],
+                "summary": "create role",
                 "parameters": [
                     {
                         "description": "PostRole",

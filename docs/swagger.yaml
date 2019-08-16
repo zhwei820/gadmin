@@ -243,24 +243,6 @@ paths:
       summary: policy list
       tags:
       - policy
-    post:
-      description: create role
-      parameters:
-      - description: PostRole
-        in: body
-        name: PostRole
-        required: true
-        schema:
-          $ref: '#/definitions/api_model.PostRole'
-          type: object
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: create role
-      tags:
-      - role
     put:
       description: SetPolicyByRole
       parameters:
@@ -285,7 +267,7 @@ paths:
       parameters:
       - description: role
         in: query
-        name: role
+        name: policy
         type: string
       responses:
         "200":
@@ -345,6 +327,24 @@ paths:
           schema:
             type: string
       summary: role list
+      tags:
+      - role
+    post:
+      description: create role
+      parameters:
+      - description: PostRole
+        in: body
+        name: PostRole
+        required: true
+        schema:
+          $ref: '#/definitions/api_model.PostRole'
+          type: object
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: create role
       tags:
       - role
     put:

@@ -44,7 +44,7 @@ func (c *RoleController) Get(r *ghttp.Request) {
 // @Tags role
 // @Param   PostRole  body api_model.PostRole true "PostRole"
 // @Success 200 {string} string	"ok"
-// @router /policy [post]
+// @router /role [post]
 func (c *RoleController) Post(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.PostRole{}

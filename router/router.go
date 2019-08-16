@@ -17,7 +17,6 @@ var routerMap = make(map[string]model.RolePolicy)
 
 func showURL(r *ghttp.Request) {
 	glog.Debug("请求路径：", r.Method, r.Request.RequestURI)
-	//r.Response.CORSDefault()
 }
 
 // InitRouter 初始化路由

@@ -68,7 +68,7 @@ func (c *PolicyController) Put(r *ghttp.Request) {
 // @Summary GetPolicyByRole
 // @Description GetPolicyByRole
 // @Tags policy
-// @Param	role	query 	string	role		"role"
+// @Param	policy	query 	string	role		"role"
 // @Success 200 {string} string	"ok"
 // @router /policy/byrole [get]
 func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {

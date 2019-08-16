@@ -87,7 +87,7 @@ func (c *UserController) Post(r *ghttp.Request) {
 	j.ToStruct(&m)
 
 	u, err := model.GetUserByName(m.Username)
-	if err != nil || u.Id != 0 {
+	if err == nil && u.Id != 0 {
 		Fail(r, code.RESPONSE_ERROR, "用户已存在")
 	}
 	addu := GetUser(r)
@@ -95,6 +95,7 @@ func (c *UserController) Post(r *ghttp.Request) {
 	if addu != nil {
 		addUserId = addu.Id
 	}
+	m.Password = utils.EncryptPassword(m.Password)
 	user := model.GadminUser{UserName: m.Username, Password: m.Password, NickName: m.Nickname, Email: m.Email, Phone: m.Phone, AddUserId: addUserId}
 	uid, _ := user.Insert()
 	if uid > 0 {
@@ -119,7 +120,7 @@ func (c *UserController) Put(r *ghttp.Request) {
 	j.ToStruct(&m)
 
 	u, err := model.GetUserByName(m.Username)
-	if err != nil || u.Id == 0 {
+	if err == nil && u.Id == 0 {
 		Fail(r, code.RESPONSE_ERROR, "用户不存在")
 	}
 	umap := gdb.Map{}

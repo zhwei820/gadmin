@@ -68,7 +68,7 @@ func GetRoleByUserName(userName string) []model.GadminRoleconfig {
 func UpdateRoleByRoleKey(role, name string) error {
 	p, err := model.GetRoleByRoleKey(role)
 	// 不存在插入新数据
-	if err != nil || p.Id == 0 {
+	if err == nil && p.Id == 0 {
 		p.RoleKey = role
 		p.Name = name
 		id, _ := p.Insert()
@@ -98,7 +98,7 @@ func UpdateRoleByRoleKey(role, name string) error {
 func AddRole(role, name string) error {
 	p, err := model.GetRoleByRoleKey(role)
 	// 不存在插入新数据
-	if err != nil || p.Id == 0 {
+	if err == nil && p.Id == 0 {
 		res := model.Enforcer.AddGroupingPolicy("system", role)
 		if !res {
 			return errors.New("add fail")
@@ -121,7 +121,7 @@ func AddRole(role, name string) error {
 // author:hailaz
 func DeleteRole(role string) error {
 	p, err := model.GetRoleByRoleKey(role)
-	if err != nil || p.Id == 0 {
+	if err == nil && p.Id == 0 {
 		return errors.New("delete fail")
 	}
 	model.Enforcer.DeleteRole(role)

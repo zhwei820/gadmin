@@ -72,7 +72,7 @@ func GetPolicyByRole(role string) []model.GadminPolicyconfig {
 func UpdatePolicyByFullPath(path, name string) error {
 	p, err := model.GetPolicyByFullPath(path)
 	// 不存在插入新数据
-	if err != nil || p.Id == 0 {
+	if err == nil && p.Id == 0 {
 		p.FullPath = path
 		p.Name = name
 		id, _ := p.Insert()
