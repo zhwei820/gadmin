@@ -137,6 +137,7 @@ func initCasbin() {
 	//Enforcer.DeletePermissionsForUser("group_admin")
 	Enforcer.AddPolicy(ADMIN_NAME, "*", ACTION_ALL)
 	//Enforcer.AddGroupingPolicy("system", "user")
+	//service.ReSetPolicy()
 
 }
 

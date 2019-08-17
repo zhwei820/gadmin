@@ -120,7 +120,7 @@ func (c *UserController) Put(r *ghttp.Request) {
 	j.ToStruct(&m)
 
 	u, err := model.GetUserByName(m.Username)
-	if err == nil && u.Id == 0 {
+	if err != nil || u.Id == 0 {
 		Fail(r, code.RESPONSE_ERROR, "用户不存在")
 	}
 	umap := gdb.Map{}

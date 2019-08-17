@@ -18,7 +18,7 @@ type RoleController struct {
 // @Tags role
 // @Param	page	query 	integer	false		"page"
 // @Param	limit	query 	integer	false		"limit"
-// @Param	username	query 	string	true		"username"
+// @Param	username	query 	string	false		"username"
 // @Success 200 {string} string	"ok"
 // @router /role [get]
 func (c *RoleController) Get(r *ghttp.Request) {

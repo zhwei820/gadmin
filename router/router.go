@@ -54,16 +54,6 @@ func authHook(r *ghttp.Request) {
 	api.GfJWTMiddleware.MiddlewareFunc()(r) //鉴权中间件
 }
 
-type Object struct{}
-
-func (o *Object) Show(r *ghttp.Request) {
-	r.Response.Writeln("Object Show")
-}
-
-func (o *Object) Delete(r *ghttp.Request) {
-	r.Response.Writeln("Object REST Delete")
-}
-
 // Init 初始化V1
 //
 // createTime:2019年04月25日 09:24:06

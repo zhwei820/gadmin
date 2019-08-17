@@ -13,7 +13,7 @@ type RolePolicy struct {
 // createTime:2019年04月30日 10:20:50
 // author:hailaz
 func GetAllRole() (gdb.Result, error) {
-	return defDB.Table("gadmin_rolename").All()
+	return defDB.Table("gadmin_roleconfig").All()
 }
 
 // GetRoleByRoleKey 根据角色唯一键获取角色
@@ -22,6 +22,6 @@ func GetAllRole() (gdb.Result, error) {
 // author:hailaz
 func GetRoleByRoleKey(role string) (GadminRoleconfig, error) {
 	obj := GadminRoleconfig{}
-	err := defDB.Table("gadmin_rolename").Where("role_key", role).Struct(&obj)
+	err := defDB.Table("gadmin_roleconfig").Where("role_key", role).Struct(&obj)
 	return obj, err
 }

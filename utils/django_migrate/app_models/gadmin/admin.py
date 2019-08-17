@@ -1,6 +1,15 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+import inspect
 
 from django.contrib import admin
 
-# Register your models here.
+from . import models as app_models
+
+for attr in dir(app_models):
+    model = getattr(app_models, attr)
+    if not inspect.isclass(model):
+        continue
+
+    try:
+        admin.site.register(model)
+    except:
+        pass
