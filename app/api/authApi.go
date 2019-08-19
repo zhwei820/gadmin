@@ -20,8 +20,8 @@ func init() {
 	authMiddleware, err := jwt.New(&jwt.GfJWTMiddleware{
 		Realm:                 "gf admin",
 		Key:                   []byte("secret key"),
-		Timeout:               time.Hour * 24,          //token有效时间
-		MaxRefresh:            time.Hour * 24,          //token刷新有效时间
+		Timeout:               time.Hour * 24 * 100,    //token有效时间1
+		MaxRefresh:            time.Hour * 24 * 100,    //token刷新有效时间
 		IdentityKey:           "username",              // 用户关键字
 		TokenLookup:           "header: Authorization", // 捕抓请求的指定数据
 		TokenHeadName:         "jwt",                   // token 头名称

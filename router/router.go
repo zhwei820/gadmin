@@ -77,8 +77,8 @@ func Init(s *ghttp.Server) {
 		////menu
 		{"REST", "/menu", menuCtrl},
 		//// 用户
-		{"GET", "/user/info", userCtrl, "Info", "false"},
-		{"GET", "/user/menu", userCtrl, "Menu", "false"},
+		{"GET", "/user/info", userCtrl, "Info"},
+		{"GET", "/user/menu", userCtrl, "Menu"},
 		{"REST", "/user", userCtrl},
 		// 角色
 		{"REST", "/role", roleCtrl},
@@ -100,17 +100,14 @@ func BindGroup(s *ghttp.Server, path string, items []ghttp.GroupItem) {
 	g.Bind(items)
 	for _, item := range items {
 		glog.Debug(gconv.String(item[1]))
-		if len(item) > 4 && gconv.String(item[4]) == "false" { //不走权限的api
-			addPolicy("*", path+gconv.String(item[1]), common.GetAction(gconv.String(item[0])))
-		} else { //走权限的api
-			if gconv.String(item[0]) == "REST" { //rest api
-				addPolicy("system", path+gconv.String(item[1]), model.ACTION_GET)
-				addPolicy("system", path+gconv.String(item[1]), model.ACTION_POST)
-				addPolicy("system", path+gconv.String(item[1]), model.ACTION_PUT)
-				addPolicy("system", path+gconv.String(item[1]), model.ACTION_DELETE)
-			} else {
-				addPolicy("system", path+gconv.String(item[1]), common.GetAction(gconv.String(item[0])))
-			}
+
+		if gconv.String(item[0]) == "REST" { //rest api
+			addPolicy("system", gconv.String(item[1]), model.ACTION_GET)
+			addPolicy("system", gconv.String(item[1]), model.ACTION_POST)
+			addPolicy("system", gconv.String(item[1]), model.ACTION_PUT)
+			addPolicy("system", gconv.String(item[1]), model.ACTION_DELETE)
+		} else {
+			addPolicy("system", gconv.String(item[1]), common.GetAction(gconv.String(item[0])))
 		}
 
 	}

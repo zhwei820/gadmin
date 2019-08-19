@@ -4,12 +4,12 @@ import (
 	"github.com/gogf/gf/g/database/gdb"
 )
 
-// GetAllPolicy 获取所有权限名称
+// GetAllPolicyConfig 获取所有权限名称
 //
 // createTime:2019年04月30日 10:20:50
 // author:hailaz
-func GetAllPolicy() (gdb.Result, error) {
-	return defDB.Table("gadmin_policyname").All()
+func GetAllPolicyConfig() (gdb.Result, error) {
+	return defDB.Table("gadmin_policyconfig").All()
 }
 
 // GetPolicyByFullPath 根据权限全路径获取权限
@@ -18,6 +18,6 @@ func GetAllPolicy() (gdb.Result, error) {
 // author:hailaz
 func GetPolicyByFullPath(path string) (GadminPolicyconfig, error) {
 	obj := GadminPolicyconfig{}
-	err := defDB.Table("gadmin_policyname").Where("full_path", path).Struct(&obj)
+	err := defDB.Table("gadmin_policyconfig").Where("full_path", path).Struct(&obj)
 	return obj, err
 }

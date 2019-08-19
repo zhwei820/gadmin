@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/g"
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/os/glog"
+	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/utils"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
@@ -137,14 +138,5 @@ func initCasbin() {
 	//Enforcer.DeletePermissionsForUser("group_admin")
 	Enforcer.AddPolicy(ADMIN_NAME, "*", ACTION_ALL)
 	//Enforcer.AddGroupingPolicy("system", "user")
-	//service.ReSetPolicy()
 
-}
-
-// GetDB 获取默认DB
-//
-// createTime:2019年04月23日 11:53:21
-// author:hailaz
-func GetDB() gdb.DB {
-	return defDB
 }

@@ -18,17 +18,17 @@ func GetPolicyList(page, limit int, defaultname string) ([]model.GadminPolicycon
 	policyList := make([]model.GadminPolicyconfig, 0)
 	policys := model.Enforcer.GetPermissionsForUser("system")
 	total := len(policys)
-	r, _ := model.GetAllPolicy()
-	pn := make([]model.GadminPolicyconfig, 0)
-	r.ToStructs(&pn)
+	r, _ := model.GetAllPolicyConfig()
+	pcs := make([]model.GadminPolicyconfig, 0)
+	r.ToStructs(&pcs)
 
 	for _, item := range policys {
 		full := fmt.Sprintf("%v:%v", item[1], item[2])
 		p := model.GadminPolicyconfig{FullPath: full, Name: defaultname}
-		for _, itempn := range pn {
-			if itempn.FullPath == full {
-				p.Name = itempn.Name
-				p.Descrption = itempn.Descrption
+		for _, itempc := range pcs {
+			if itempc.FullPath == full {
+				p.Name = itempc.Name
+				p.Descrption = itempc.Descrption
 				break
 			}
 		}
