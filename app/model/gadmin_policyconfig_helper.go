@@ -21,3 +21,7 @@ func GetPolicyByFullPath(path string) (GadminPolicyconfig, error) {
 	err := defDB.Table("gadmin_policyconfig").Where("full_path", path).Struct(&obj)
 	return obj, err
 }
+
+func CountPolicyConfig() (int, error) {
+	return defDB.Table("gadmin_policyconfig").Count()
+}

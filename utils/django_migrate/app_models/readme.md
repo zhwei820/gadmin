@@ -17,7 +17,8 @@
 1. 修改python数据库model。
    edit file in gadmin/models
 2. 执行makemigrations, 生成migrations文件记录。
-   python manage makemigrations
+   python manage.py makemigrations
 3. 执行migrate，将表结构变动同步到数据库。
-   python manage migrate
+   python manage.py migrate
 
+python manage.py runserver 0.0.0.0:8188

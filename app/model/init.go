@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"github.com/casbin/casbin"
 	"github.com/gogf/gf/g"
 	"github.com/gogf/gf/g/database/gdb"
@@ -34,6 +35,7 @@ func InitModel() {
 	initUser()
 	initCasbin()
 	initMenu()
+	initPolicyConfig()
 }
 
 // initUser 初始化用户
@@ -138,4 +140,24 @@ func initCasbin() {
 	Enforcer.AddPolicy(ADMIN_NAME, "*", ACTION_ALL)
 	//Enforcer.AddGroupingPolicy("system", "user")
 
+}
+
+func initPolicyConfig() {
+	policys := Enforcer.GetPermissionsForUser("system")
+	r, _ := GetAllPolicyConfig()
+	pcs := make([]GadminPolicyconfig, 0)
+	_ = r.ToStructs(&pcs)
+	pcd := make(map[string]GadminPolicyconfig)
+	for _, itempc := range pcs {
+		pcd[itempc.FullPath] = itempc
+	}
+	for _, item := range policys {
+		full := fmt.Sprintf("%v:%v", item[1], item[2])
+		_, ok := pcd[full]
+		if ok {
+			continue
+		}
+		p := GadminPolicyconfig{FullPath: full, Name: "未命名"}
+		_, _ = p.Insert()
+	}
 }
