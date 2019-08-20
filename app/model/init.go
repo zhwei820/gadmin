@@ -36,6 +36,7 @@ func InitModel() {
 	initCasbin()
 	initMenu()
 	initPolicyConfig()
+	initRoleConfig()
 }
 
 // initUser 初始化用户
@@ -158,6 +159,26 @@ func initPolicyConfig() {
 			continue
 		}
 		p := GadminPolicyconfig{FullPath: full, Name: "未命名"}
+		_, _ = p.Insert()
+	}
+}
+
+func initRoleConfig() {
+	roles := Enforcer.GetAllRoles()
+	r, _ := GetAllRole()
+	pns := make([]GadminRoleconfig, 0)
+	r.ToStructs(&pns)
+
+	pcd := make(map[string]GadminRoleconfig)
+	for _, item := range pns {
+		pcd[item.RoleKey] = item
+	}
+	for _, item := range roles {
+		_, ok := pcd[item]
+		if ok {
+			continue
+		}
+		p := GadminRoleconfig{RoleKey: item, Name: "未命名"}
 		_, _ = p.Insert()
 	}
 }
