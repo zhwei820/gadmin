@@ -2,7 +2,6 @@
 # 19-4-3 下午3:40
 
 import logging
-from celery.schedules import crontab
 
 LOG_LEVEL = logging.INFO
 

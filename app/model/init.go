@@ -5,7 +5,6 @@ import (
 	"github.com/gogf/gf/g"
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/os/glog"
-	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/utils"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
