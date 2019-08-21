@@ -63,17 +63,7 @@ class PolicyConfig(models.Model):
         pass
 
 
-class RoleMenu(models.Model):
-    role_key = models.CharField(max_length=255)
-    menu_name = models.CharField(max_length=255)
-
-    class Meta:
-        # managed = False
-        #db_table = 'role_menu'
-        pass
-
-
-class RoleConfig(models.Model):
+class RoleConfig(models.Model):  # 角色配置表
     role_key = models.CharField(unique=True, max_length=255)
     name = models.CharField(max_length=255)
     descrption = models.CharField(max_length=255, blank=True, null=True)
@@ -83,6 +73,24 @@ class RoleConfig(models.Model):
         #db_table = 'role_name'
         pass
 
+
+class RolePolicy(models.Model):  # 角色权限表
+    role_key = models.CharField(max_length=255, db_index=True)
+    menu_name = models.CharField(max_length=255)
+
+    class Meta:
+        # managed = False
+        pass
+
+
+class RoleMenu(models.Model):  # 角色菜单表
+    role_key = models.CharField(max_length=255, db_index=True)
+    menu_name = models.CharField(max_length=255)
+
+    class Meta:
+        # managed = False
+        #db_table = 'role_menu'
+        pass
 
 class User(models.Model):
     status = models.IntegerField()

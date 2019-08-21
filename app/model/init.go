@@ -35,7 +35,7 @@ func InitModel() {
 	initUser()
 	initCasbin()
 	initMenu()
-	initPolicyConfig()
+	initSystemAndUserDefinedPolicyConfig()
 	initRoleConfig()
 }
 
@@ -143,7 +143,8 @@ func initCasbin() {
 
 }
 
-func initPolicyConfig() {
+// 初始化系统权限(api接口权限) 和 用户自定义权限
+func initSystemAndUserDefinedPolicyConfig() {
 	policys := Enforcer.GetPermissionsForUser("system")
 	r, _ := GetAllPolicyConfig()
 	pcs := make([]GadminPolicyconfig, 0)

@@ -113,6 +113,17 @@ func GetMenuByRoleConfig(roles []string) []MenuOut {
 		r.ToStructs(&menus)
 	}
 
+	// remove duplicate
+	menuDict := make(map[string]MenuOut)
+	for ii := range menus {
+		menuDict[menus[ii].MenuPath] = menus[ii]
+	}
+	menus = make([]MenuOut, 0)
+	for key := range menuDict {
+		menus = append(menus, menuDict[key])
+	}
+	// end remove duplicate
+
 	for index, item := range menus {
 		meta := GadminMenumeta{}
 		r, _ := defDB.Table("gadmin_menumeta").Where("menu_name=?", item.Name).One()
