@@ -7,9 +7,9 @@ import (
 // GadminRolepolicy 表名：gadmin_rolepolicy
 // 由数据库自动生成的结构体
 type GadminRolepolicy struct {
-	Id       int `json:"id" xorm:"not null pk autoincr INT(11)"`
-	RoleId   int `json:"role_id" xorm:"not null index INT(11)"`
-	PolicyId int `json:"policy_id" xorm:"not null index INT(11)"`
+	Id         int    `json:"id" xorm:"not null pk autoincr INT(11)"`
+	RoleKey    string `json:"role_key" xorm:"not null index VARCHAR(255)"`
+	PolicyPath string `json:"policy_path" xorm:"not null index VARCHAR(255)"`
 }
 
 // TableName 获取表名

@@ -70,25 +70,25 @@ func GetMenuList(page, limit int) ([]MenuOut, int) {
 	r.ToStructs(&menuList)
 	for index, item := range menuList {
 		meta := GadminMenumeta{}
-		r, _ := defDB.Table("gadmin_menumeta").Where("menu_name=?", item.Name).One()
+		r, _ := defDB.Table("gadmin_menumeta").Where("menu_id=?", item.GadminMenu.Id).One()
 		r.ToStruct(&meta)
 		menuList[index].GadminMenumeta = meta
 	}
 	return menuList, total
 }
 
-// UpdateMenuByName description
+// UpdateMenuById description
 //
 // createTime:2019年05月17日 17:54:40
 // author:hailaz
-func UpdateMenuByName(name string, dataMap gdb.Map) error {
+func UpdateMenuById(id int, dataMap gdb.Map) error {
 	mate := dataMap["meta"].(gdb.Map)
 	delete(dataMap, "meta")
-	_, err := defDB.Update("gadmin_menu", dataMap, "name=?", name)
+	_, err := defDB.Update("gadmin_menu", dataMap, "id=?", id)
 	if err != nil {
 		return err
 	}
-	_, err = defDB.Update("gadmin_menumeta", mate, "menu_name=?", name)
+	_, err = defDB.Update("gadmin_menumeta", mate, "menu_id=?", id)
 	if err != nil {
 		return err
 	}
@@ -126,14 +126,14 @@ func GetMenuByRoleConfig(roles []string) []MenuOut {
 
 	for index, item := range menus {
 		meta := GadminMenumeta{}
-		r, _ := defDB.Table("gadmin_menumeta").Where("menu_name=?", item.Name).One()
+		r, _ := defDB.Table("gadmin_menumeta").Where("menu_id=?", item.GadminMenu.Id).One()
 		r.ToStruct(&meta)
 		menus[index].GadminMenumeta = meta
 	}
 	menuRoot := make([]MenuOut, 0)
 	childs := make([]*MenuOut, 0)
 	for index, item := range menus { //分类菜单，一级菜单与非一级菜单
-		if item.ParentName == "" {
+		if item.ParentId == 0 {
 			menuRoot = append(menuRoot, item)
 		} else {
 			childs = append(childs, &menus[index])
@@ -152,7 +152,7 @@ func GetMenuByRoleConfig(roles []string) []MenuOut {
 // author:hailaz
 func FindChildren(mo *MenuOut, list []*MenuOut) {
 	for _, item := range list {
-		if item.ParentName == mo.Name {
+		if item.ParentId == mo.GadminMenu.Id {
 			mo.Children = append(mo.Children, *item)
 		}
 	}

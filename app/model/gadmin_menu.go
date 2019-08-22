@@ -11,11 +11,11 @@ type GadminMenu struct {
 	MenuPath   string `json:"menu_path" xorm:"not null VARCHAR(255)"`
 	Component  string `json:"component" xorm:"not null VARCHAR(255)"`
 	Redirect   string `json:"redirect" xorm:"not null VARCHAR(255)"`
-	Name       string `json:"name" xorm:"not null unique VARCHAR(255)"`
 	Hidden     int    `json:"hidden" xorm:"INT(11)"`
 	Alwaysshow int    `json:"alwaysshow" xorm:"INT(11)"`
 	Sort       int    `json:"sort" xorm:"INT(11)"`
-	ParentName string `json:"parent_name" xorm:"VARCHAR(255)"`
+	AutoCreate int    `json:"auto_create" xorm:"INT(11)"`
+	ParentId   int    `json:"parent_id" xorm:"not null index INT(11)"`
 }
 
 // TableName 获取表名

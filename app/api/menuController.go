@@ -43,14 +43,13 @@ func (c *MenuController) Post(r *ghttp.Request) {
 	data.ToStruct(&m)
 	model.InsertMenuWithMeta(gdb.List{
 		{
-			"name":        m.Name,
-			"menu_path":   m.MenuPath,
-			"component":   m.Component,
-			"sort":        m.Sort,
-			"parent_name": m.ParentName,
-			"hidden":      m.Hidden,
-			"redirect":    m.Redirect,
-			"alwaysshow":  m.Alwaysshow,
+			"menu_path":  m.MenuPath,
+			"component":  m.Component,
+			"sort":       m.Sort,
+			"parent_id":  m.ParentId,
+			"hidden":     m.Hidden,
+			"redirect":   m.Redirect,
+			"alwaysshow": m.Alwaysshow,
 			"meta": gdb.Map{
 				"title":   m.GadminMenumeta.Title,
 				"icon":    m.GadminMenumeta.Icon,
@@ -72,16 +71,16 @@ func (c *MenuController) Put(r *ghttp.Request) {
 	data := r.GetJson()
 	m := model.MenuOut{}
 	data.ToStruct(&m)
-	err := model.UpdateMenuByName(
-		m.Name,
+	err := model.UpdateMenuById(
+		m.GadminMenu.Id,
 		gdb.Map{
-			"menu_path":   m.MenuPath,
-			"component":   m.Component,
-			"sort":        m.Sort,
-			"parent_name": m.ParentName,
-			"hidden":      m.Hidden,
-			"redirect":    m.Redirect,
-			"alwaysshow":  m.Alwaysshow,
+			"menu_path":  m.MenuPath,
+			"component":  m.Component,
+			"sort":       m.Sort,
+			"parent_id":  m.ParentId,
+			"hidden":     m.Hidden,
+			"redirect":   m.Redirect,
+			"alwaysshow": m.Alwaysshow,
 			"meta": gdb.Map{
 				"title":   m.GadminMenumeta.Title,
 				"icon":    m.GadminMenumeta.Icon,

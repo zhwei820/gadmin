@@ -30,7 +30,7 @@ class Menu(models.Model):
     hidden = models.IntegerField(blank=True, null=True)
     alwaysshow = models.IntegerField(blank=True, null=True)
     sort = models.IntegerField(blank=True, null=True)
-    parent_name = models.CharField(max_length=255, blank=True, null=True)
+    parent_id = models.IntegerField(db_index=True, default=0)
     auto_create = models.IntegerField(blank=True, null=True)
 
     class Meta:

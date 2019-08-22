@@ -7,9 +7,9 @@ import (
 // GadminRolemenu 表名：gadmin_rolemenu
 // 由数据库自动生成的结构体
 type GadminRolemenu struct {
-	Id     int `json:"id" xorm:"not null pk autoincr INT(11)"`
-	MenuId int `json:"menu_id" xorm:"not null index INT(11)"`
-	RoleId int `json:"role_id" xorm:"not null index INT(11)"`
+	Id      int    `json:"id" xorm:"not null pk autoincr INT(11)"`
+	RoleKey string `json:"role_key" xorm:"not null index VARCHAR(255)"`
+	MenuId  int    `json:"menu_id" xorm:"not null index INT(11)"`
 }
 
 // TableName 获取表名
