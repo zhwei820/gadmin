@@ -16,7 +16,6 @@ type GadminMenu struct {
 	Alwaysshow int    `json:"alwaysshow" xorm:"INT(11)"`
 	Sort       int    `json:"sort" xorm:"INT(11)"`
 	ParentName string `json:"parent_name" xorm:"VARCHAR(255)"`
-	AutoCreate int    `json:"auto_create" xorm:"INT(11)"`
 }
 
 // TableName 获取表名

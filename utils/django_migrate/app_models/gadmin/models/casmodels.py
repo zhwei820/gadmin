@@ -27,11 +27,11 @@ class Menu(models.Model):
     menu_path = models.CharField(max_length=255)
     component = models.CharField(max_length=255)
     redirect = models.CharField(max_length=255)
-    name = models.CharField(unique=True, max_length=255)
     hidden = models.IntegerField(blank=True, null=True)
     alwaysshow = models.IntegerField(blank=True, null=True)
     sort = models.IntegerField(blank=True, null=True)
     parent_name = models.CharField(max_length=255, blank=True, null=True)
+    auto_create = models.IntegerField(blank=True, null=True)
 
     class Meta:
         # managed = False
@@ -43,6 +43,7 @@ class MenuMeta(models.Model):
     menu_id = models.IntegerField(db_index=True, default=0)
     title = models.CharField(max_length=255)
     icon = models.CharField(max_length=255, blank=True, null=True)
+    nocache = models.IntegerField(blank=True, null=True)
 
     class Meta:
         # managed = False
@@ -73,8 +74,8 @@ class RoleConfig(models.Model):  # 角色配置表
 
 
 class RolePolicy(models.Model):  # 角色权限表
-    role_id = models.IntegerField(db_index=True, default=0)
-    policy_id = models.IntegerField(db_index=True, default=0)
+    role_key = models.CharField(max_length=255, db_index=True)
+    policy_path = models.CharField(max_length=255, db_index=True)
 
     class Meta:
         # managed = False
@@ -82,7 +83,7 @@ class RolePolicy(models.Model):  # 角色权限表
 
 
 class RoleMenu(models.Model):  # 角色菜单表
-    role_id = models.IntegerField(db_index=True, default=0)
+    role_key = models.CharField(max_length=255, db_index=True)
     menu_id = models.IntegerField(db_index=True, default=0)
 
     class Meta:

@@ -32,7 +32,6 @@ func (t *GadminUser) TableName() string {
 
 // Insert 插入一条记录
 func (t *GadminUser) Insert() (int64, error) {
-	t.updateTime(true)
 	r, err := defDB.Insert("gadmin_user", t)
 	if err != nil {
 		return 0, err
@@ -44,7 +43,6 @@ func (t *GadminUser) Insert() (int64, error) {
 
 // Update 更新对象
 func (t *GadminUser) Update() (int64, error) {
-	t.updateTime()
 	if t.Id <= 0 {
 		return 0, errors.New("primary_key <= 0")
 	}
@@ -69,12 +67,4 @@ func (t *GadminUser) GetById(id int) (GadminUser, error) {
 	obj := GadminUser{}
 	err := defDB.Table("gadmin_user").Where("id", id).Struct(&obj)
 	return obj, err
-}
-
-// 更新操作时间
-func (u *GadminUser) updateTime(create ...bool) {
-	if len(create) > 0 && create[0] {
-		u.AddTime = time.Now()
-	}
-	u.UpdateTime = time.Now()
 }

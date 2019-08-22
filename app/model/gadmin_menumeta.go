@@ -7,11 +7,10 @@ import (
 // GadminMenumeta 表名：gadmin_menumeta
 // 由数据库自动生成的结构体
 type GadminMenumeta struct {
-	Id       int    `json:"id" xorm:"not null pk autoincr INT(11)"`
-	MenuName string `json:"menu_name" xorm:"not null unique VARCHAR(255)"`
-	Title    string `json:"title" xorm:"not null VARCHAR(255)"`
-	Icon     string `json:"icon" xorm:"VARCHAR(255)"`
-	Nocache  int    `json:"nocache" xorm:"INT(11)"`
+	Id     int    `json:"id" xorm:"not null pk autoincr INT(11)"`
+	Title  string `json:"title" xorm:"not null VARCHAR(255)"`
+	Icon   string `json:"icon" xorm:"VARCHAR(255)"`
+	MenuId int    `json:"menu_id" xorm:"not null index INT(11)"`
 }
 
 // TableName 获取表名
