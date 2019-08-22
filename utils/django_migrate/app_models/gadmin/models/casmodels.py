@@ -110,3 +110,13 @@ class User(models.Model):
         # managed = False
         #db_table = 'user'
         pass
+
+
+class UserRole(models.Model):  # 用户角色表
+    role_key = models.CharField(max_length=255, db_index=True)
+    user_name = models.CharField(max_length=255)
+
+    class Meta:
+        # managed = False
+        #db_table = 'role_menu'
+        pass
