@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
+	"strings"
 )
 
 // GetRoleList 获取权限列表
@@ -137,9 +138,17 @@ func DeleteRole(role string) error {
 //
 // createTime:2019年05月08日 15:22:05
 // author:hailaz
-func SetRoleByUserName(userName string, roles []string) {
+func SetRoleByUserName(userName string, roles []string) error {
 	model.Enforcer.DeleteRolesForUser(userName)
-	for _, item := range roles {
-		model.Enforcer.AddRoleForUser(userName, item)
+	for _, role := range roles {
+		model.Enforcer.AddRoleForUser(userName, role)
 	}
+	rolestr := strings.Join(roles, ",")
+	user, err := model.GetUserByName(userName)
+	if err != nil {
+		return errors.New("userName find User error")
+	}
+	user.RoleKeys = rolestr
+	user.Update()
+	return nil
 }

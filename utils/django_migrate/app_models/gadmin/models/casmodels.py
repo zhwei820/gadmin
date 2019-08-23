@@ -91,6 +91,7 @@ class RoleMenu(models.Model):  # 角色菜单表
         #db_table = 'role_menu'
         pass
 
+
 class User(models.Model):
     status = models.IntegerField()
     user_name = models.CharField(unique=True, max_length=255)
@@ -100,23 +101,15 @@ class User(models.Model):
     phone = models.CharField(max_length=255, blank=True, null=True)
     sex = models.IntegerField()
     age = models.IntegerField()
-    add_time = models.DateTimeField()
-    update_time = models.DateTimeField()
+    add_time = models.DateTimeField(auto_now_add=True)
+    update_time = models.DateTimeField(auto_now=True)
     add_user_id = models.IntegerField()
     introduction = models.CharField(db_column='Introduction', max_length=255, blank=True, null=True)  # Field name made lowercase.
     avatar = models.CharField(max_length=255, blank=True, null=True)
+    role_keys = models.CharField(max_length=255, db_index=True, default='')
 
     class Meta:
         # managed = False
         #db_table = 'user'
         pass
 
-
-class UserRole(models.Model):  # 用户角色表
-    role_key = models.CharField(max_length=255, db_index=True)
-    user_name = models.CharField(max_length=255)
-
-    class Meta:
-        # managed = False
-        #db_table = 'role_menu'
-        pass

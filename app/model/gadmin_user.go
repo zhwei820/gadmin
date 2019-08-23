@@ -23,6 +23,7 @@ type GadminUser struct {
 	AddUserId    int       `json:"add_user_id" xorm:"not null INT(11)"`
 	Introduction string    `json:"Introduction" xorm:"VARCHAR(255)"`
 	Avatar       string    `json:"avatar" xorm:"VARCHAR(255)"`
+	RoleKeys     string    `json:"role_keys" xorm:"not null index VARCHAR(255)"`
 }
 
 // TableName 获取表名
