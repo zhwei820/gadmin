@@ -26,10 +26,10 @@ func TestGetWhereFromQuery(t *testing.T) {
 		},
 		{
 			querys: map[string]interface{}{
-				"nickname__icontains": "name_2",
+				"nickname__icontains": "NAME_2",
 			},
 			wheres: map[string]interface{}{
-				"nickname like ? ": "%name_2%",
+				"nickname like ? ": "%NAME_2%",
 			},
 		},
 		{
