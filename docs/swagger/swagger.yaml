@@ -17,8 +17,6 @@ definitions:
     type: object
   api_model.Login:
     properties:
-      kid:
-        type: string
       password:
         type: string
       username:
@@ -82,16 +80,14 @@ definitions:
         type: string
       id:
         type: integer
-      menu_name:
-        type: string
+      menu_id:
+        type: integer
       menu_path:
-        type: string
-      name:
         type: string
       nocache:
         type: integer
-      parent_name:
-        type: string
+      parent_id:
+        type: integer
       redirect:
         type: string
       sort:
@@ -112,7 +108,7 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
-  /login:
+  /rbac/login:
     post:
       description: 登陆
       parameters:
@@ -131,7 +127,7 @@ paths:
       summary: 登陆
       tags:
       - auth
-  /loginkey:
+  /rbac/loginkey:
     get:
       description: 获取登录的加密key
       responses:
@@ -142,7 +138,7 @@ paths:
       summary: 获取登录的加密key
       tags:
       - auth
-  /logout:
+  /rbac/logout:
     post:
       description: 登出
       responses:
@@ -153,7 +149,7 @@ paths:
       summary: 登出
       tags:
       - auth
-  /menu:
+  /rbac/menu:
     delete:
       description: delete menu
       parameters:
@@ -206,7 +202,7 @@ paths:
             type: string
       summary: create menu
       tags:
-      - user
+      - menu
     put:
       description: update menu
       parameters:
@@ -224,8 +220,8 @@ paths:
             type: string
       summary: update menu
       tags:
-      - user
-  /policy:
+      - menu
+  /rbac/policy:
     get:
       description: policy list
       parameters:
@@ -245,24 +241,6 @@ paths:
       summary: policy list
       tags:
       - policy
-    post:
-      description: create role
-      parameters:
-      - description: PostRole
-        in: body
-        name: PostRole
-        required: true
-        schema:
-          $ref: '#/definitions/api_model.PostRole'
-          type: object
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: create role
-      tags:
-      - role
     put:
       description: SetPolicyByRole
       parameters:
@@ -281,13 +259,13 @@ paths:
       summary: SetPolicyByRole
       tags:
       - policy
-  /policy/byrole:
+  /rbac/policy/byrole:
     get:
       description: GetPolicyByRole
       parameters:
       - description: role
         in: query
-        name: role
+        name: policy
         type: string
       responses:
         "200":
@@ -297,7 +275,7 @@ paths:
       summary: GetPolicyByRole
       tags:
       - policy
-  /refresh_token:
+  /rbac/refresh_token:
     get:
       description: 刷新token
       responses:
@@ -308,7 +286,7 @@ paths:
       summary: 刷新token
       tags:
       - auth
-  /role:
+  /rbac/role:
     delete:
       description: delete role
       parameters:
@@ -339,7 +317,6 @@ paths:
       - description: username
         in: query
         name: username
-        required: true
         type: string
       responses:
         "200":
@@ -347,6 +324,24 @@ paths:
           schema:
             type: string
       summary: role list
+      tags:
+      - role
+    post:
+      description: create role
+      parameters:
+      - description: PostRole
+        in: body
+        name: PostRole
+        required: true
+        schema:
+          $ref: '#/definitions/api_model.PostRole'
+          type: object
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: create role
       tags:
       - role
     put:
@@ -367,7 +362,7 @@ paths:
       summary: Update role
       tags:
       - role
-  /role/byuser:
+  /rbac/role/byuser:
     put:
       description: SetRoleByUserName
       parameters:
@@ -386,7 +381,7 @@ paths:
       summary: SetRoleByUserName
       tags:
       - role
-  /role/menu:
+  /rbac/role/menu:
     put:
       description: SetRoleMenus
       parameters:
@@ -405,7 +400,7 @@ paths:
       summary: SetRoleMenus
       tags:
       - role
-  /user:
+  /rbac/user:
     delete:
       description: delete user
       parameters:
@@ -433,6 +428,10 @@ paths:
         in: query
         name: limit
         type: integer
+      - description: search
+        in: query
+        name: search
+        type: string
       responses:
         "200":
           description: ok
@@ -477,7 +476,7 @@ paths:
       summary: UpdateUser
       tags:
       - user
-  /user/info:
+  /rbac/user/info:
     get:
       description: user info
       responses:
@@ -488,7 +487,7 @@ paths:
       summary: user info
       tags:
       - user
-  /user/menu:
+  /rbac/user/menu:
     get:
       description: user menu
       parameters:
@@ -504,4 +503,9 @@ paths:
       summary: user menu
       tags:
       - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

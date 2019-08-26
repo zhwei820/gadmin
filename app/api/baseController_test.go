@@ -151,7 +151,7 @@ func TestGetWhereFromQuery(t *testing.T) {
 	table := createInitTable()
 	defer dropTable(table)
 	for _, test := range tests {
-		assert.Equal(t, GetWhereFromQuery(test.querys), test.wheres)
+		assert.Equal(t, GetWhereFromQuerys(test.querys), test.wheres)
 		type User struct {
 			Id         int
 			Passport   string
@@ -160,7 +160,7 @@ func TestGetWhereFromQuery(t *testing.T) {
 			CreateTime *gtime.Time
 		}
 		var users []*User
-		_ = db.Table(table).Where(GetWhereFromQuery(test.querys)).Structs(&users)
+		_ = db.Table(table).Where(GetWhereFromQuerys(test.querys)).Structs(&users)
 		g.Dump("====================")
 		g.Dump(test.wheres)
 		g.Dump(users)

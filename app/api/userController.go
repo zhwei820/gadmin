@@ -63,16 +63,18 @@ func (c *UserController) Menu(r *ghttp.Request) {
 // @Tags user
 // @Param	page	query 	integer	false		"page"
 // @Param	limit	query 	integer	false		"limit"
+// @Param	search	query 	string	false		"search"
 // @Success 200 {string} string	"ok"
 // @router /rbac/user [get]
 func (c *UserController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
 	limit := r.GetInt("limit", 10)
+	wheres := GetWhereFromRequest(r, nil, nil, []string{"user_name", "nick_name", "email"})
 	var userList struct {
 		List  []model.GadminUser `json:"items"`
 		Total int                `json:"total"`
 	}
-	userList.List, userList.Total = service.GetPagedUser(nil, page, limit)
+	userList.List, userList.Total = service.GetPagedUser(wheres, page, limit)
 	Success(r, userList)
 }
 

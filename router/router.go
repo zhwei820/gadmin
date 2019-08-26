@@ -67,7 +67,7 @@ func Init(s *ghttp.Server) {
 	menuCtrl := new(api.MenuController)
 
 	// user
-	BindGroup(s, "/", []ghttp.GroupItem{
+	BindGroup(s, "/rbac", []ghttp.GroupItem{
 		//
 		//登录
 		{"GET", "/loginkey", api.GetLoginCryptoKey},                   //获取登录加密公钥

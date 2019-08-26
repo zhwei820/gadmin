@@ -6,7 +6,7 @@ import "github.com/hailaz/gadmin/app/model"
 //
 // createTime:2019年05月07日 16:11:41
 // author:hailaz
-func GetPagedUser(where [][2]interface{}, page, limit int) ([]model.GadminUser, int) {
+func GetPagedUser(where map[string]interface{}, page, limit int) ([]model.GadminUser, int) {
 
 	total, _ := model.CountUser()
 

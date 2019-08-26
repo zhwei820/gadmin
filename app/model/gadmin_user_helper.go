@@ -72,10 +72,10 @@ func CountUser() (int, error) {
 //
 // createTime:2019年04月30日 10:20:50
 // author:hailaz
-func GetPagedUser(where [][2]interface{}, limit ...int) (gdb.Result, error) {
+func GetPagedUser(where map[string]interface{}, limit ...int) (gdb.Result, error) {
 	qs := defDB.Table("gadmin_user")
-	for ii := range where {
-		qs = qs.Where(where[ii][0], where[ii][1])
+	for key := range where {
+		qs = qs.Where(key, where[key])
 	}
 	return qs.Limit(limit...).Select()
 }

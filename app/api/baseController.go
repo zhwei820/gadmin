@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/library/code"
+	"strconv"
 	"strings"
 )
 
@@ -97,7 +98,7 @@ var FilterMap = map[string]string{
 	LT:        " < ? ",
 }
 
-func GetWhereFromQuery(querys map[string]interface{}) map[string]interface{} {
+func GetWhereFromQuerys(querys map[string]interface{}) map[string]interface{} {
 	wheres := make(map[string]interface{}, 0)
 	for key := range querys {
 		for _, kk := range FilterKeys {
@@ -119,4 +120,47 @@ func GetWhereFromQuery(querys map[string]interface{}) map[string]interface{} {
 		}
 	}
 	return wheres
+}
+
+func GetWhereFromRequest(r *ghttp.Request, strKeys, intKeys, searchKeys []string) map[string]interface{} {
+	retQuery := make(map[string]interface{}, 0)
+	query := r.GetQueryMap()
+	if strKeys != nil {
+
+		for _, key := range strKeys {
+			if item, ok := query[key]; ok {
+				retQuery[key] = item
+			}
+		}
+	}
+	if intKeys != nil {
+		for _, key := range intKeys {
+			if item, ok := query[key]; ok {
+				if strings.Contains(key, RANGE) || strings.Contains(key, IN) {
+					items := strings.Split(item, ",")
+					if len(items) == 2 {
+						ii, _ := strconv.Atoi(items[0])
+						jj, _ := strconv.Atoi(items[1])
+						retQuery[key] = []int{ii, jj}
+					}
+				} else {
+					ii, _ := strconv.Atoi(item)
+					retQuery[key] = ii
+
+				}
+			}
+		}
+	}
+	retWhere := GetWhereFromQuerys(retQuery)
+
+	if item, ok := query["search"]; ok && searchKeys != nil {
+		searchKey := make([]string, 0)
+		searchValue := make([]interface{}, 0)
+		for _, key := range searchKeys {
+			searchKey = append(searchKey, key+" like ? ")
+			searchValue = append(searchValue, "%"+item+"%")
+		}
+		retWhere[strings.Join(searchKey, " or ")] = searchValue
+	}
+	return retWhere
 }

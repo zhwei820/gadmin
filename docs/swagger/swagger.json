@@ -17,7 +17,7 @@
     },
     "basePath": "/",
     "paths": {
-        "/login": {
+        "/rbac/login": {
             "post": {
                 "description": "登陆",
                 "tags": [
@@ -46,7 +46,7 @@
                 }
             }
         },
-        "/loginkey": {
+        "/rbac/loginkey": {
             "get": {
                 "description": "获取登录的加密key",
                 "tags": [
@@ -63,7 +63,7 @@
                 }
             }
         },
-        "/logout": {
+        "/rbac/logout": {
             "post": {
                 "description": "登出",
                 "tags": [
@@ -80,7 +80,7 @@
                 }
             }
         },
-        "/menu": {
+        "/rbac/menu": {
             "get": {
                 "description": "menu list",
                 "tags": [
@@ -113,7 +113,7 @@
             "put": {
                 "description": "update menu",
                 "tags": [
-                    "user"
+                    "menu"
                 ],
                 "summary": "update menu",
                 "parameters": [
@@ -140,7 +140,7 @@
             "post": {
                 "description": "create menu",
                 "tags": [
-                    "user"
+                    "menu"
                 ],
                 "summary": "create menu",
                 "parameters": [
@@ -189,7 +189,7 @@
                 }
             }
         },
-        "/policy": {
+        "/rbac/policy": {
             "get": {
                 "description": "policy list",
                 "tags": [
@@ -245,36 +245,9 @@
                         }
                     }
                 }
-            },
-            "post": {
-                "description": "create role",
-                "tags": [
-                    "role"
-                ],
-                "summary": "create role",
-                "parameters": [
-                    {
-                        "description": "PostRole",
-                        "name": "PostRole",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api_model.PostRole"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
             }
         },
-        "/policy/byrole": {
+        "/rbac/policy/byrole": {
             "get": {
                 "description": "GetPolicyByRole",
                 "tags": [
@@ -285,7 +258,7 @@
                     {
                         "type": "string",
                         "description": "role",
-                        "name": "role",
+                        "name": "policy",
                         "in": "query"
                     }
                 ],
@@ -299,7 +272,7 @@
                 }
             }
         },
-        "/refresh_token": {
+        "/rbac/refresh_token": {
             "get": {
                 "description": "刷新token",
                 "tags": [
@@ -316,7 +289,7 @@
                 }
             }
         },
-        "/role": {
+        "/rbac/role": {
             "get": {
                 "description": "role list",
                 "tags": [
@@ -340,8 +313,7 @@
                         "type": "string",
                         "description": "username",
                         "name": "username",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -359,6 +331,33 @@
                     "role"
                 ],
                 "summary": "Update role",
+                "parameters": [
+                    {
+                        "description": "PostRole",
+                        "name": "PostRole",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api_model.PostRole"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create role",
+                "tags": [
+                    "role"
+                ],
+                "summary": "create role",
                 "parameters": [
                     {
                         "description": "PostRole",
@@ -405,7 +404,7 @@
                 }
             }
         },
-        "/role/byuser": {
+        "/rbac/role/byuser": {
             "put": {
                 "description": "SetRoleByUserName",
                 "tags": [
@@ -434,7 +433,7 @@
                 }
             }
         },
-        "/role/menu": {
+        "/rbac/role/menu": {
             "put": {
                 "description": "SetRoleMenus",
                 "tags": [
@@ -463,7 +462,7 @@
                 }
             }
         },
-        "/user": {
+        "/rbac/user": {
             "get": {
                 "description": "user list",
                 "tags": [
@@ -481,6 +480,12 @@
                         "type": "integer",
                         "description": "limit",
                         "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
                         "in": "query"
                     }
                 ],
@@ -572,7 +577,7 @@
                 }
             }
         },
-        "/user/info": {
+        "/rbac/user/info": {
             "get": {
                 "description": "user info",
                 "tags": [
@@ -589,7 +594,7 @@
                 }
             }
         },
-        "/user/menu": {
+        "/rbac/user/menu": {
             "get": {
                 "description": "user menu",
                 "tags": [
@@ -642,9 +647,6 @@
         "api_model.Login": {
             "type": "object",
             "properties": {
-                "kid": {
-                    "type": "string"
-                },
                 "password": {
                     "type": "string"
                 },
@@ -742,20 +744,17 @@
                 "id": {
                     "type": "integer"
                 },
-                "menu_name": {
-                    "type": "string"
+                "menu_id": {
+                    "type": "integer"
                 },
                 "menu_path": {
-                    "type": "string"
-                },
-                "name": {
                     "type": "string"
                 },
                 "nocache": {
                     "type": "integer"
                 },
-                "parent_name": {
-                    "type": "string"
+                "parent_id": {
+                    "type": "integer"
                 },
                 "redirect": {
                     "type": "string"
@@ -767,6 +766,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
