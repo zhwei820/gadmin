@@ -25,3 +25,15 @@ func GetRoleByRoleKey(role string) (GadminRoleconfig, error) {
 	err := defDB.Table("gadmin_roleconfig").Where("role_key", role).Struct(&obj)
 	return obj, err
 }
+
+func CountRoleConfig() (int, error) {
+	return defDB.Table("gadmin_roleconfig").Count()
+}
+
+// GetPagedRoleConfig 获取分页的角色
+//
+// createTime:2019年04月30日 10:20:50
+// author:hailaz
+func GetPagedRoleConfig(limit ...int) (gdb.Result, error) {
+	return defDB.Table("gadmin_roleconfig").Limit(limit...).Select()
+}

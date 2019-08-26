@@ -20,19 +20,19 @@ type RoleController struct {
 // @Param	limit	query 	integer	false		"limit"
 // @Param	username	query 	string	false		"username"
 // @Success 200 {string} string	"ok"
-// @router /role [get]
+// @router /rbac/role [get]
 func (c *RoleController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
 	limit := r.GetInt("limit", 10)
 	username := r.GetString("username")
 	var list struct {
 		List         []model.GadminRoleconfig `json:"items"`
-		UserRoleList []model.GadminRoleconfig `json:"role_items"`
+		UserRoleKeys []string                 `json:"user_role_keyss"`
 		Total        int                      `json:"total"`
 	}
-	list.List, list.Total = service.GetRoleList(page, limit, UNDEFIND_POLICY_NAME)
+	list.List, list.Total = service.GetPagedRoleList(page, limit)
 	if username != "" {
-		list.UserRoleList = service.GetRoleByUserName(username)
+		list.UserRoleKeys = service.GetRoleKeysByUserName(username)
 	}
 
 	Success(r, list)
@@ -44,7 +44,7 @@ func (c *RoleController) Get(r *ghttp.Request) {
 // @Tags role
 // @Param   PostRole  body api_model.PostRole true "PostRole"
 // @Success 200 {string} string	"ok"
-// @router /role [post]
+// @router /rbac/role [post]
 func (c *RoleController) Post(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.PostRole{}
@@ -64,7 +64,7 @@ func (c *RoleController) Post(r *ghttp.Request) {
 // @Tags role
 // @Param   PostRole  body api_model.PostRole true "PostRole"
 // @Success 200 {string} string	"ok"
-// @router /role [put]
+// @router /rbac/role [put]
 func (c *RoleController) Put(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.PostRole{}
@@ -88,7 +88,7 @@ func (c *RoleController) Put(r *ghttp.Request) {
 // @Tags role
 // @Param	role	query 	string	true		"role"
 // @Success 200 {string} string	"ok"
-// @router /role [delete]
+// @router /rbac/role [delete]
 func (c *RoleController) Delete(r *ghttp.Request) {
 	role := r.GetString("role")
 
@@ -105,7 +105,7 @@ func (c *RoleController) Delete(r *ghttp.Request) {
 // @Tags role
 // @Param   SetRoleByUserName  body api_model.SetRoleByUserName true "SetRoleByUserName"
 // @Success 200 {string} string	"ok"
-// @router /role/byuser [put]
+// @router /rbac/role/byuser [put]
 func (c *RoleController) SetRoleByUserName(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.SetRoleByUserName{}
@@ -122,7 +122,7 @@ func (c *RoleController) SetRoleByUserName(r *ghttp.Request) {
 // @Tags role
 // @Param   SetRoleMenus  body api_model.SetRoleMenus true "SetRoleMenus"
 // @Success 200 {string} string	"ok"
-// @router /role/menu [put]
+// @router /rbac/role/menu [put]
 func (c *RoleController) SetRoleMenus(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.SetRoleMenus{}

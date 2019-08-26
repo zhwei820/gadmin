@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/library/code"
+	"strings"
 )
 
 type BaseController struct {
@@ -54,4 +55,68 @@ func GetUser(r *ghttp.Request) *model.GadminUser {
 	claims := jwt.ExtractClaims(r)
 	user, _ := model.GetUserByName(claims["username"].(string))
 	return user
+}
+
+func GetUserId(r *ghttp.Request) int {
+	addu := GetUser(r)
+	var addUserId = 0
+	if addu != nil {
+		addUserId = addu.Id
+	}
+	return addUserId
+}
+
+var (
+	CONTAINS  = "__contains"
+	ICONTAINS = "__icontains"
+	RANGE     = "__range"
+	IN        = "__in"
+	GTE       = "__gte"
+	LTE       = "__lte"
+	GT        = "__gt"
+	LT        = "__lt"
+)
+var FilterKeys = []string{
+	CONTAINS,
+	ICONTAINS,
+	RANGE,
+	IN,
+	GTE,
+	LTE,
+	GT,
+	LT,
+}
+var FilterMap = map[string]string{
+	CONTAINS:  " like BINARY ? ",
+	ICONTAINS: " like ? ",
+	RANGE:     " between ? AND ? ",
+	IN:        " in (?) ",
+	GTE:       " >= ? ",
+	LTE:       " <= ? ",
+	GT:        " > ? ",
+	LT:        " < ? ",
+}
+
+func GetWhereFromQuery(querys map[string]interface{}) map[string]interface{} {
+	wheres := make(map[string]interface{}, 0)
+	for key := range querys {
+		for _, kk := range FilterKeys {
+			if strings.Contains(key, kk) {
+				val := querys[key]
+
+				if _, ok := querys[key].(string); ok {
+					if CONTAINS == kk || ICONTAINS == kk {
+						val = "%" + querys[key].(string) + "%"
+					}
+					if RANGE == kk || IN == kk {
+						val = strings.Split(querys[key].(string), ",")
+					}
+				}
+
+				wheres[key[0:len(key)-len(kk)]+FilterMap[kk]] = val
+				break
+			}
+		}
+	}
+	return wheres
 }

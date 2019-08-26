@@ -47,7 +47,7 @@ func init() {
 // @Description 获取登录的加密key
 // @Tags auth
 // @Success 200 {string} string	"ok"
-// @router /loginkey [get]
+// @router /rbac/loginkey [get]
 func GetLoginCryptoKey(r *ghttp.Request) {
 	kid := r.Session.Id()
 	ck := common.GenCryptoKey(kid)
@@ -60,7 +60,7 @@ func GetLoginCryptoKey(r *ghttp.Request) {
 // @Description 登出
 // @Tags auth
 // @Success 200 {string} string	"ok"
-// @router /logout [post]
+// @router /rbac/logout [post]
 func Logout(r *ghttp.Request) {
 	Success(r, "success")
 }
@@ -71,7 +71,7 @@ func Logout(r *ghttp.Request) {
 // @Tags auth
 // @Param   Login  body api_model.Login true "Login"
 // @Success 200 {string} string	"ok"
-// @router /login [post]
+// @router /rbac/login [post]
 func SwaggerLogin(r *ghttp.Request) {
 	Success(r, "success")
 }
@@ -81,7 +81,7 @@ func SwaggerLogin(r *ghttp.Request) {
 // @Description 刷新token
 // @Tags auth
 // @Success 200 {string} string	"ok"
-// @router /refresh_token [get]
+// @router /rbac/refresh_token [get]
 func SwaggerRefreshToken(r *ghttp.Request) {
 	Success(r, "success")
 }

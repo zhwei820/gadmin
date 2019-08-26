@@ -25,3 +25,11 @@ func GetPolicyByFullPath(path string) (GadminPolicyconfig, error) {
 func CountPolicyConfig() (int, error) {
 	return defDB.Table("gadmin_policyconfig").Count()
 }
+
+// GetPagedPolicyConfig 获取分页的权限
+//
+// createTime:2019年04月30日 10:20:50
+// author:hailaz
+func GetPagedPolicyConfig(limit ...int) (gdb.Result, error) {
+	return defDB.Table("gadmin_policyconfig").Limit(limit...).Select()
+}

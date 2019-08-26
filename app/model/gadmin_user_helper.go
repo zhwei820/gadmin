@@ -64,33 +64,18 @@ func UpdateUserById(id int, udmap gdb.Map) error {
 	return nil
 }
 
-// GetUserByPageLimt 获取用户
+func CountUser() (int, error) {
+	return defDB.Table("gadmin_user").Count()
+}
+
+// GetPagedUser 获取分页的用户
 //
-// createTime:2019年05月07日 16:11:41
+// createTime:2019年04月30日 10:20:50
 // author:hailaz
-func GetUserByPageLimt(page, limit int) ([]GadminUser, int) {
-	if page < 1 {
-		page = 1
+func GetPagedUser(where [][2]interface{}, limit ...int) (gdb.Result, error) {
+	qs := defDB.Table("gadmin_user")
+	for ii := range where {
+		qs = qs.Where(where[ii][0], where[ii][1])
 	}
-	if limit < 1 {
-		limit = 10
-	}
-	total, _ := defDB.Table("gadmin_user").Count()
-	if total == 0 {
-		return nil, 0
-	}
-
-	userList := make([]GadminUser, 0)
-	if total < page*limit {
-		if total < limit {
-			page = 1
-		}
-	}
-	r, err := defDB.Table("gadmin_user").Limit((page-1)*limit, (page-1)*limit+limit).Select()
-	if err != nil {
-		return nil, 0
-	}
-	r.ToStructs(&userList)
-	return userList, total
-
+	return qs.Limit(limit...).Select()
 }

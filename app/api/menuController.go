@@ -17,7 +17,7 @@ type MenuController struct {
 // @Param	page	query 	integer	false		"page"
 // @Param	limit	query 	integer	false		"limit"
 // @Success 200 {string} string	"ok"
-// @router /menu [get]
+// @router /rbac/menu [get]
 func (c *MenuController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
 	limit := r.GetInt("limit", 10)
@@ -36,7 +36,7 @@ func (c *MenuController) Get(r *ghttp.Request) {
 // @Tags menu
 // @Param   SignInInfo  body model.MenuOut true "MenuOut"
 // @Success 200 {string} string	"ok"
-// @router /menu [post]
+// @router /rbac/menu [post]
 func (c *MenuController) Post(r *ghttp.Request) {
 	data := r.GetJson()
 	m := model.MenuOut{}
@@ -66,7 +66,7 @@ func (c *MenuController) Post(r *ghttp.Request) {
 // @Tags menu
 // @Param   SignInInfo  body model.MenuOut true "MenuOut"
 // @Success 200 {string} string	"ok"
-// @router /menu [put]
+// @router /rbac/menu [put]
 func (c *MenuController) Put(r *ghttp.Request) {
 	data := r.GetJson()
 	m := model.MenuOut{}
@@ -99,7 +99,7 @@ func (c *MenuController) Put(r *ghttp.Request) {
 // @Tags menu
 // @Param	name	query 	string	true		"name"
 // @Success 200 {string} string	"ok"
-// @router /menu [delete]
+// @router /rbac/menu [delete]
 func (c *MenuController) Delete(r *ghttp.Request) {
 	name := r.GetString("name")
 	m, err := model.GetMenuByName(name)

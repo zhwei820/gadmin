@@ -9,6 +9,7 @@ require (
 	github.com/gogf/gf-jwt v1.0.5
 	github.com/lib/pq v1.1.0
 	github.com/mattn/go-sqlite3 v1.10.0
+	github.com/stretchr/testify v1.3.0
 	github.com/swaggo/swag v1.4.0
 	github.com/zhwei820/gogf-swagger v0.0.0-20190809145810-2a2bce4d16ed // indirect
 )

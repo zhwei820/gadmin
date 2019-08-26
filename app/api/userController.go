@@ -6,8 +6,10 @@ import (
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/model"
+	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/library/code"
 	"github.com/hailaz/gadmin/utils"
+	"time"
 )
 
 type UserController struct {
@@ -18,7 +20,7 @@ type UserController struct {
 // @Description user info
 // @Tags user
 // @Success 200 {string} string	"ok"
-// @router /user/info [get]
+// @router /rbac/user/info [get]
 func (c *UserController) Info(r *ghttp.Request) {
 	u := GetUser(r)
 	if u != nil {
@@ -32,7 +34,7 @@ func (c *UserController) Info(r *ghttp.Request) {
 // @Tags user
 // @Param	RoleConfig	query 	string	false		"RoleConfig"
 // @Success 200 {string} string	"ok"
-// @router /user/menu [get]
+// @router /rbac/user/menu [get]
 func (c *UserController) Menu(r *ghttp.Request) {
 	RoleConfig := r.GetString("RoleConfig")
 	if RoleConfig != "" {
@@ -62,7 +64,7 @@ func (c *UserController) Menu(r *ghttp.Request) {
 // @Param	page	query 	integer	false		"page"
 // @Param	limit	query 	integer	false		"limit"
 // @Success 200 {string} string	"ok"
-// @router /user [get]
+// @router /rbac/user [get]
 func (c *UserController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
 	limit := r.GetInt("limit", 10)
@@ -70,7 +72,7 @@ func (c *UserController) Get(r *ghttp.Request) {
 		List  []model.GadminUser `json:"items"`
 		Total int                `json:"total"`
 	}
-	userList.List, userList.Total = model.GetUserByPageLimt(page, limit)
+	userList.List, userList.Total = service.GetPagedUser(nil, page, limit)
 	Success(r, userList)
 }
 
@@ -80,7 +82,7 @@ func (c *UserController) Get(r *ghttp.Request) {
 // @Tags user
 // @Param   CreateUser  body api_model.CreateUser true "CreateUser"
 // @Success 200 {string} string	"ok"
-// @router /user [post]
+// @router /rbac/user [post]
 func (c *UserController) Post(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.CreateUser{}
@@ -90,21 +92,28 @@ func (c *UserController) Post(r *ghttp.Request) {
 	if err == nil && u.Id != 0 {
 		Fail(r, code.RESPONSE_ERROR, "用户已存在")
 	}
-	addu := GetUser(r)
-	var addUserId = 0
-	if addu != nil {
-		addUserId = addu.Id
-	}
+
 	m.Password = utils.EncryptPassword(m.Password)
-	user := model.GadminUser{UserName: m.Username, Password: m.Password, NickName: m.Nickname, Email: m.Email, Phone: m.Phone, AddUserId: addUserId}
-	uid, _ := user.Insert()
+	user := model.GadminUser{
+		UserName:   m.Username,
+		Password:   m.Password,
+		NickName:   m.Nickname,
+		Email:      m.Email,
+		Phone:      m.Phone,
+		AddUserId:  GetUserId(r),
+		AddTime:    time.Now(),
+		UpdateTime: time.Now(),
+	}
+	uid, err := user.Insert()
+	if err != nil {
+		glog.Debug(err.Error())
+		glog.Debug(j.ToJsonString())
+		Fail(r, code.RESPONSE_ERROR, err.Error())
+	}
 	if uid > 0 {
 		Success(r, "success")
 	}
 
-	glog.Debug(uid)
-	glog.Debug(j.ToJsonString())
-	Fail(r, code.RESPONSE_ERROR)
 }
 
 //
@@ -113,7 +122,7 @@ func (c *UserController) Post(r *ghttp.Request) {
 // @Tags user
 // @Param   UpdateUser  body api_model.UpdateUser true "UpdateUser"
 // @Success 200 {string} string	"ok"
-// @router /user [put]
+// @router /rbac/user [put]
 func (c *UserController) Put(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.UpdateUser{}
@@ -153,7 +162,7 @@ func (c *UserController) Put(r *ghttp.Request) {
 // @Tags user
 // @Param	id	query 	integer	true		"id"
 // @Success 200 {string} string	"ok"
-// @router /user [delete]
+// @router /rbac/user [delete]
 func (c *UserController) Delete(r *ghttp.Request) {
 	data := r.GetJson()
 	id := data.GetInt("id")

@@ -25,7 +25,7 @@ type PolicyController struct {
 // @Param	page	query 	integer	false		"page"
 // @Param	limit	query 	integer	false		"limit"
 // @Success 200 {string} string	"ok"
-// @router /policy [get]
+// @router /rbac/policy [get]
 func (c *PolicyController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
 	limit := r.GetInt("limit", 10)
@@ -35,7 +35,7 @@ func (c *PolicyController) Get(r *ghttp.Request) {
 		Total int                        `json:"total"`
 	}
 
-	list.List, list.Total = service.GetPolicyList(page, limit, UNDEFIND_POLICY_NAME)
+	list.List, list.Total = service.GetPagedPolicyList(page, limit)
 
 	Success(r, list)
 }
@@ -47,7 +47,7 @@ func (c *PolicyController) Get(r *ghttp.Request) {
 // @Param	name	query 	string	true		"name"
 // @Param	policy	query 	string	true		"policy"
 // @Success 200 {string} string	"ok"
-// @router /policy [put]
+// @router /rbac/policy [put]
 func (c *PolicyController) Put(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.UpdatePolicy{}
@@ -70,7 +70,7 @@ func (c *PolicyController) Put(r *ghttp.Request) {
 // @Tags policy
 // @Param	policy	query 	string	role		"role"
 // @Success 200 {string} string	"ok"
-// @router /policy/byrole [get]
+// @router /rbac/policy/byrole [get]
 func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {
 	role := r.GetString("role")
 	var list struct {
@@ -79,7 +79,7 @@ func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {
 		Total          int                        `json:"total"`
 	}
 
-	list.List, list.Total = service.GetPolicyList(1, -1, "")
+	list.List, list.Total = service.GetPagedPolicyList(1, 999999)
 	list.RolePolicyList = service.GetPolicyByRole(role)
 
 	Success(r, list)
@@ -91,7 +91,7 @@ func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {
 // @Tags policy
 // @Param   PostRole  body api_model.PostRole true "PostRole"
 // @Success 200 {string} string	"ok"
-// @router /policy [put]
+// @router /rbac/policy [put]
 func (c *PolicyController) SetPolicyByRole(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.SetPolicyByRole{}
