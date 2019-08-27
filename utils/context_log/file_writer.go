@@ -48,11 +48,11 @@ func (w *FileWriter) Write(p []byte) (int, error) {
 	copy(buf, p)
 	select {
 	case w.ch <- buf:
-		//attr.AttrAPI(2769322, 1)       //log写入成功
-		//attr.AttrAPI(33520635, len(p)) //log写入channel字节数
+		//(2769322, 1)       //log写入成功
+		//(33520635, len(p)) //log写入channel字节数
 		return len(buf), nil
 	default:
-		//attr.AttrAPI(2769322, 1) //chan满，写入失败
+		//(2769322, 1) //chan满，写入失败
 		return 0, errors.New("chan full, drop")
 	}
 }
@@ -65,7 +65,7 @@ func (w *FileWriter) check() {
 		w.mu.Lock()
 		fileInfo, err := os.Stat(w.filePath)
 		if os.IsNotExist(err) {
-			//attr.AttrAPI(3216535, 1) //日志已被误删除，重新创建新日志文件
+			//(3216535, 1) //日志已被误删除，重新创建新日志文件
 			file, e := os.OpenFile(w.filePath, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
 			if e == nil {
 				w.file.Close()
@@ -76,7 +76,7 @@ func (w *FileWriter) check() {
 			continue
 		}
 		if w.maxSize > 0 && fileInfo.Size() > w.maxSize {
-			//attr.AttrAPI(3216536, 1) //日志文件超过最大size
+			//(3216536, 1) //日志文件超过最大size
 			name := path.Base(w.filePath) + ".full."
 			files, _ := ioutil.ReadDir(path.Dir(w.filePath))
 			var minNum = 1000000
@@ -102,12 +102,12 @@ func (w *FileWriter) check() {
 			name = fmt.Sprintf("%s.full.%d.log", w.filePath, maxNum+1) //织云日志清理规则 默认需要以 .log 结尾
 			err := os.Rename(w.filePath, name)
 			if err != nil {
-				//attr.AttrAPI(3216537, 1) //Rename重命名日志文件失败
+				//(3216537, 1) //Rename重命名日志文件失败
 				fmt.Printf("rename file path:%s fail:%s\n", w.filePath, err)
 			}
 			file, err := os.OpenFile(w.filePath, os.O_CREATE|os.O_RDWR|os.O_APPEND, 0666)
 			if err != nil {
-				//attr.AttrAPI(3216538, 1) //创建日志文件失败
+				//(3216538, 1) //创建日志文件失败
 				fmt.Printf("open file path:%s fail:%s\n", w.filePath, err)
 			}
 			if err == nil {
@@ -115,12 +115,12 @@ func (w *FileWriter) check() {
 				w.writer = file
 			}
 			if totalNum >= w.maxNum {
-				//attr.AttrAPI(3216539, 1) //大日志文件个数超过20个
+				//(3216539, 1) //大日志文件个数超过20个
 				//remove oldest log file
 				name = fmt.Sprintf("%s.full.%d.log", w.filePath, minNum)
 				err := os.Remove(name)
 				if err != nil {
-					//attr.AttrAPI(3216540, 1) //Remove删除老日志文件失败
+					//(3216540, 1) //Remove删除老日志文件失败
 					fmt.Printf("remove file path:%s fail:%s\n", name, err)
 				}
 			}
@@ -157,7 +157,7 @@ func (w *FileWriter) flush() {
 		w.mu.Lock()
 		w.writer.Write(log)
 		w.mu.Unlock()
-		//attr.AttrAPI(33520636, 1)        //log写入磁盘个数
-		//attr.AttrAPI(33520637, len(log)) //log写入磁盘字节数
+		//(33520636, 1)        //log写入磁盘个数
+		//(33520637, len(log)) //log写入磁盘字节数
 	}
 }

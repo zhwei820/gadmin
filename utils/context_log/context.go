@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"runtime"
 	"time"
 )
 
@@ -74,17 +73,8 @@ type MultiFuncContext interface {
 type Context struct {
 	context.Context
 	*log.Logger
-	Uin           uint64
-	Cmd           uint32
-	SubCmd        uint32
 	Seq           uint32
-	ClientAddr    uint32
-	ClientVersion uint32
-	ErrCode       int32
-	ExtData       interface{} //额外数据，用于异步逻辑传参
 	LogLevel      int         //日志打印等级，每次new一个context时，都必须设置这个
-	Version       int         //客户端版本号
-	Source        int         //客户端来源 1:ios 2:android 3:web
 	writer        io.Writer
 	buffer        *bytes.Buffer
 	startTime     time.Time
@@ -92,7 +82,7 @@ type Context struct {
 	NoResponse    bool
 }
 
-// NewContext 新建一个包含日志的ctx，需要手动设置uin cmd subcmd loglevel
+// NewContext 新建一个包含日志的ctx，
 func NewContext(ctx context.Context, w io.Writer) *Context {
 	newCtx := Context{
 		Context:   ctx,
@@ -106,23 +96,6 @@ func NewContext(ctx context.Context, w io.Writer) *Context {
 
 // Trace 打印trace日志 log trace, no uls
 func (ctx *Context) Trace(format string, v ...interface{}) {
-	//if GetConfig().Log.Mode == 1 {
-	//	if ctx.level > LogLevelTrace && !GetConfig().Log.Whitelist.Has(ctx.Uin) {
-	//		return
-	//	}
-	//
-	//	var buffer bytes.Buffer
-	//	if ctx.Seq > 0 {
-	//		buffer.WriteString(fmt.Sprintf("[uin=%d,seq=%d]", ctx.Uin, ctx.Seq))
-	//	} else {
-	//		buffer.WriteString(fmt.Sprintf("[uin=%d]", ctx.Uin))
-	//	}
-	//	buffer.WriteString("[TRACE] ")
-	//	buffer.WriteString(fmt.Sprintf(format, v...))
-	//	ctx.Output(2, buffer.String())
-	//	return
-	//}
-
 	if ctx.level < LogLevelTrace {
 		ctx.level = LogLevelTrace
 	}
@@ -136,9 +109,6 @@ func (ctx *Context) Trace(format string, v ...interface{}) {
 func (ctx *Context) Debug(format string, v ...interface{}) {
 	data := fmt.Sprintf(format, v...)
 	//(&uls.Logger{
-	//	Uin:           ctx.Uin,
-	//	Cmd:           ctx.Cmd,
-	//	SubCmd:        ctx.SubCmd,
 	//	Seq:           ctx.Seq,
 	//	ClientIP:      ctx.ClientAddr,
 	//	ClientVersion: ctx.ClientVersion,
@@ -217,7 +187,7 @@ func (ctx *Context) Level() int {
 func (ctx *Context) WriteLog() {
 	if ctx.level >= ctx.LogLevel && ctx.buffer.Len() > 0 {
 		ctx.writer.Write(ctx.buffer.Bytes())
-		ctx.writer.Write([]byte("==>\n"))
+		ctx.writer.Write([]byte(fmt.Sprintf("==> %v\n", ctx.Cost().Seconds())))
 	}
 	ctx.buffer.Reset()
 	ctx.level = LogLevelNull
@@ -235,39 +205,9 @@ func (ctx *Context) Cost() time.Duration {
 
 // String 打印ctx信息 防止高并发下多个goroutine打印整个ctx导致crash问题
 func (ctx *Context) String() string {
-	return fmt.Sprintf("cmd[%d], uin[%d]", ctx.Cmd, ctx.Uin)
+	return fmt.Sprintf("seq[%d]: ", ctx.Seq)
 }
 
-// SetNoResponse 不回包给客户端
-func (ctx *Context) SetNoResponse() {
-	ctx.NoResponse = true
-}
-
-// DoAsync 异步处理逻辑, 新建ctx，设置超时，捕获panic，flush日志, ExtData可携带自定义参数 必须是结构体指针
-func (ctx *Context) DoAsync(f func(*Context), timeout time.Duration) {
-	baseCtx, cancel := context.WithTimeout(context.Background(), timeout)
-	w, _ := NewFileWriter("../log/log.log", 1204*1204*10, 10)
-	c := NewContext(baseCtx, w)
-	c.LogLevel = ctx.LogLevel
-	c.Uin = ctx.Uin
-	c.Cmd = ctx.Cmd
-	c.SubCmd = ctx.SubCmd
-	c.ExtData = ctx.ExtData
-	go func() {
-		defer cancel()
-		defer c.WriteLog()
-		defer func() {
-			if e := recover(); e != nil {
-				buf := make([]byte, 16*1024*1024)
-				buf = buf[:runtime.Stack(buf, false)]
-				c.Error("[PANIC]%v\n%s", e, buf)
-			}
-		}()
-		c.Debug("start an async task")
-		f(c)
-		c.Debug("async task finished, cost:%s", c.Cost())
-	}()
-}
 
 // IsDone 判断ctx是否已经失效，包括超时，被取消
 func (ctx *Context) IsDone() bool {
