@@ -19,6 +19,7 @@ type MenuController struct {
 // @Success 200 {string} string	"ok"
 // @router /rbac/menu [get]
 func (c *MenuController) Get(r *ghttp.Request) {
+	//r.Context().
 	page := r.GetInt("page", 1)
 	limit := r.GetInt("limit", 10)
 	var list struct {
