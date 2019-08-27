@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/library/code"
+	"github.com/hailaz/gadmin/utils/context_log"
 	"strconv"
 	"strings"
 )
@@ -65,6 +66,26 @@ func GetUserId(r *ghttp.Request) int {
 		addUserId = addu.Id
 	}
 	return addUserId
+}
+
+func ReqTrace(r *ghttp.Request, msg string) {
+	r.GetParam("ctx").Val().(context_log.Context).Trace(msg)
+}
+
+func ReqDebug(r *ghttp.Request, msg string) {
+	r.GetParam("ctx").Val().(context_log.Context).Debug(msg)
+}
+
+func ReqInfo(r *ghttp.Request, msg string) {
+	r.GetParam("ctx").Val().(context_log.Context).Info(msg)
+}
+
+func ReqWarning(r *ghttp.Request, msg string) {
+	r.GetParam("ctx").Val().(context_log.Context).Warning(msg)
+}
+
+func ReqError(r *ghttp.Request, msg string) {
+	r.GetParam("ctx").Val().(context_log.Context).Error(msg)
 }
 
 var (

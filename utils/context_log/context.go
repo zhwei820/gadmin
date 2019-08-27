@@ -73,17 +73,17 @@ type MultiFuncContext interface {
 type Context struct {
 	context.Context
 	*log.Logger
-	Seq           uint32
-	LogLevel      int         //日志打印等级，每次new一个context时，都必须设置这个
-	writer        io.Writer
-	buffer        *bytes.Buffer
-	startTime     time.Time
-	level         int
-	NoResponse    bool
+	Seq        string
+	LogLevel   int //日志打印等级，每次new一个context时，都必须设置这个
+	writer     io.Writer
+	buffer     *bytes.Buffer
+	startTime  time.Time
+	level      int
+	NoResponse bool
 }
 
 // NewContext 新建一个包含日志的ctx，
-func NewContext(ctx context.Context, w io.Writer) *Context {
+func NewContext(ctx context.Context, w io.Writer, Seq string) *Context {
 	newCtx := Context{
 		Context:   ctx,
 		writer:    w,
@@ -207,7 +207,6 @@ func (ctx *Context) Cost() time.Duration {
 func (ctx *Context) String() string {
 	return fmt.Sprintf("seq[%d]: ", ctx.Seq)
 }
-
 
 // IsDone 判断ctx是否已经失效，包括超时，被取消
 func (ctx *Context) IsDone() bool {

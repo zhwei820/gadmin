@@ -3,6 +3,9 @@ package router
 import (
 	"fmt"
 	"github.com/hailaz/gadmin/app/service"
+	"github.com/hailaz/gadmin/utils/context_log"
+	"github.com/satori/go.uuid"
+	"io"
 	"strings"
 
 	"github.com/gogf/gf/g/net/ghttp"
@@ -14,9 +17,18 @@ import (
 )
 
 var routerMap = make(map[string]model.RolePolicy)
+var writer io.Writer
 
 func showURL(r *ghttp.Request) {
 	glog.Debug("请求路径：", r.Method, r.Request.RequestURI)
+
+	uid := uuid.NewV4()
+	r.SetParam("req", uid)
+	r.SetParam("ctx", context_log.NewContext(r.Context(), writer))
+}
+
+func writeLog(r *ghttp.Request) {
+	r.GetParam("ctx").Val().(context_log.Context).WriteLog()
 }
 
 // InitRouter 初始化路由
@@ -24,8 +36,10 @@ func showURL(r *ghttp.Request) {
 // createTime:2019年05月13日 09:32:58
 // author:hailaz
 func InitRouter(s *ghttp.Server) {
+	writer, _ = context_log.NewFileWriter("log.log", 9999, 3)
 
 	s.BindHookHandler("/*", ghttp.HOOK_BEFORE_SERVE, showURL)
+	s.BindHookHandler("/*", ghttp.HOOK_AFTER_OUTPUT, writeLog)
 	Init(s)
 
 	service.ReSetPolicy("system", routerMap)
@@ -52,6 +66,8 @@ func authHook(r *ghttp.Request) {
 	r.Response.CORSDefault() //开启跨域
 	//r.Response.Header().Set("Access-Control-Allow-Origin", "*")
 	api.GfJWTMiddleware.MiddlewareFunc()(r) //鉴权中间件
+	// or error handling
+
 }
 
 // Init 初始化V1
