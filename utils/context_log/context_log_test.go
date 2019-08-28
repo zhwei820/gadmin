@@ -8,7 +8,7 @@ import (
 func work() {
 
 	w, _ := NewFileWriter("log.log", 9999, 3)
-	ctx := NewContext(context.Background(), w)
+	ctx := NewContext(context.Background(), w, "test", 2)
 	ctx.Debug("hi i am debug")
 	ctx.Info("hi i am Info")
 	ctx.Error("hi i am Error")

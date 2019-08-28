@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/gogf/gf/g"
 	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/utils/context_log"
 	"github.com/satori/go.uuid"
@@ -24,11 +25,12 @@ func showURL(r *ghttp.Request) {
 
 	uid := uuid.NewV4()
 	r.SetParam("req", uid)
-	r.SetParam("ctx", context_log.NewContext(r.Context(), writer))
+	r.SetParam("ctx", context_log.NewContext(r.Context(), writer, uid.String(), g.Config().GetInt("ReqLogLevel", glog.LEVEL_INFO)))
 }
 
 func writeLog(r *ghttp.Request) {
-	r.GetParam("ctx").Val().(context_log.Context).WriteLog()
+	r.GetParam("ctx").Val().(*context_log.Context).WriteLog()
+	g.Dump()
 }
 
 // InitRouter 初始化路由
@@ -36,10 +38,13 @@ func writeLog(r *ghttp.Request) {
 // createTime:2019年05月13日 09:32:58
 // author:hailaz
 func InitRouter(s *ghttp.Server) {
-	writer, _ = context_log.NewFileWriter("log.log", 9999, 3)
+	writer, _ = context_log.NewFileWriter("../log.log", 9999, 3)
 
-	s.BindHookHandler("/*", ghttp.HOOK_BEFORE_SERVE, showURL)
-	s.BindHookHandler("/*", ghttp.HOOK_AFTER_OUTPUT, writeLog)
+	s.BindHookHandlerByMap("/*", map[string]ghttp.HandlerFunc{
+		ghttp.HOOK_BEFORE_SERVE: showURL,
+		ghttp.HOOK_AFTER_SERVE:  writeLog,
+	})
+
 	Init(s)
 
 	service.ReSetPolicy("system", routerMap)
@@ -52,22 +57,24 @@ func InitRouter(s *ghttp.Server) {
 // authHook is the HOOK function implements JWT logistics.
 func authHook(r *ghttp.Request) {
 	uri := strings.Split(r.Request.RequestURI, "/")
-	if len(uri) > 1 {
+	if len(uri) >= 3 {
+		switch uri[1] + "/" + uri[2] { //登录相关免鉴权
+		case "rbac/loginkey":
+			return
+		case "rbac/login":
+			return
+		}
+	}
+	if len(uri) >= 2 {
 		switch uri[1] { //登录相关免鉴权
-		case "loginkey":
-			return
-		case "login":
-			return
 		case "swagger":
 			return
 		}
 	}
-
 	r.Response.CORSDefault() //开启跨域
 	//r.Response.Header().Set("Access-Control-Allow-Origin", "*")
 	api.GfJWTMiddleware.MiddlewareFunc()(r) //鉴权中间件
 	// or error handling
-
 }
 
 // Init 初始化V1

@@ -104,7 +104,7 @@ class User(models.Model):
     add_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     add_user_id = models.IntegerField()
-    introduction = models.CharField(db_column='Introduction', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    introduction = models.CharField(max_length=255, blank=True, null=True)  # Field name made lowercase.
     avatar = models.CharField(max_length=255, blank=True, null=True)
     role_keys = models.CharField(max_length=255, db_index=True, default='')
 

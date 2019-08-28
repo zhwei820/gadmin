@@ -9,6 +9,7 @@ import (
 	"github.com/hailaz/gadmin/utils"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+	"time"
 )
 
 var defDB gdb.DB
@@ -49,9 +50,11 @@ func initUser() {
 		return
 	}
 	admin := GadminUser{
-		UserName: ADMIN_NAME,
-		NickName: ADMIN_NICK_NAME,
-		Password: utils.EncryptPassword(ADMIN_DEFAULT_PASSWORD),
+		UserName:   ADMIN_NAME,
+		NickName:   ADMIN_NICK_NAME,
+		Password:   utils.EncryptPassword(ADMIN_DEFAULT_PASSWORD),
+		AddTime:    time.Now(),
+		UpdateTime: time.Now(),
 	}
 	ii, err := admin.Insert()
 	glog.Debugfln("%v %v", ii, err)

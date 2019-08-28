@@ -83,10 +83,12 @@ type Context struct {
 }
 
 // NewContext 新建一个包含日志的ctx，
-func NewContext(ctx context.Context, w io.Writer, Seq string) *Context {
+func NewContext(ctx context.Context, w io.Writer, Seq string, logLevel int) *Context {
 	newCtx := Context{
 		Context:   ctx,
 		writer:    w,
+		LogLevel:  logLevel,
+		Seq:       Seq,
 		startTime: time.Now(),
 	}
 	newCtx.buffer = new(bytes.Buffer)
@@ -205,7 +207,7 @@ func (ctx *Context) Cost() time.Duration {
 
 // String 打印ctx信息 防止高并发下多个goroutine打印整个ctx导致crash问题
 func (ctx *Context) String() string {
-	return fmt.Sprintf("seq[%d]: ", ctx.Seq)
+	return fmt.Sprintf("seq[%v]: ", ctx.Seq)
 }
 
 // IsDone 判断ctx是否已经失效，包括超时，被取消

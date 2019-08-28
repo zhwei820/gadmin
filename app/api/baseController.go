@@ -69,23 +69,23 @@ func GetUserId(r *ghttp.Request) int {
 }
 
 func ReqTrace(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(context_log.Context).Trace(msg)
+	r.GetParam("ctx").Val().(*context_log.Context).Trace(msg)
 }
 
 func ReqDebug(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(context_log.Context).Debug(msg)
+	r.GetParam("ctx").Val().(*context_log.Context).Debug(msg)
 }
 
 func ReqInfo(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(context_log.Context).Info(msg)
+	r.GetParam("ctx").Val().(*context_log.Context).Info(msg)
 }
 
 func ReqWarning(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(context_log.Context).Warning(msg)
+	r.GetParam("ctx").Val().(*context_log.Context).Warning(msg)
 }
 
 func ReqError(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(context_log.Context).Error(msg)
+	r.GetParam("ctx").Val().(*context_log.Context).Error(msg)
 }
 
 var (
