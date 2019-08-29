@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gogf/gf/g"
 	"github.com/hailaz/gadmin/app/service"
+	"github.com/hailaz/gadmin/utils"
 	"github.com/hailaz/gadmin/utils/context_log"
 	"github.com/satori/go.uuid"
 	"io"
@@ -25,12 +26,11 @@ func showURL(r *ghttp.Request) {
 
 	uid := uuid.NewV4()
 	r.SetParam("req", uid)
-	r.SetParam("ctx", context_log.NewContext(r.Context(), writer, uid.String(), g.Config().GetInt("ReqLogLevel", glog.LEVEL_INFO)))
+	r.SetParam("ctx", context_log.NewContext(r.Context(), writer, uid.String(), utils.GetLogLevel(g.Config().GetString("ReqLogLevel"))))
 }
 
 func writeLog(r *ghttp.Request) {
 	r.GetParam("ctx").Val().(*context_log.Context).WriteLog()
-	g.Dump()
 }
 
 // InitRouter 初始化路由
@@ -38,7 +38,7 @@ func writeLog(r *ghttp.Request) {
 // createTime:2019年05月13日 09:32:58
 // author:hailaz
 func InitRouter(s *ghttp.Server) {
-	writer, _ = context_log.NewFileWriter("../log.log", 9999, 3)
+	writer, _ = context_log.NewFileWriter("log/log", 1024*1024*50, 30)
 
 	s.BindHookHandlerByMap("/*", map[string]ghttp.HandlerFunc{
 		ghttp.HOOK_BEFORE_SERVE: showURL,
@@ -59,9 +59,7 @@ func authHook(r *ghttp.Request) {
 	uri := strings.Split(r.Request.RequestURI, "/")
 	if len(uri) >= 3 {
 		switch uri[1] + "/" + uri[2] { //登录相关免鉴权
-		case "rbac/loginkey":
-			return
-		case "rbac/login":
+		case "rbac/loginkey", "rbac/login", "rbac/logout":
 			return
 		}
 	}
@@ -96,7 +94,7 @@ func Init(s *ghttp.Server) {
 		{"GET", "/loginkey", api.GetLoginCryptoKey},                   //获取登录加密公钥
 		{"POST", "/login", api.GfJWTMiddleware.LoginHandler},          //登录
 		{"GET", "/refresh_token", api.GfJWTMiddleware.RefreshHandler}, //获取登录加密公钥
-		{"POST", "/logout", api.Logout},                               //登出
+		{"GET", "/logout", api.Logout},                                //登出
 		////menu
 		{"REST", "/menu", menuCtrl},
 		//// 用户

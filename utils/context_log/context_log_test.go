@@ -2,13 +2,14 @@ package context_log
 
 import (
 	"context"
+	"github.com/gogf/gf/g/os/glog"
 	"testing"
 )
 
 func work() {
 
-	w, _ := NewFileWriter("log.log", 9999, 3)
-	ctx := NewContext(context.Background(), w, "test", 2)
+	w, _ := NewFileWriter("log.log", 1024*1024*50, 30)
+	ctx := NewContext(context.Background(), w, "test", glog.LEVEL_ALL)
 	ctx.Debug("hi i am debug")
 	ctx.Info("hi i am Info")
 	ctx.Error("hi i am Error")

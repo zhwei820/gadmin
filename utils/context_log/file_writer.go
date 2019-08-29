@@ -87,7 +87,7 @@ func (w *FileWriter) check() {
 					totalNum++
 					s := strings.Split(f.Name(), ".") // going.2018-05-22.log.full.1.log
 					if len(s) > 5 {
-						n, _ := strconv.Atoi(s[4])
+						n, _ := strconv.Atoi(s[len(s)-2])
 						if n > maxNum {
 							maxNum = n
 						}
@@ -99,7 +99,7 @@ func (w *FileWriter) check() {
 			}
 			w.file.Close()
 			//rename log file
-			name = fmt.Sprintf("%s.full.%d.log", w.filePath, maxNum+1) //织云日志清理规则 默认需要以 .log 结尾
+			name = fmt.Sprintf("%s.full.%d.log", w.filePath, maxNum+1)
 			err := os.Rename(w.filePath, name)
 			if err != nil {
 				//(3216537, 1) //Rename重命名日志文件失败

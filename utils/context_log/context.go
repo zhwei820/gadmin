@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/gogf/gf/g/os/glog"
 	"io"
 	"log"
 	"time"
@@ -44,12 +45,11 @@ func SysLogf(format string, v ...interface{}) {
 //上线文缺失的问题。
 const (
 	LogLevelNull    = 0
-	LogLevelTrace   = 1
-	LogLevelDebug   = 2
-	LogLevelInfo    = 3
-	LogLevelWarning = 4
-	LogLevelError   = 5
-	LogLevelFatal   = 6
+	LogLevelDebug   = glog.LEVEL_DEBU
+	LogLevelInfo    = glog.LEVEL_INFO
+	LogLevelWarning = glog.LEVEL_WARN
+	LogLevelError   = glog.LEVEL_ERRO
+	LogLevelFatal   = glog.LEVEL_CRIT
 )
 
 // 客户端来源
@@ -94,17 +94,6 @@ func NewContext(ctx context.Context, w io.Writer, Seq string, logLevel int) *Con
 	newCtx.buffer = new(bytes.Buffer)
 	newCtx.Logger = log.New(newCtx.buffer, "", log.LstdFlags|log.Lshortfile)
 	return &newCtx
-}
-
-// Trace 打印trace日志 log trace, no uls
-func (ctx *Context) Trace(format string, v ...interface{}) {
-	if ctx.level < LogLevelTrace {
-		ctx.level = LogLevelTrace
-	}
-	var buffer bytes.Buffer
-	buffer.WriteString("[TRACE] ")
-	buffer.WriteString(fmt.Sprintf(format, v...))
-	ctx.Output(2, buffer.String())
 }
 
 // Debug 打印debug日志 log debug, uls debug
@@ -187,7 +176,7 @@ func (ctx *Context) Level() int {
 
 // WriteLog 请求结束后刷新日志到文件 write all log into file when request finish
 func (ctx *Context) WriteLog() {
-	if ctx.level >= ctx.LogLevel && ctx.buffer.Len() > 0 {
+	if ctx.level&ctx.LogLevel > 0 && ctx.buffer.Len() > 0 {
 		ctx.writer.Write(ctx.buffer.Bytes())
 		ctx.writer.Write([]byte(fmt.Sprintf("==> %v\n", ctx.Cost().Seconds())))
 	}

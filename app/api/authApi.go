@@ -62,7 +62,13 @@ func GetLoginCryptoKey(r *ghttp.Request) {
 // @Success 200 {string} string	"ok"
 // @router /rbac/logout [post]
 func Logout(r *ghttp.Request) {
+	ReqDebug(r, "ReqDebug ReqDebug: %v", struct {
+		a string
+	}{"11235478"})
+
 	Success(r, "success")
+	ReqInfo(r, "ReqInfo ReqInfo %v", []int{1, 2, 9000})
+
 }
 
 //

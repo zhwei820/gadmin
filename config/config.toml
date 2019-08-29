@@ -4,6 +4,8 @@ port = 8199
 #日志目录，默认log目录
 logpath = "log"
 
+ReqLogLevel = "DEV"
+
 
 #数据库
 [database]

@@ -25,7 +25,6 @@ type BaseResult struct {
 // author:hailaz
 func Response(r *ghttp.Request, rs BaseResult) {
 	r.Response.WriteJson(rs)
-	r.ExitAll()
 }
 
 // Success 返回成功
@@ -68,24 +67,20 @@ func GetUserId(r *ghttp.Request) int {
 	return addUserId
 }
 
-func ReqTrace(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(*context_log.Context).Trace(msg)
+func ReqDebug(r *ghttp.Request, msg string, v ...interface{}) {
+	r.GetParam("ctx").Val().(*context_log.Context).Debug(msg, v...)
 }
 
-func ReqDebug(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(*context_log.Context).Debug(msg)
+func ReqInfo(r *ghttp.Request, msg string, v ...interface{}) {
+	r.GetParam("ctx").Val().(*context_log.Context).Info(msg, v...)
 }
 
-func ReqInfo(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(*context_log.Context).Info(msg)
+func ReqWarning(r *ghttp.Request, msg string, v ...interface{}) {
+	r.GetParam("ctx").Val().(*context_log.Context).Warning(msg, v...)
 }
 
-func ReqWarning(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(*context_log.Context).Warning(msg)
-}
-
-func ReqError(r *ghttp.Request, msg string) {
-	r.GetParam("ctx").Val().(*context_log.Context).Error(msg)
+func ReqError(r *ghttp.Request, msg string, v ...interface{}) {
+	r.GetParam("ctx").Val().(*context_log.Context).Error(msg, v...)
 }
 
 var (
