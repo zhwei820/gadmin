@@ -150,18 +150,22 @@ func (c *UserController) Delete(r *ghttp.Request) {
 	id := data.GetInt("id")
 	if id < 1 {
 		Fail(r, code.RESPONSE_ERROR)
+		return
 	}
 	u := new(model.GadminUser)
 	user, err := u.GetById(id)
 	if err != nil {
 		Fail(r, code.RESPONSE_ERROR, err.Error())
+		return
 	}
 	if user.UserName == model.ADMIN_NAME {
 		Fail(r, code.RESPONSE_ERROR, "无权限")
+		return
 	}
 	res, _ := u.DeleteById(id)
 	if res <= 0 {
 		Fail(r, code.RESPONSE_ERROR)
+		return
 	}
 	model.Enforcer.DeleteRolesForUser(user.UserName)
 	Success(r, "success")

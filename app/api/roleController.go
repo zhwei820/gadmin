@@ -29,12 +29,12 @@ func (c *RoleController) Get(r *ghttp.Request) {
 	username := r.GetString("username")
 	var list struct {
 		List         []model.GadminRoleconfig `json:"items"`
-		UserRoleKeys []string                 `json:"user_role_keyss"`
+		UserRoleKeys []model.GadminRoleconfig `json:"user_role_keyss"`
 		Total        int                      `json:"total"`
 	}
 	list.List, list.Total = service.GetPagedRoleList(page, limit)
 	if username != "" {
-		list.UserRoleKeys = service.GetRoleKeysByUserName(username)
+		list.UserRoleKeys = service.GetRoleByUserName(username)
 	}
 
 	Success(r, list)
@@ -122,6 +122,6 @@ func (c *RoleController) SetRoleByUserName(r *ghttp.Request) {
 		Fail(r, code.ERROR_INVALID_PARAM, e.String())
 		return
 	}
-	_ = service.SetRoleByUserName(m.Username, m.Roles)
+	service.SetRoleByUserName(m.Username, m.Roles)
 	Success(r, "success")
 }

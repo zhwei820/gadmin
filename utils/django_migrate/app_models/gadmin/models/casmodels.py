@@ -44,15 +44,6 @@ class RoleConfig(models.Model):  # 角色配置表
         #db_table = 'role_name'
         pass
 
-
-class RolePolicy(models.Model):  # 角色权限表
-    role_key = models.CharField(max_length=255, db_index=True)
-    policy_path = models.CharField(max_length=255, db_index=True)
-
-    class Meta:
-        # managed = False
-        pass
-
 class User(models.Model):
     status = models.IntegerField()
     user_name = models.CharField(unique=True, max_length=255)

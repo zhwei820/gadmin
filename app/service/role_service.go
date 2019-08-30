@@ -4,31 +4,62 @@ import (
 	"errors"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
-	"strings"
 )
 
-// GetPagedRoleList 获取权限列表
+// GetRoleList 获取权限列表
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
 func GetPagedRoleList(page, limit int) ([]model.GadminRoleconfig, int) {
+	defaultname := "未命名"
+	if page < 1 {
+		page = 1
+	}
+	roleList := make([]model.GadminRoleconfig, 0)
+	roles := model.Enforcer.GetAllRoles()
+	total := len(roles)
+	r, _ := model.GetAllRole()
+	pn := make([]model.GadminRoleconfig, 0)
+	_ = r.ToStructs(&pn)
 
-	total, _ := model.CountRoleConfig()
-	r, _ := model.GetPagedRoleConfig((page-1)*limit, limit)
-	pcs := make([]model.GadminRoleconfig, 0)
-	r.ToStructs(&pcs)
-
-	return pcs, total
+	for _, item := range roles {
+		p := model.GadminRoleconfig{RoleKey: item, Name: defaultname}
+		for _, itempn := range pn {
+			if itempn.RoleKey == item {
+				p.Name = itempn.Name
+				p.Descrption = itempn.Descrption
+				break
+			}
+		}
+		roleList = append(roleList, p)
+	}
+	if limit == -1 {
+		return roleList, total
+	}
+	if len(roleList) < page*limit {
+		if len(roleList) < limit {
+			roleList = roleList
+		} else {
+			roleList = roleList[(page-1)*limit:]
+		}
+	} else {
+		roleList = roleList[(page-1)*limit : (page-1)*limit+limit]
+	}
+	return roleList, total
 }
 
-// GetRoleKeysByUserName 根据用户名获取对应角色
+// GetRoleByUserName 根据用户名获取对应角色
 //
 // createTime:2019年05月08日 15:08:19
 // author:hailaz
-func GetRoleKeysByUserName(userName string) []string {
-	user, _ := model.GetUserByName(userName)
-
-	return strings.Split(user.RoleKeys, ",")
+func GetRoleByUserName(userName string) []model.GadminRoleconfig {
+	roles := model.Enforcer.GetRolesForUser(userName)
+	roleList := make([]model.GadminRoleconfig, 0)
+	for _, item := range roles {
+		p := model.GadminRoleconfig{RoleKey: item}
+		roleList = append(roleList, p)
+	}
+	return roleList
 }
 
 // UpdateRoleByRoleKey 更新角色信息
@@ -37,9 +68,16 @@ func GetRoleKeysByUserName(userName string) []string {
 // author:hailaz
 func UpdateRoleByRoleKey(role, name string) error {
 	p, err := model.GetRoleByRoleKey(role)
-	// 不存在报错
-	if err != nil {
-		return errors.New("update fail")
+	// 不存在插入新数据
+	if err != nil || p.Id == 0 {
+		p.RoleKey = role
+		p.Name = name
+		id, _ := p.Insert()
+		if id > 0 {
+			return nil
+		} else {
+			return errors.New("update fail")
+		}
 	}
 	// 存在则更新
 	p.Name = name
@@ -83,13 +121,12 @@ func AddRole(role, name string) error {
 // createTime:2019年05月07日 11:12:59
 // author:hailaz
 func DeleteRole(role string) error {
-	item, err := model.GetRoleByRoleKey(role)
-	if err != nil || item.Id == 0 {
+	p, err := model.GetRoleByRoleKey(role)
+	if err != nil || p.Id == 0 {
 		return errors.New("delete fail")
 	}
 	model.Enforcer.DeleteRole(role)
-	model.DeleteRolePolicys(role)
-	i, _ := item.DeleteById(item.Id)
+	i, _ := p.DeleteById(p.Id)
 	if i > 0 {
 		return nil
 	}
@@ -100,17 +137,9 @@ func DeleteRole(role string) error {
 //
 // createTime:2019年05月08日 15:22:05
 // author:hailaz
-func SetRoleByUserName(userName string, roles []string) error {
+func SetRoleByUserName(userName string, roles []string) {
 	model.Enforcer.DeleteRolesForUser(userName)
-	for _, role := range roles {
-		model.Enforcer.AddRoleForUser(userName, role)
+	for _, item := range roles {
+		model.Enforcer.AddRoleForUser(userName, item)
 	}
-	rolestr := strings.Join(roles, ",")
-	user, err := model.GetUserByName(userName)
-	if err != nil {
-		return errors.New("userName find User error")
-	}
-	user.RoleKeys = rolestr
-	_, _ = user.Update()
-	return nil
 }

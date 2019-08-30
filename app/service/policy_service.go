@@ -7,20 +7,46 @@ import (
 	"github.com/hailaz/gadmin/app/model"
 )
 
-// GetPagedPolicyList 获取权限列表
+// GetPolicyList 获取权限列表
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
-func GetPagedPolicyList(page, limit int) ([]model.GadminPolicyconfig, int) {
+func GetPagedPolicyList(page, limit int, defaultname string) ([]model.GadminPolicyconfig, int) {
 	if page < 1 {
 		page = 1
 	}
-	total, _ := model.CountPolicyConfig()
-	r, _ := model.GetPagedPolicyConfig((page-1)*limit, limit)
+	policyList := make([]model.GadminPolicyconfig, 0)
+	policys := model.Enforcer.GetPermissionsForUser("system")
+	total := len(policys)
+	r, _ := model.GetAllPolicyConfig()
 	pcs := make([]model.GadminPolicyconfig, 0)
-	r.ToStructs(&pcs)
+	_ = r.ToStructs(&pcs)
 
-	return pcs, total
+	for _, item := range policys {
+		full := fmt.Sprintf("%v:%v", item[1], item[2])
+		p := model.GadminPolicyconfig{FullPath: full, Name: defaultname}
+		for _, itempc := range pcs {
+			if itempc.FullPath == full {
+				p.Name = itempc.Name
+				p.Descrption = itempc.Descrption
+				break
+			}
+		}
+		policyList = append(policyList, p)
+	}
+	if limit == -1 {
+		return policyList, total
+	}
+	if len(policyList) < page*limit {
+		if len(policyList) < limit {
+			policyList = policyList
+		} else {
+			policyList = policyList[(page-1)*limit:]
+		}
+	} else {
+		policyList = policyList[(page-1)*limit : (page-1)*limit+limit]
+	}
+	return policyList, total
 }
 
 // GetPolicyByRole 根据角色获取权限
@@ -45,9 +71,17 @@ func GetPolicyByRole(role string) []model.GadminPolicyconfig {
 // author:hailaz
 func UpdatePolicyByFullPath(path, name string) error {
 	p, err := model.GetPolicyByFullPath(path)
-	// 不存在报错
-	if err != nil {
-		return errors.New("update fail")
+	// 不存在插入新数据
+	if err != nil || p.Id == 0 {
+		p := model.GadminPolicyconfig{}
+		p.FullPath = path
+		p.Name = name
+		id, _ := p.Insert()
+		if id > 0 {
+			return nil
+		} else {
+			return errors.New("update fail")
+		}
 	}
 	// 存在则更新
 	p.Name = name
@@ -78,7 +112,7 @@ func ReSetPolicy(role string, rmap map[string]model.RolePolicy) {
 			if role == "system" {
 				p, _ := model.GetPolicyByFullPath(fmt.Sprintf("%v:%v", item[1], item[2]))
 				if p.Id > 0 {
-					p.DeleteById(p.Id)
+					_, _ = p.DeleteById(p.Id)
 				}
 			}
 		}
