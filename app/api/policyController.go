@@ -134,7 +134,7 @@ func (c *PolicyController) SetPolicyByRole(r *ghttp.Request) {
 		list := strings.Split(item, ":")
 		path := list[0]
 		act := list[1]
-		routerMap[fmt.Sprintf("%v %v %v", m.Role, path, act)] = model.RolePolicy{Role: m.Role, Path: path, Atc: act}
+		routerMap[fmt.Sprintf("%v %v %v", m.Role, path, act)] = model.RolePolicy{Role: m.Role, Path: path, Act: act}
 	}
 
 	service.ReSetPolicy(m.Role, routerMap)

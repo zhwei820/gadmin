@@ -5,7 +5,7 @@ import "github.com/gogf/gf/g/database/gdb"
 type RolePolicy struct {
 	Role string
 	Path string
-	Atc  string
+	Act  string
 }
 
 // GetAllRole 获取所有角色名称

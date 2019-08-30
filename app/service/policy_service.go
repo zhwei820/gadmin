@@ -149,6 +149,6 @@ func ReSetPolicy(role string, rmap map[string]model.RolePolicy) {
 		}
 	}
 	for _, item := range rmap { //插入新路由
-		model.Enforcer.AddPolicy(item.Role, item.Path, item.Atc)
+		model.Enforcer.AddPolicy(item.Role, item.Path, item.Act)
 	}
 }
