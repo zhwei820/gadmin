@@ -28,6 +28,7 @@ func (c *UserController) Info(r *ghttp.Request) {
 	u := GetUser(r)
 	if u != nil {
 		Success(r, u.GetUserRoles())
+		return
 	}
 	Fail(r, code.RESPONSE_ERROR, "获取用户信息失败")
 }
@@ -70,6 +71,7 @@ func (c *UserController) Post(r *ghttp.Request) {
 	u, err := model.GetUserByName(m.Username)
 	if err == nil && u.Id != 0 {
 		Fail(r, code.RESPONSE_ERROR, "用户已存在")
+		return
 	}
 
 	m.Password = utils.EncryptPassword(m.Password)
@@ -88,6 +90,7 @@ func (c *UserController) Post(r *ghttp.Request) {
 		glog.Debug(err.Error())
 		glog.Debug(j.ToJsonString())
 		Fail(r, code.RESPONSE_ERROR, err.Error())
+		return
 	}
 	if uid > 0 {
 		Success(r, "success")

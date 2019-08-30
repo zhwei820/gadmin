@@ -65,12 +65,13 @@ func GetRoleByUserName(userName string) []model.GadminRoleconfig {
 // createTime:2019年05月06日 15:47:35
 // author:hailaz
 func UpdateRoleByRoleKey(role, name string) error {
-	p, err := model.GetRoleByRoleKey(role)
+	r, err := model.GetRoleByRoleKey(role)
 	// 不存在插入新数据
-	if err != nil || p.Id == 0 {
-		p.RoleKey = role
-		p.Name = name
-		id, _ := p.Insert()
+	if err != nil || r.Id == 0 {
+		r := model.GadminRoleconfig{}
+		r.RoleKey = role
+		r.Name = name
+		id, _ := r.Insert()
 		if id > 0 {
 			return nil
 		} else {
@@ -78,8 +79,8 @@ func UpdateRoleByRoleKey(role, name string) error {
 		}
 	}
 	// 存在则更新
-	p.Name = name
-	i, err := p.Update()
+	r.Name = name
+	i, err := r.Update()
 	if err != nil {
 		glog.Error(err)
 		return err
@@ -95,23 +96,24 @@ func UpdateRoleByRoleKey(role, name string) error {
 // createTime:2019年05月07日 10:45:04
 // author:hailaz
 func AddRole(role, name string) error {
-	p, err := model.GetRoleByRoleKey(role)
+	r, err := model.GetRoleByRoleKey(role)
 	// 不存在插入新数据
-	if err != nil || p.Id == 0 {
+	if err != nil || r.Id == 0 {
 		res := model.Enforcer.AddGroupingPolicy("system", role)
 		if !res {
-			return errors.New("add fail")
+			return errors.New("add to casbin fail")
 		}
-		p.RoleKey = role
-		p.Name = name
-		id, _ := p.Insert()
+		r := model.GadminRoleconfig{}
+		r.RoleKey = role
+		r.Name = name
+		id, _ := r.Insert()
 		if id > 0 {
 			return nil
 		} else {
-			return errors.New("add fail")
+			return errors.New("add to db fail")
 		}
 	}
-	return errors.New("add fail")
+	return errors.New("already exist")
 }
 
 // DeleteRole 删除角色

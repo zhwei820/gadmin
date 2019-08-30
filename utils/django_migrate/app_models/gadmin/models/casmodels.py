@@ -57,7 +57,6 @@ class User(models.Model):
     add_user_id = models.IntegerField()
     introduction = models.CharField(max_length=255, blank=True, null=True)
     avatar = models.CharField(max_length=255, blank=True, null=True)
-    role_keys = models.CharField(max_length=255, db_index=True, default='')
 
     class Meta:
         # managed = False

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
+	"strings"
 )
 
 // GetPolicyList 获取权限列表
@@ -95,6 +96,35 @@ func UpdatePolicyByFullPath(path, name string) error {
 		return errors.New("update fail")
 	}
 	return nil
+}
+
+// AddRole 添加角色
+//
+// createTime:2019年05月07日 10:45:04
+// author:hailaz
+func AddPolicy(policy, name string) error {
+	p, err := model.GetPolicyByFullPath(policy)
+	// 不存在插入新数据
+	if err != nil || p.Id == 0 {
+		list := strings.Split(policy, ":")
+		path := list[0]
+		act := list[1]
+
+		res := model.Enforcer.AddPolicy("system", path, act)
+		if !res {
+			return errors.New("add to casbin fail")
+		}
+		r := model.GadminPolicyconfig{}
+		r.FullPath = policy
+		r.Name = name
+		id, _ := r.Insert()
+		if id > 0 {
+			return nil
+		} else {
+			return errors.New("add to db fail")
+		}
+	}
+	return errors.New("already exist")
 }
 
 // ReSetPolicy 更新路由权限

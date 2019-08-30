@@ -34,7 +34,7 @@ func InitModel() {
 	defDB = g.DB()
 	defDB.SetDebug(true)
 	initUser()
-	initCasbin()
+	InitCasbin()
 	initSystemAndUserDefinedPolicyConfig()
 	initRoleConfig()
 }
@@ -56,22 +56,19 @@ func initUser() {
 		UpdateTime: time.Now(),
 	}
 	ii, err := admin.Insert()
-	glog.Debugfln("%v %v", ii, err)
-
+	glog.Debugf("%v %v", ii, err)
 }
 
-// initCasbin 初始化Casbin
+// InitCasbin 初始化Casbin
 //
 // createTime:2019年04月23日 14:45:20
 // author:hailaz
-func initCasbin() {
+func InitCasbin() {
 	a := NewAdapter(defDB)
 	Enforcer = casbin.NewEnforcer("./config/rbac.conf", a)
-	Enforcer.LoadPolicy()
-	//Enforcer.DeletePermissionsForUser("group_admin")
+	_ = Enforcer.LoadPolicy()
 	Enforcer.AddPolicy(ADMIN_NAME, "*", ACTION_ALL)
-	//Enforcer.AddGroupingPolicy("system", "user")
-
+	glog.Debug("InitCasbin end ")
 }
 
 // 初始化系统权限(api接口权限) 和 用户自定义权限
@@ -99,7 +96,7 @@ func initRoleConfig() {
 	roles := Enforcer.GetAllRoles()
 	r, _ := GetAllRole()
 	pns := make([]GadminRoleconfig, 0)
-	r.ToStructs(&pns)
+	_ = r.ToStructs(&pns)
 
 	pcd := make(map[string]GadminRoleconfig)
 	for _, item := range pns {

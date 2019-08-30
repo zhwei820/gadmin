@@ -101,18 +101,41 @@
                 "summary": "UpdatePolicy",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "name",
-                        "name": "name",
-                        "in": "query",
-                        "required": true
-                    },
+                        "description": "UpdatePolicy",
+                        "name": "UpdatePolicy",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api_model.UpdatePolicy"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "create policy",
+                "tags": [
+                    "policy"
+                ],
+                "summary": "create policy",
+                "parameters": [
                     {
-                        "type": "string",
-                        "description": "policy",
-                        "name": "policy",
-                        "in": "query",
-                        "required": true
+                        "description": "UpdatePolicy",
+                        "name": "UpdatePolicy",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api_model.UpdatePolicy"
+                        }
                     }
                 ],
                 "responses": {
@@ -541,6 +564,17 @@
                     }
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "api_model.UpdatePolicy": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "path": {
                     "type": "string"
                 }
             }

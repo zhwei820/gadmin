@@ -42,11 +42,34 @@ func (c *PolicyController) Get(r *ghttp.Request) {
 }
 
 //
+// @Summary create policy
+// @Description create policy
+// @Tags policy
+// @Param   UpdatePolicy  body api_model.UpdatePolicy true "UpdatePolicy"
+// @Success 200 {string} string	"ok"
+// @router /rbac/policy [post]
+func (c *PolicyController) Post(r *ghttp.Request) {
+	j := r.GetJson()
+	m := api_model.UpdatePolicy{}
+	_ = j.ToStruct(&m)
+	if e := gvalid.CheckStruct(m, nil); e != nil {
+		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		return
+	}
+	err := service.AddPolicy(m.Path, m.Name)
+	if err != nil {
+		Fail(r, code.RESPONSE_ERROR, err.Error())
+		return
+	}
+
+	Success(r, "Post")
+}
+
+//
 // @Summary UpdatePolicy
 // @Description UpdatePolicy
 // @Tags policy
-// @Param	name	query 	string	true		"name"
-// @Param	policy	query 	string	true		"policy"
+// @Param   UpdatePolicy  body api_model.UpdatePolicy true "UpdatePolicy"
 // @Success 200 {string} string	"ok"
 // @router /rbac/policy [put]
 func (c *PolicyController) Put(r *ghttp.Request) {
@@ -59,10 +82,12 @@ func (c *PolicyController) Put(r *ghttp.Request) {
 	}
 	if m.Name == UNDEFIND_POLICY_NAME {
 		Fail(r, code.RESPONSE_ERROR)
+		return
 	} else {
 		err := service.UpdatePolicyByFullPath(m.Path, m.Name)
 		if err != nil {
 			Fail(r, code.RESPONSE_ERROR, err.Error())
+			return
 		}
 	}
 	Success(r, "修改成功")
@@ -108,8 +133,8 @@ func (c *PolicyController) SetPolicyByRole(r *ghttp.Request) {
 	for _, item := range m.Policys {
 		list := strings.Split(item, ":")
 		path := list[0]
-		atc := list[1]
-		routerMap[fmt.Sprintf("%v %v %v", m.Role, path, atc)] = model.RolePolicy{Role: m.Role, Path: path, Atc: atc}
+		act := list[1]
+		routerMap[fmt.Sprintf("%v %v %v", m.Role, path, act)] = model.RolePolicy{Role: m.Role, Path: path, Atc: act}
 	}
 
 	service.ReSetPolicy(m.Role, routerMap)

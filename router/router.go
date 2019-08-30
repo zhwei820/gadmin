@@ -110,16 +110,14 @@ func BindGroup(s *ghttp.Server, path string, items []ghttp.GroupItem) {
 	g.Bind(items)
 	for _, item := range items {
 		glog.Debug(gconv.String(item[1]))
-
 		if gconv.String(item[0]) == "REST" { //rest api
-			addPolicy("system", gconv.String(item[1]), model.ACTION_GET)
-			addPolicy("system", gconv.String(item[1]), model.ACTION_POST)
-			addPolicy("system", gconv.String(item[1]), model.ACTION_PUT)
-			addPolicy("system", gconv.String(item[1]), model.ACTION_DELETE)
+			addPolicy("system", path+gconv.String(item[1]), model.ACTION_GET)
+			addPolicy("system", path+gconv.String(item[1]), model.ACTION_POST)
+			addPolicy("system", path+gconv.String(item[1]), model.ACTION_PUT)
+			addPolicy("system", path+gconv.String(item[1]), model.ACTION_DELETE)
 		} else {
-			addPolicy("system", gconv.String(item[1]), common.GetAction(gconv.String(item[0])))
+			addPolicy("system", path+gconv.String(item[1]), common.GetAction(gconv.String(item[0])))
 		}
-
 	}
 
 }
@@ -128,6 +126,6 @@ func BindGroup(s *ghttp.Server, path string, items []ghttp.GroupItem) {
 //
 // createTime:2019年04月29日 17:18:25
 // author:hailaz
-func addPolicy(role, path, atc string) {
-	routerMap[fmt.Sprintf("%v %v %v", role, path, atc)] = model.RolePolicy{Role: role, Path: path, Atc: atc}
+func addPolicy(role, path, act string) {
+	routerMap[fmt.Sprintf("%v %v %v", role, path, act)] = model.RolePolicy{Role: role, Path: path, Atc: act}
 }

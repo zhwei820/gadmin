@@ -58,6 +58,7 @@ func (c *RoleController) Post(r *ghttp.Request) {
 	err := service.AddRole(m.Role, m.Name)
 	if err != nil {
 		Fail(r, code.RESPONSE_ERROR, err.Error())
+		return
 	}
 
 	Success(r, "Post")
@@ -81,10 +82,12 @@ func (c *RoleController) Put(r *ghttp.Request) {
 	glog.Debug(m)
 	if m.Name == UNDEFIND_POLICY_NAME {
 		Fail(r, code.RESPONSE_ERROR)
+		return
 	} else {
 		err := service.UpdateRoleByRoleKey(m.Role, m.Name)
 		if err != nil {
 			Fail(r, code.RESPONSE_ERROR, err.Error())
+			return
 		}
 	}
 	Success(r, "修改成功")
@@ -103,6 +106,7 @@ func (c *RoleController) Delete(r *ghttp.Request) {
 	err := service.DeleteRole(role)
 	if err != nil {
 		Fail(r, code.RESPONSE_ERROR, err.Error())
+		return
 	}
 	Success(r, "Delete")
 }

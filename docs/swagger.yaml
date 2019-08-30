@@ -47,6 +47,13 @@ definitions:
       username:
         type: string
     type: object
+  api_model.UpdatePolicy:
+    properties:
+      name:
+        type: string
+      path:
+        type: string
+    type: object
   api_model.UpdateUser:
     properties:
       email:
@@ -125,19 +132,34 @@ paths:
       summary: policy list
       tags:
       - policy
+    post:
+      description: create policy
+      parameters:
+      - description: UpdatePolicy
+        in: body
+        name: UpdatePolicy
+        required: true
+        schema:
+          $ref: '#/definitions/api_model.UpdatePolicy'
+          type: object
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: create policy
+      tags:
+      - policy
     put:
       description: UpdatePolicy
       parameters:
-      - description: name
-        in: query
-        name: name
+      - description: UpdatePolicy
+        in: body
+        name: UpdatePolicy
         required: true
-        type: string
-      - description: policy
-        in: query
-        name: policy
-        required: true
-        type: string
+        schema:
+          $ref: '#/definitions/api_model.UpdatePolicy'
+          type: object
       responses:
         "200":
           description: ok
