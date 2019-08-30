@@ -53,6 +53,14 @@ func authHook(r *ghttp.Request) {
 	r.SetParam("req", uid)
 	r.SetParam("ctx", context_log.NewContext(r.Context(), writer, uid.String(), utils.GetLogLevel(g.Config().GetString("ReqLogLevel"))))
 
+	r.Response.CORS(ghttp.CORSOptions{
+		AllowOrigin:      "*",
+		AllowMethods:     ghttp.HTTP_METHODS,
+		AllowCredentials: "true",
+		MaxAge:           3628800,
+		AllowHeaders:     "*",
+	}) //开启跨域
+
 	uri := strings.Split(r.Request.RequestURI, "/")
 	if len(uri) >= 3 {
 		switch uri[1] + "/" + uri[2] { //登录相关免鉴权
@@ -66,8 +74,6 @@ func authHook(r *ghttp.Request) {
 			return
 		}
 	}
-	r.Response.CORSDefault() //开启跨域
-	//r.Response.Header().Set("Access-Control-Allow-Origin", "*")
 	base.GfJWTMiddleware.MiddlewareFunc()(r) //鉴权中间件
 	// or error handling
 }

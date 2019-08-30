@@ -11,5 +11,5 @@ import (
 // createTime:2019年04月24日 14:50:34
 // author:hailaz
 func InitTimer() {
-	gtimer.Add(time.Second*10, model.InitCasbin)
+	gtimer.Add(time.Minute, model.InitCasbin)
 }

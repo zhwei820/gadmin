@@ -25,6 +25,9 @@ type BaseResult struct {
 // author:hailaz
 func Response(r *ghttp.Request, rs BaseResult) {
 	r.Response.WriteJson(rs)
+	if rs.Code < 600 {
+		r.Response.Status = rs.Code
+	}
 }
 
 // Success 返回成功
