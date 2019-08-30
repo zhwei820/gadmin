@@ -29,7 +29,7 @@ func (c *RoleController) Get(r *ghttp.Request) {
 	username := r.GetString("username")
 	var list struct {
 		List         []model.GadminRoleconfig `json:"items"`
-		UserRoleKeys []model.GadminRoleconfig `json:"user_role_keyss"`
+		UserRoleKeys []model.GadminRoleconfig `json:"user_role_keys"`
 		Total        int                      `json:"total"`
 	}
 	list.List, list.Total = service.GetPagedRoleList(page, limit)

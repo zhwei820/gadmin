@@ -12,9 +12,7 @@ import (
 // author:hailaz
 func GetPagedRoleList(page, limit int) ([]model.GadminRoleconfig, int) {
 	defaultname := "未命名"
-	if page < 1 {
-		page = 1
-	}
+
 	roleList := make([]model.GadminRoleconfig, 0)
 	roles := model.Enforcer.GetAllRoles()
 	total := len(roles)

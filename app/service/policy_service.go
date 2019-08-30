@@ -11,7 +11,8 @@ import (
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
-func GetPagedPolicyList(page, limit int, defaultname string) ([]model.GadminPolicyconfig, int) {
+func GetPagedPolicyList(page, limit int) ([]model.GadminPolicyconfig, int) {
+	defaultName := "未命名"
 	if page < 1 {
 		page = 1
 	}
@@ -24,7 +25,7 @@ func GetPagedPolicyList(page, limit int, defaultname string) ([]model.GadminPoli
 
 	for _, item := range policys {
 		full := fmt.Sprintf("%v:%v", item[1], item[2])
-		p := model.GadminPolicyconfig{FullPath: full, Name: defaultname}
+		p := model.GadminPolicyconfig{FullPath: full, Name: defaultName}
 		for _, itempc := range pcs {
 			if itempc.FullPath == full {
 				p.Name = itempc.Name

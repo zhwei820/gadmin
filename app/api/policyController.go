@@ -72,7 +72,7 @@ func (c *PolicyController) Put(r *ghttp.Request) {
 // @Summary GetPolicyByRole
 // @Description GetPolicyByRole
 // @Tags policy
-// @Param	policy	query 	string	role		"role"
+// @Param	role	query 	string	role		"role"
 // @Success 200 {string} string	"ok"
 // @router /rbac/policy/byrole [get]
 func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {
@@ -93,9 +93,9 @@ func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {
 // @Summary SetPolicyByRole
 // @Description SetPolicyByRole
 // @Tags policy
-// @Param   PostRole  body api_model.PostRole true "PostRole"
+// @Param   SetPolicyByRole  body api_model.SetPolicyByRole true "SetPolicyByRole"
 // @Success 200 {string} string	"ok"
-// @router /rbac/policy [put]
+// @router /rbac/policy/byrole [put]
 func (c *PolicyController) SetPolicyByRole(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.SetPolicyByRole{}

@@ -94,21 +94,25 @@
                 }
             },
             "put": {
-                "description": "SetPolicyByRole",
+                "description": "UpdatePolicy",
                 "tags": [
                     "policy"
                 ],
-                "summary": "SetPolicyByRole",
+                "summary": "UpdatePolicy",
                 "parameters": [
                     {
-                        "description": "PostRole",
-                        "name": "PostRole",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api_model.PostRole"
-                        }
+                        "type": "string",
+                        "description": "name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "policy",
+                        "name": "policy",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -132,8 +136,35 @@
                     {
                         "type": "string",
                         "description": "role",
-                        "name": "policy",
+                        "name": "role",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "SetPolicyByRole",
+                "tags": [
+                    "policy"
+                ],
+                "summary": "SetPolicyByRole",
+                "parameters": [
+                    {
+                        "description": "SetPolicyByRole",
+                        "name": "SetPolicyByRole",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api_model.SetPolicyByRole"
+                        }
                     }
                 ],
                 "responses": {
@@ -480,6 +511,20 @@
             "properties": {
                 "name": {
                     "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
+        "api_model.SetPolicyByRole": {
+            "type": "object",
+            "properties": {
+                "policys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "role": {
                     "type": "string"
