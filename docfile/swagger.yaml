@@ -449,7 +449,7 @@ definitions:
         add_user_id:
           type: integer
           readOnly: true
-        add_time:
+        create_time:
           type: string
           format: date-time
           readOnly: true

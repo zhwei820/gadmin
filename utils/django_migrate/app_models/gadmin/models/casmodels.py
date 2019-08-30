@@ -61,7 +61,7 @@ class User(models.Model):
     email = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
     sex = models.IntegerField()
-    add_time = models.DateTimeField(auto_now_add=True)
+    create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     add_user_id = models.IntegerField()
     introduction = models.CharField(max_length=255, blank=True, null=True)
