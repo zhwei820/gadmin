@@ -1,14 +1,11 @@
 package api
 
 import (
-	"encoding/base64"
 	"github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/g"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
-	"github.com/gogf/gf/g/os/gtime"
 	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/utils/common"
 	"github.com/hailaz/gadmin/utils"
 	"time"
 )
@@ -73,51 +70,7 @@ func RefreshResponse(r *ghttp.Request, code int, token string, expire time.Time)
 	Success(r, tk)
 }
 
-// Authenticator 登录验证
-//
-// createTime:2019年05月13日 10:00:22
-// author:hailaz
-func Authenticator(r *ghttp.Request) (interface{}, error) {
-	data := r.GetJson()
-	name := data.GetString("username")
-	pwd := data.GetString("password")
-	kid := data.GetString("kid")
-
-	if ck := common.GetCryptoKey(kid); ck != nil {
-		if gtime.Second()-ck.TimeStamp >= 5 { //加密key超时时间
-			return nil, jwt.ErrFailedAuthentication
-		}
-		//glog.Debugfln("%v", ck.Id)
-		//glog.Debugfln("%v", ck.Key)
-		//glog.Debugfln("%v %v", name, pwd)
-		decodePwd, err := base64.StdEncoding.DecodeString(pwd)
-		if err != nil {
-			return nil, err
-		}
-		decryptPwd, _ := common.RsaDecrypt(decodePwd, []byte(ck.PrivateKey))
-		//glog.Debug(string(decryptPwd))
-		password := string(decryptPwd)
-		//glog.Debugfln("%v %v", name, password)
-		if password != "" {
-			u, err := model.GetUserByName(name)
-			if err != nil {
-				return nil, err
-			}
-			if u.Password == utils.EncryptPassword(password) {
-				return g.Map{
-					"username": u.UserName,
-					"id":       u.Id,
-				}, nil
-			}
-
-		}
-	}
-
-	return nil, jwt.ErrFailedAuthentication
-}
-
 // 简单 Authenticator 登录验证
-
 func SimpleAuthenticator(r *ghttp.Request) (interface{}, error) {
 	data := r.GetJson()
 	name := data.GetString("username")

@@ -85,7 +85,6 @@ func Init(s *ghttp.Server) {
 	BindGroup(s, "/rbac", []ghttp.GroupItem{
 		//
 		//登录
-		{"GET", "/loginkey", api.GetLoginCryptoKey},                   //获取登录加密公钥
 		{"POST", "/login", api.GfJWTMiddleware.LoginHandler},          //登录
 		{"GET", "/refresh_token", api.GfJWTMiddleware.RefreshHandler}, //获取登录加密公钥
 		{"GET", "/logout", api.Logout},                                //登出

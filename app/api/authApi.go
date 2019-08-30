@@ -6,7 +6,6 @@ import (
 	"github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
-	"github.com/hailaz/gadmin/utils/common"
 )
 
 var (
@@ -41,22 +40,8 @@ func init() {
 	GfJWTMiddleware = authMiddleware
 }
 
-// GetLoginCryptoKey 获取登录的加密key
 //
-// @Summary 获取登录的加密key
-// @Description 获取登录的加密key
-// @Tags auth
-// @Success 200 {string} string	"ok"
-// @router /rbac/loginkey [get]
-func GetLoginCryptoKey(r *ghttp.Request) {
-	kid := r.Session.Id()
-	ck := common.GenCryptoKey(kid)
-	//glog.Debug("kid:" + kid)
-	Success(r, ck)
-}
-
-//
-// @Summary 登出 （jwt 后端暂时无）
+// @Summary 登出 （jwt 后端暂时无法登出）
 // @Description 登出
 // @Tags auth
 // @Success 200 {string} string	"ok"
