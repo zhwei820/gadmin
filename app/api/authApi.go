@@ -6,7 +6,7 @@ import (
 	"github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
-	"github.com/hailaz/gadmin/library/common"
+	"github.com/hailaz/gadmin/utils/common"
 )
 
 var (
@@ -56,7 +56,7 @@ func GetLoginCryptoKey(r *ghttp.Request) {
 }
 
 //
-// @Summary 登出
+// @Summary 登出 （jwt 后端暂时无）
 // @Description 登出
 // @Tags auth
 // @Success 200 {string} string	"ok"

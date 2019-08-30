@@ -4,7 +4,7 @@ import (
 	"github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/library/code"
+	"github.com/hailaz/gadmin/utils/code"
 	"github.com/hailaz/gadmin/utils/context_log"
 	"strconv"
 	"strings"

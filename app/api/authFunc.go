@@ -8,7 +8,7 @@ import (
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/gogf/gf/g/os/gtime"
 	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/library/common"
+	"github.com/hailaz/gadmin/utils/common"
 	"github.com/hailaz/gadmin/utils"
 	"time"
 )

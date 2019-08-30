@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/gogf/gf/g/os/gtimer"
-	"github.com/hailaz/gadmin/library/common"
+	"github.com/hailaz/gadmin/utils/common"
 )
 
 // InitTimer 初始化定时任务

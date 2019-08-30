@@ -6,7 +6,7 @@ import (
 	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service"
-	"github.com/hailaz/gadmin/library/code"
+	"github.com/hailaz/gadmin/utils/code"
 )
 
 type RoleController struct {

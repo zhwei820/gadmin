@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/library/code"
+	"github.com/hailaz/gadmin/utils/code"
 )
 
 const (

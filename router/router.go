@@ -15,7 +15,7 @@ import (
 	"github.com/gogf/gf/g/util/gconv"
 	"github.com/hailaz/gadmin/app/api"
 	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/library/common"
+	"github.com/hailaz/gadmin/utils/common"
 )
 
 var routerMap = make(map[string]model.RolePolicy)

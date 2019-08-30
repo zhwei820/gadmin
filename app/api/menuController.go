@@ -4,7 +4,7 @@ import (
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/library/code"
+	"github.com/hailaz/gadmin/utils/code"
 )
 
 type MenuController struct {
