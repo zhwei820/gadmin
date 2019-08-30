@@ -278,7 +278,7 @@
                 }
             }
         },
-        "/rbac/role/byuser": {
+        "/rbac/role/userrole": {
             "put": {
                 "description": "SetRoleByUserName",
                 "tags": [

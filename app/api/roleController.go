@@ -5,6 +5,7 @@ import (
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/gogf/gf/g/util/gvalid"
 	"github.com/hailaz/gadmin/app/api/api_model"
+	. "github.com/hailaz/gadmin/app/api/base"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/utils/code"
@@ -112,7 +113,7 @@ func (c *RoleController) Delete(r *ghttp.Request) {
 // @Tags role
 // @Param   SetRoleByUserName  body api_model.SetRoleByUserName true "SetRoleByUserName"
 // @Success 200 {string} string	"ok"
-// @router /rbac/role/byuser [put]
+// @router /rbac/role/userrole [put]
 func (c *RoleController) SetRoleByUserName(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.SetRoleByUserName{}

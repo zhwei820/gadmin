@@ -5,11 +5,11 @@ import (
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/util/gvalid"
 	"github.com/hailaz/gadmin/app/api/api_model"
-	"github.com/hailaz/gadmin/app/service"
-	"strings"
-
+	. "github.com/hailaz/gadmin/app/api/base"
 	"github.com/hailaz/gadmin/app/model"
+	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/utils/code"
+	"strings"
 )
 
 const (

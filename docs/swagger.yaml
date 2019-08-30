@@ -237,7 +237,7 @@ paths:
       summary: Update role
       tags:
       - role
-  /rbac/role/byuser:
+  /rbac/role/userrole:
     put:
       description: SetRoleByUserName
       parameters:

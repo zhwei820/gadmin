@@ -3,6 +3,7 @@ package router
 import (
 	"fmt"
 	"github.com/gogf/gf/g"
+	"github.com/hailaz/gadmin/app/api/base"
 	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/utils"
 	"github.com/hailaz/gadmin/utils/context_log"
@@ -67,7 +68,7 @@ func authHook(r *ghttp.Request) {
 	}
 	r.Response.CORSDefault() //开启跨域
 	//r.Response.Header().Set("Access-Control-Allow-Origin", "*")
-	api.GfJWTMiddleware.MiddlewareFunc()(r) //鉴权中间件
+	base.GfJWTMiddleware.MiddlewareFunc()(r) //鉴权中间件
 	// or error handling
 }
 
@@ -84,9 +85,9 @@ func Init(s *ghttp.Server) {
 	BindGroup(s, "/rbac", []ghttp.GroupItem{
 		//
 		//登录
-		{"POST", "/login", api.GfJWTMiddleware.LoginHandler},          //登录
-		{"GET", "/refresh_token", api.GfJWTMiddleware.RefreshHandler}, //获取登录加密公钥
-		{"GET", "/logout", api.Logout},                                //登出
+		{"POST", "/login", base.GfJWTMiddleware.LoginHandler},          //登录
+		{"GET", "/refresh_token", base.GfJWTMiddleware.RefreshHandler}, //获取登录加密公钥
+		{"GET", "/logout", api.Logout},                                 //登出
 		//// 用户
 		{"GET", "/user/info", userCtrl, "Info"},
 		{"REST", "/user", userCtrl},

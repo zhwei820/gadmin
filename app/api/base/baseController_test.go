@@ -1,4 +1,4 @@
-package api
+package base
 
 import (
 	"github.com/gogf/gf/g"

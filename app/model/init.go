@@ -52,7 +52,7 @@ func initUser() {
 		UserName:   ADMIN_NAME,
 		NickName:   ADMIN_NICK_NAME,
 		Password:   utils.EncryptPassword(ADMIN_DEFAULT_PASSWORD),
-		AddTime:    time.Now(),
+		CreateTime: time.Now(),
 		UpdateTime: time.Now(),
 	}
 	ii, err := admin.Insert()

@@ -1,6 +1,8 @@
 package api
 
 import (
+	. "github.com/hailaz/gadmin/app/api/base"
+
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
@@ -78,7 +80,7 @@ func (c *UserController) Post(r *ghttp.Request) {
 		Email:      m.Email,
 		Phone:      m.Phone,
 		AddUserId:  GetUserId(r),
-		AddTime:    time.Now(),
+		CreateTime: time.Now(),
 		UpdateTime: time.Now(),
 	}
 	uid, err := user.Insert()
