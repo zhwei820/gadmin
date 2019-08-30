@@ -38,15 +38,6 @@ definitions:
       username:
         type: string
     type: object
-  api_model.SetRoleMenus:
-    properties:
-      menus:
-        items:
-          type: string
-        type: array
-      role:
-        type: string
-    type: object
   api_model.UpdateUser:
     properties:
       email:
@@ -62,41 +53,6 @@ definitions:
       username:
         type: string
     type: object
-  model.MenuOut:
-    properties:
-      alwaysshow:
-        type: integer
-      auto_create:
-        type: integer
-      children:
-        items:
-          $ref: '#/definitions/model.MenuOut'
-        type: array
-      component:
-        type: string
-      hidden:
-        type: integer
-      icon:
-        type: string
-      id:
-        type: integer
-      menu_name:
-        type: string
-      menu_path:
-        type: string
-      name:
-        type: string
-      nocache:
-        type: integer
-      parent_name:
-        type: string
-      redirect:
-        type: string
-      sort:
-        type: integer
-      title:
-        type: string
-    type: object
 info:
   contact:
     email: hello@hello.io
@@ -110,7 +66,7 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
-  /login:
+  /rbac/login:
     post:
       description: 登陆
       parameters:
@@ -129,101 +85,18 @@ paths:
       summary: 登陆
       tags:
       - auth
-  /loginkey:
+  /rbac/logout:
     get:
-      description: 获取登录的加密key
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: 获取登录的加密key
-      tags:
-      - auth
-  /logout:
-    post:
       description: 登出
       responses:
         "200":
           description: ok
           schema:
             type: string
-      summary: 登出
+      summary: 登出 （jwt 后端暂时无法登出）
       tags:
       - auth
-  /menu:
-    delete:
-      description: delete menu
-      parameters:
-      - description: name
-        in: query
-        name: name
-        required: true
-        type: string
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: delete menu
-      tags:
-      - menu
-    get:
-      description: menu list
-      parameters:
-      - description: page
-        in: query
-        name: page
-        type: integer
-      - description: limit
-        in: query
-        name: limit
-        type: integer
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: menu list
-      tags:
-      - menu
-    post:
-      description: create menu
-      parameters:
-      - description: MenuOut
-        in: body
-        name: SignInInfo
-        required: true
-        schema:
-          $ref: '#/definitions/model.MenuOut'
-          type: object
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: create menu
-      tags:
-      - menu
-    put:
-      description: update menu
-      parameters:
-      - description: MenuOut
-        in: body
-        name: SignInInfo
-        required: true
-        schema:
-          $ref: '#/definitions/model.MenuOut'
-          type: object
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: update menu
-      tags:
-      - menu
-  /policy:
+  /rbac/policy:
     get:
       description: policy list
       parameters:
@@ -261,7 +134,7 @@ paths:
       summary: SetPolicyByRole
       tags:
       - policy
-  /policy/byrole:
+  /rbac/policy/byrole:
     get:
       description: GetPolicyByRole
       parameters:
@@ -277,7 +150,7 @@ paths:
       summary: GetPolicyByRole
       tags:
       - policy
-  /refresh_token:
+  /rbac/refresh_token:
     get:
       description: 刷新token
       responses:
@@ -288,7 +161,7 @@ paths:
       summary: 刷新token
       tags:
       - auth
-  /role:
+  /rbac/role:
     delete:
       description: delete role
       parameters:
@@ -319,7 +192,6 @@ paths:
       - description: username
         in: query
         name: username
-        required: true
         type: string
       responses:
         "200":
@@ -365,7 +237,7 @@ paths:
       summary: Update role
       tags:
       - role
-  /role/byuser:
+  /rbac/role/byuser:
     put:
       description: SetRoleByUserName
       parameters:
@@ -384,26 +256,7 @@ paths:
       summary: SetRoleByUserName
       tags:
       - role
-  /role/menu:
-    put:
-      description: SetRoleMenus
-      parameters:
-      - description: SetRoleMenus
-        in: body
-        name: SetRoleMenus
-        required: true
-        schema:
-          $ref: '#/definitions/api_model.SetRoleMenus'
-          type: object
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: SetRoleMenus
-      tags:
-      - role
-  /user:
+  /rbac/user:
     delete:
       description: delete user
       parameters:
@@ -431,6 +284,10 @@ paths:
         in: query
         name: limit
         type: integer
+      - description: search
+        in: query
+        name: search
+        type: string
       responses:
         "200":
           description: ok
@@ -475,7 +332,7 @@ paths:
       summary: UpdateUser
       tags:
       - user
-  /user/info:
+  /rbac/user/info:
     get:
       description: user info
       responses:
@@ -484,22 +341,6 @@ paths:
           schema:
             type: string
       summary: user info
-      tags:
-      - user
-  /user/menu:
-    get:
-      description: user menu
-      parameters:
-      - description: RoleConfig
-        in: query
-        name: RoleConfig
-        type: string
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: user menu
       tags:
       - user
 securityDefinitions:

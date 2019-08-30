@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
+	"github.com/gogf/gf/g/util/gvalid"
 	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service"
@@ -48,8 +49,11 @@ func (c *RoleController) Get(r *ghttp.Request) {
 func (c *RoleController) Post(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.PostRole{}
-	j.ToStruct(&m)
-
+	_ = j.ToStruct(&m)
+	if e := gvalid.CheckStruct(m, nil); e != nil {
+		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		return
+	}
 	err := service.AddRole(m.Role, m.Name)
 	if err != nil {
 		Fail(r, code.RESPONSE_ERROR, err.Error())
@@ -68,8 +72,11 @@ func (c *RoleController) Post(r *ghttp.Request) {
 func (c *RoleController) Put(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.PostRole{}
-	j.ToStruct(&m)
-
+	_ = j.ToStruct(&m)
+	if e := gvalid.CheckStruct(m, nil); e != nil {
+		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		return
+	}
 	glog.Debug(m)
 	if m.Name == UNDEFIND_POLICY_NAME {
 		Fail(r, code.RESPONSE_ERROR)
@@ -109,25 +116,11 @@ func (c *RoleController) Delete(r *ghttp.Request) {
 func (c *RoleController) SetRoleByUserName(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.SetRoleByUserName{}
-	j.ToStruct(&m)
-
-	service.SetRoleByUserName(m.Username, m.Roles)
-
-	Success(r, "success")
-}
-
-//
-// @Summary SetRoleMenus
-// @Description SetRoleMenus
-// @Tags role
-// @Param   SetRoleMenus  body api_model.SetRoleMenus true "SetRoleMenus"
-// @Success 200 {string} string	"ok"
-// @router /rbac/role/menu [put]
-func (c *RoleController) SetRoleMenus(r *ghttp.Request) {
-	j := r.GetJson()
-	m := api_model.SetRoleMenus{}
-	j.ToStruct(&m)
-
-	model.SetRoleMenus(m.Role, m.Menus)
+	_ = j.ToStruct(&m)
+	if e := gvalid.CheckStruct(m, nil); e != nil {
+		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		return
+	}
+	_ = service.SetRoleByUserName(m.Username, m.Roles)
 	Success(r, "success")
 }

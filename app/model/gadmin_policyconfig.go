@@ -10,7 +10,7 @@ type GadminPolicyconfig struct {
 	Id         int    `json:"id" xorm:"not null pk autoincr INT(11)"`
 	FullPath   string `json:"full_path" xorm:"not null unique VARCHAR(255)"`
 	Name       string `json:"name" xorm:"not null VARCHAR(255)"`
-	Descrption string `json:"descrption" xorm:"VARCHAR(255)"`
+	Descrption string `json:"descrption" xorm:"default 'NULL' VARCHAR(255)"`
 }
 
 // TableName 获取表名

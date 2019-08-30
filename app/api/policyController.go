@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"github.com/gogf/gf/g/net/ghttp"
+	"github.com/gogf/gf/g/util/gvalid"
 	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/service"
 	"strings"
@@ -51,8 +52,11 @@ func (c *PolicyController) Get(r *ghttp.Request) {
 func (c *PolicyController) Put(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.UpdatePolicy{}
-	j.ToStruct(&m)
-
+	_ = j.ToStruct(&m)
+	if e := gvalid.CheckStruct(m, nil); e != nil {
+		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		return
+	}
 	if m.Name == UNDEFIND_POLICY_NAME {
 		Fail(r, code.RESPONSE_ERROR)
 	} else {
@@ -95,8 +99,11 @@ func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {
 func (c *PolicyController) SetPolicyByRole(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.SetPolicyByRole{}
-	j.ToStruct(&m)
-
+	_ = j.ToStruct(&m)
+	if e := gvalid.CheckStruct(m, nil); e != nil {
+		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		return
+	}
 	var routerMap = make(map[string]model.RolePolicy)
 	for _, item := range m.Policys {
 		list := strings.Split(item, ":")

@@ -88,7 +88,6 @@ func DeleteRole(role string) error {
 		return errors.New("delete fail")
 	}
 	model.Enforcer.DeleteRole(role)
-	model.DeleteRoleMenus(role)
 	model.DeleteRolePolicys(role)
 	i, _ := item.DeleteById(item.Id)
 	if i > 0 {
@@ -112,6 +111,6 @@ func SetRoleByUserName(userName string, roles []string) error {
 		return errors.New("userName find User error")
 	}
 	user.RoleKeys = rolestr
-	user.Update()
+	_, _ = user.Update()
 	return nil
 }

@@ -4,11 +4,12 @@ import (
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
+	"github.com/gogf/gf/g/util/gvalid"
 	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service"
-	"github.com/hailaz/gadmin/utils/code"
 	"github.com/hailaz/gadmin/utils"
+	"github.com/hailaz/gadmin/utils/code"
 	"time"
 )
 
@@ -24,38 +25,9 @@ type UserController struct {
 func (c *UserController) Info(r *ghttp.Request) {
 	u := GetUser(r)
 	if u != nil {
-		Success(r, u.GetUserInfo())
+		Success(r, u.GetUserRoles())
 	}
 	Fail(r, code.RESPONSE_ERROR, "获取用户信息失败")
-}
-
-// @Summary user menu
-// @Description user menu
-// @Tags user
-// @Param	RoleConfig	query 	string	false		"RoleConfig"
-// @Success 200 {string} string	"ok"
-// @router /rbac/user/menu [get]
-func (c *UserController) Menu(r *ghttp.Request) {
-	RoleConfig := r.GetString("RoleConfig")
-	if RoleConfig != "" {
-		var list struct {
-			Menus     []model.MenuOut `json:"menus"`
-			RoleMenus []model.MenuOut `json:"role_menus"`
-		}
-		list.Menus = model.GetMenuByRoleConfig([]string{model.ADMIN_NAME})
-		list.RoleMenus = model.GetMenuByRoleConfig([]string{RoleConfig})
-		Success(r, list)
-	}
-	u := GetUser(r)
-	if u != nil {
-		if u.UserName == model.ADMIN_NAME {
-			Success(r, model.GetMenuByRoleConfig([]string{model.ADMIN_NAME}))
-		} else {
-			Success(r, model.GetMenuByRoleConfig(model.Enforcer.GetRolesForUser(u.UserName)))
-		}
-
-	}
-	Fail(r, code.RESPONSE_ERROR, "获取用户菜单失败")
 }
 
 // @Summary user list
@@ -88,8 +60,11 @@ func (c *UserController) Get(r *ghttp.Request) {
 func (c *UserController) Post(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.CreateUser{}
-	j.ToStruct(&m)
-
+	_ = j.ToStruct(&m)
+	if e := gvalid.CheckStruct(m, nil); e != nil {
+		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		return
+	}
 	u, err := model.GetUserByName(m.Username)
 	if err == nil && u.Id != 0 {
 		Fail(r, code.RESPONSE_ERROR, "用户已存在")
@@ -128,11 +103,15 @@ func (c *UserController) Post(r *ghttp.Request) {
 func (c *UserController) Put(r *ghttp.Request) {
 	j := r.GetJson()
 	m := api_model.UpdateUser{}
-	j.ToStruct(&m)
-
+	_ = j.ToStruct(&m)
+	if e := gvalid.CheckStruct(m, nil); e != nil {
+		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		return
+	}
 	u, err := model.GetUserByName(m.Username)
-	if err != nil || u.Id == 0 {
+	if u == nil || err != nil || u.Id == 0 {
 		Fail(r, code.RESPONSE_ERROR, "用户不存在")
+		return
 	}
 	umap := gdb.Map{}
 	umap = j.ToMap()
@@ -143,15 +122,14 @@ func (c *UserController) Put(r *ghttp.Request) {
 		err := model.UpdateUserById(u.Id, umap)
 		if err != nil {
 			Fail(r, code.RESPONSE_ERROR, err.Error())
+			return
 		}
 	} else {
-		if m.Password != m.Passwordconfirm {
-			Fail(r, code.RESPONSE_ERROR, "输入密码不一致")
-		}
 		umap["password"] = utils.EncryptPassword(m.Password)
 		err := model.UpdateUserById(u.Id, umap)
 		if err != nil {
 			Fail(r, code.RESPONSE_ERROR, err.Error())
+			return
 		}
 	}
 

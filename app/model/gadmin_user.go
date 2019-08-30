@@ -14,15 +14,13 @@ type GadminUser struct {
 	UserName     string    `json:"user_name" xorm:"not null unique VARCHAR(255)"`
 	NickName     string    `json:"nick_name" xorm:"not null VARCHAR(255)"`
 	Password     string    `json:"password" xorm:"not null VARCHAR(255)"`
-	Email        string    `json:"email" xorm:"VARCHAR(255)"`
-	Phone        string    `json:"phone" xorm:"VARCHAR(255)"`
+	Email        string    `json:"email" xorm:"default 'NULL' VARCHAR(255)"`
+	Phone        string    `json:"phone" xorm:"default 'NULL' VARCHAR(255)"`
 	Sex          int       `json:"sex" xorm:"not null INT(11)"`
-	Age          int       `json:"age" xorm:"not null INT(11)"`
 	AddTime      time.Time `json:"add_time" xorm:"not null DATETIME(6)"`
 	UpdateTime   time.Time `json:"update_time" xorm:"not null DATETIME(6)"`
-	AddUserId    int       `json:"add_user_id" xorm:"not null INT(11)"`
-	Introduction string    `json:"Introduction" xorm:"VARCHAR(255)"`
-	Avatar       string    `json:"avatar" xorm:"VARCHAR(255)"`
+	Introduction string    `json:"introduction" xorm:"default 'NULL' VARCHAR(255)"`
+	Avatar       string    `json:"avatar" xorm:"default 'NULL' VARCHAR(255)"`
 	RoleKeys     string    `json:"role_keys" xorm:"not null index VARCHAR(255)"`
 }
 

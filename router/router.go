@@ -79,7 +79,6 @@ func Init(s *ghttp.Server) {
 	userCtrl := new(api.UserController)
 	roleCtrl := new(api.RoleController)
 	policyCtrl := new(api.PolicyController)
-	menuCtrl := new(api.MenuController)
 
 	// user
 	BindGroup(s, "/rbac", []ghttp.GroupItem{
@@ -88,16 +87,12 @@ func Init(s *ghttp.Server) {
 		{"POST", "/login", api.GfJWTMiddleware.LoginHandler},          //登录
 		{"GET", "/refresh_token", api.GfJWTMiddleware.RefreshHandler}, //获取登录加密公钥
 		{"GET", "/logout", api.Logout},                                //登出
-		////menu
-		{"REST", "/menu", menuCtrl},
 		//// 用户
 		{"GET", "/user/info", userCtrl, "Info"},
-		{"GET", "/user/menu", userCtrl, "Menu"},
 		{"REST", "/user", userCtrl},
 		// 角色
 		{"REST", "/role", roleCtrl},
-		{"PUT", "/role/byuser", roleCtrl, "SetRoleByUserName"},
-		{"PUT", "/role/menu", roleCtrl, "SetRoleMenus"},
+		{"PUT", "/role/userrole", roleCtrl, "SetRoleByUserName"},
 		// 权限
 		{"REST", "/policy", policyCtrl},
 		{"GET", "/policy/byrole", policyCtrl, "GetPolicyByRole"},

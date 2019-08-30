@@ -2,7 +2,7 @@ package model
 
 import "github.com/gogf/gf/g/database/gdb"
 
-// DeleteRoleMenus description
+// DeleteRolePolicys description
 //
 // createTime:2019年05月21日 17:52:06
 // author:hailaz

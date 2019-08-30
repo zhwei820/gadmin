@@ -5,11 +5,8 @@ import (
 	"github.com/gogf/gf/g/database/gdb"
 )
 
-type UserInfo struct {
-	Roles        []string `json:"roles"`
-	Introduction string   `json:"introduction"`
-	Avatar       string   `json:"avatar"`
-	Name         string   `json:"name"`
+type UserRoles struct {
+	Roles []string `json:"roles"`
 }
 
 // {
@@ -18,21 +15,17 @@ type UserInfo struct {
 //     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
 //     name: 'Super Admin'
 //   }
-// GetUserInfo 获取用户信息
+// GetUserRoles 获取用户信息
 //
 // createTime:2019年05月08日 16:53:24
 // author:hailaz
-func (u *GadminUser) GetUserInfo() UserInfo {
-	info := UserInfo{}
+func (u *GadminUser) GetUserRoles() UserRoles {
+	info := UserRoles{}
 	if u.UserName == ADMIN_NAME {
 		info.Roles = []string{ADMIN_NAME}
 	} else {
 		info.Roles = Enforcer.GetRolesForUser(u.UserName)
 	}
-
-	info.Avatar = u.Avatar
-	info.Introduction = u.Introduction
-	info.Name = u.NickName
 
 	return info
 }
