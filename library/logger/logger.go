@@ -12,6 +12,6 @@ import (
 func InitLogger() {
 	path := g.Config().GetString("logpath", "log")
 	glog.SetPath(path)
-	glog.SetLevel(glog.LEVEL_PROD)
+	glog.SetLevel(glog.LEVEL_ALL)
 	glog.SetFlags(glog.F_TIME_STD | glog.F_FILE_SHORT)
 }

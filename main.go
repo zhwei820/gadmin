@@ -43,7 +43,8 @@ func init() {
 // @BasePath /
 func main() {
 	s := g.Server()
-	s.SetLogStdout(false)
+	s.SetLogStdout(true)
+	s.SetAccessLogEnabled(true)
 	// 初始化路由
 	router.InitRouter(s)
 

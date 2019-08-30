@@ -6,7 +6,7 @@ import (
 	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/utils"
 	"github.com/hailaz/gadmin/utils/context_log"
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 	"io"
 	"strings"
 
@@ -21,14 +21,6 @@ import (
 var routerMap = make(map[string]model.RolePolicy)
 var writer io.Writer
 
-func showURL(r *ghttp.Request) {
-	glog.Debug("请求路径：", r.Method, r.Request.RequestURI)
-
-	uid := uuid.NewV4()
-	r.SetParam("req", uid)
-	r.SetParam("ctx", context_log.NewContext(r.Context(), writer, uid.String(), utils.GetLogLevel(g.Config().GetString("ReqLogLevel"))))
-}
-
 func writeLog(r *ghttp.Request) {
 	r.GetParam("ctx").Val().(*context_log.Context).WriteLog()
 }
@@ -41,7 +33,7 @@ func InitRouter(s *ghttp.Server) {
 	writer, _ = context_log.NewFileWriter("log/log", 1024*1024*50, 30)
 
 	s.BindHookHandlerByMap("/*", map[string]ghttp.HandlerFunc{
-		ghttp.HOOK_BEFORE_SERVE: showURL,
+		ghttp.HOOK_BEFORE_SERVE: authHook,
 		ghttp.HOOK_AFTER_SERVE:  writeLog,
 	})
 
@@ -56,6 +48,10 @@ func InitRouter(s *ghttp.Server) {
 // author:hailaz
 // authHook is the HOOK function implements JWT logistics.
 func authHook(r *ghttp.Request) {
+	uid := uuid.NewV4()
+	r.SetParam("req", uid)
+	r.SetParam("ctx", context_log.NewContext(r.Context(), writer, uid.String(), utils.GetLogLevel(g.Config().GetString("ReqLogLevel"))))
+
 	uri := strings.Split(r.Request.RequestURI, "/")
 	if len(uri) >= 3 {
 		switch uri[1] + "/" + uri[2] { //登录相关免鉴权
@@ -65,7 +61,7 @@ func authHook(r *ghttp.Request) {
 	}
 	if len(uri) >= 2 {
 		switch uri[1] { //登录相关免鉴权
-		case "swagger":
+		case "swagger", "favicon.ico":
 			return
 		}
 	}
@@ -80,8 +76,6 @@ func authHook(r *ghttp.Request) {
 // createTime:2019年04月25日 09:24:06
 // author:hailaz
 func Init(s *ghttp.Server) {
-	//权限验证
-	s.Group("").ALL("/*any", authHook, ghttp.HOOK_BEFORE_SERVE)
 	userCtrl := new(api.UserController)
 	roleCtrl := new(api.RoleController)
 	policyCtrl := new(api.PolicyController)
