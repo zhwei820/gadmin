@@ -46,139 +46,13 @@
                 }
             }
         },
-        "/rbac/loginkey": {
-            "get": {
-                "description": "获取登录的加密key",
-                "tags": [
-                    "auth"
-                ],
-                "summary": "获取登录的加密key",
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/rbac/logout": {
-            "post": {
+            "get": {
                 "description": "登出",
                 "tags": [
                     "auth"
                 ],
-                "summary": "登出",
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/rbac/menu": {
-            "get": {
-                "description": "menu list",
-                "tags": [
-                    "menu"
-                ],
-                "summary": "menu list",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "page",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "limit",
-                        "name": "limit",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "update menu",
-                "tags": [
-                    "menu"
-                ],
-                "summary": "update menu",
-                "parameters": [
-                    {
-                        "description": "MenuOut",
-                        "name": "SignInInfo",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.MenuOut"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "create menu",
-                "tags": [
-                    "menu"
-                ],
-                "summary": "create menu",
-                "parameters": [
-                    {
-                        "description": "MenuOut",
-                        "name": "SignInInfo",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.MenuOut"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "description": "delete menu",
-                "tags": [
-                    "menu"
-                ],
-                "summary": "delete menu",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "name",
-                        "name": "name",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
+                "summary": "登出 （jwt 后端暂时无法登出）",
                 "responses": {
                     "200": {
                         "description": "ok",
@@ -220,20 +94,20 @@
                 }
             },
             "put": {
-                "description": "SetPolicyByRole",
+                "description": "UpdatePolicy",
                 "tags": [
                     "policy"
                 ],
-                "summary": "SetPolicyByRole",
+                "summary": "UpdatePolicy",
                 "parameters": [
                     {
-                        "description": "PostRole",
-                        "name": "PostRole",
+                        "description": "UpdatePolicy",
+                        "name": "UpdatePolicy",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api_model.PostRole"
+                            "$ref": "#/definitions/api_model.UpdatePolicy"
                         }
                     }
                 ],
@@ -258,8 +132,35 @@
                     {
                         "type": "string",
                         "description": "role",
-                        "name": "policy",
+                        "name": "role",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "SetPolicyByRole",
+                "tags": [
+                    "policy"
+                ],
+                "summary": "SetPolicyByRole",
+                "parameters": [
+                    {
+                        "description": "SetPolicyByRole",
+                        "name": "SetPolicyByRole",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api_model.SetPolicyByRole"
+                        }
                     }
                 ],
                 "responses": {
@@ -404,7 +305,7 @@
                 }
             }
         },
-        "/rbac/role/byuser": {
+        "/rbac/role/userrole": {
             "put": {
                 "description": "SetRoleByUserName",
                 "tags": [
@@ -420,35 +321,6 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/api_model.SetRoleByUserName"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/rbac/role/menu": {
-            "put": {
-                "description": "SetRoleMenus",
-                "tags": [
-                    "role"
-                ],
-                "summary": "SetRoleMenus",
-                "parameters": [
-                    {
-                        "description": "SetRoleMenus",
-                        "name": "SetRoleMenus",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api_model.SetRoleMenus"
                         }
                     }
                 ],
@@ -593,31 +465,6 @@
                     }
                 }
             }
-        },
-        "/rbac/user/menu": {
-            "get": {
-                "description": "user menu",
-                "tags": [
-                    "user"
-                ],
-                "summary": "user menu",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "RoleConfig",
-                        "name": "RoleConfig",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -666,6 +513,20 @@
                 }
             }
         },
+        "api_model.SetPolicyByRole": {
+            "type": "object",
+            "properties": {
+                "policys": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "role": {
+                    "type": "string"
+                }
+            }
+        },
         "api_model.SetRoleByUserName": {
             "type": "object",
             "properties": {
@@ -680,16 +541,16 @@
                 }
             }
         },
-        "api_model.SetRoleMenus": {
+        "api_model.UpdatePolicy": {
             "type": "object",
             "properties": {
-                "menus": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "label": {
+                    "type": "string"
                 },
-                "role": {
+                "name": {
+                    "type": "string"
+                },
+                "path": {
                     "type": "string"
                 }
             }
@@ -713,56 +574,6 @@
                     "type": "string"
                 },
                 "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.MenuOut": {
-            "type": "object",
-            "properties": {
-                "alwaysshow": {
-                    "type": "integer"
-                },
-                "auto_create": {
-                    "type": "integer"
-                },
-                "children": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.MenuOut"
-                    }
-                },
-                "component": {
-                    "type": "string"
-                },
-                "hidden": {
-                    "type": "integer"
-                },
-                "icon": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "menu_id": {
-                    "type": "integer"
-                },
-                "menu_path": {
-                    "type": "string"
-                },
-                "nocache": {
-                    "type": "integer"
-                },
-                "parent_id": {
-                    "type": "integer"
-                },
-                "redirect": {
-                    "type": "string"
-                },
-                "sort": {
-                    "type": "integer"
-                },
-                "title": {
                     "type": "string"
                 }
             }

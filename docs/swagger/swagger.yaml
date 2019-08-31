@@ -29,6 +29,15 @@ definitions:
       role:
         type: string
     type: object
+  api_model.SetPolicyByRole:
+    properties:
+      policys:
+        items:
+          type: string
+        type: array
+      role:
+        type: string
+    type: object
   api_model.SetRoleByUserName:
     properties:
       roles:
@@ -38,13 +47,13 @@ definitions:
       username:
         type: string
     type: object
-  api_model.SetRoleMenus:
+  api_model.UpdatePolicy:
     properties:
-      menus:
-        items:
-          type: string
-        type: array
-      role:
+      label:
+        type: string
+      name:
+        type: string
+      path:
         type: string
     type: object
   api_model.UpdateUser:
@@ -60,39 +69,6 @@ definitions:
       phone:
         type: string
       username:
-        type: string
-    type: object
-  model.MenuOut:
-    properties:
-      alwaysshow:
-        type: integer
-      auto_create:
-        type: integer
-      children:
-        items:
-          $ref: '#/definitions/model.MenuOut'
-        type: array
-      component:
-        type: string
-      hidden:
-        type: integer
-      icon:
-        type: string
-      id:
-        type: integer
-      menu_id:
-        type: integer
-      menu_path:
-        type: string
-      nocache:
-        type: integer
-      parent_id:
-        type: integer
-      redirect:
-        type: string
-      sort:
-        type: integer
-      title:
         type: string
     type: object
 info:
@@ -127,100 +103,17 @@ paths:
       summary: 登陆
       tags:
       - auth
-  /rbac/loginkey:
-    get:
-      description: 获取登录的加密key
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: 获取登录的加密key
-      tags:
-      - auth
   /rbac/logout:
-    post:
+    get:
       description: 登出
       responses:
         "200":
           description: ok
           schema:
             type: string
-      summary: 登出
+      summary: 登出 （jwt 后端暂时无法登出）
       tags:
       - auth
-  /rbac/menu:
-    delete:
-      description: delete menu
-      parameters:
-      - description: name
-        in: query
-        name: name
-        required: true
-        type: string
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: delete menu
-      tags:
-      - menu
-    get:
-      description: menu list
-      parameters:
-      - description: page
-        in: query
-        name: page
-        type: integer
-      - description: limit
-        in: query
-        name: limit
-        type: integer
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: menu list
-      tags:
-      - menu
-    post:
-      description: create menu
-      parameters:
-      - description: MenuOut
-        in: body
-        name: SignInInfo
-        required: true
-        schema:
-          $ref: '#/definitions/model.MenuOut'
-          type: object
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: create menu
-      tags:
-      - menu
-    put:
-      description: update menu
-      parameters:
-      - description: MenuOut
-        in: body
-        name: SignInInfo
-        required: true
-        schema:
-          $ref: '#/definitions/model.MenuOut'
-          type: object
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: update menu
-      tags:
-      - menu
   /rbac/policy:
     get:
       description: policy list
@@ -242,21 +135,21 @@ paths:
       tags:
       - policy
     put:
-      description: SetPolicyByRole
+      description: UpdatePolicy
       parameters:
-      - description: PostRole
+      - description: UpdatePolicy
         in: body
-        name: PostRole
+        name: UpdatePolicy
         required: true
         schema:
-          $ref: '#/definitions/api_model.PostRole'
+          $ref: '#/definitions/api_model.UpdatePolicy'
           type: object
       responses:
         "200":
           description: ok
           schema:
             type: string
-      summary: SetPolicyByRole
+      summary: UpdatePolicy
       tags:
       - policy
   /rbac/policy/byrole:
@@ -265,7 +158,7 @@ paths:
       parameters:
       - description: role
         in: query
-        name: policy
+        name: role
         type: string
       responses:
         "200":
@@ -273,6 +166,24 @@ paths:
           schema:
             type: string
       summary: GetPolicyByRole
+      tags:
+      - policy
+    put:
+      description: SetPolicyByRole
+      parameters:
+      - description: SetPolicyByRole
+        in: body
+        name: SetPolicyByRole
+        required: true
+        schema:
+          $ref: '#/definitions/api_model.SetPolicyByRole'
+          type: object
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: SetPolicyByRole
       tags:
       - policy
   /rbac/refresh_token:
@@ -362,7 +273,7 @@ paths:
       summary: Update role
       tags:
       - role
-  /rbac/role/byuser:
+  /rbac/role/userrole:
     put:
       description: SetRoleByUserName
       parameters:
@@ -379,25 +290,6 @@ paths:
           schema:
             type: string
       summary: SetRoleByUserName
-      tags:
-      - role
-  /rbac/role/menu:
-    put:
-      description: SetRoleMenus
-      parameters:
-      - description: SetRoleMenus
-        in: body
-        name: SetRoleMenus
-        required: true
-        schema:
-          $ref: '#/definitions/api_model.SetRoleMenus'
-          type: object
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: SetRoleMenus
       tags:
       - role
   /rbac/user:
@@ -485,22 +377,6 @@ paths:
           schema:
             type: string
       summary: user info
-      tags:
-      - user
-  /rbac/user/menu:
-    get:
-      description: user menu
-      parameters:
-      - description: RoleConfig
-        in: query
-        name: RoleConfig
-        type: string
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: user menu
       tags:
       - user
 securityDefinitions:

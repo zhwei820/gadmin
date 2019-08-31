@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
-	"strings"
 )
 
 // GetPolicyList 获取权限列表
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
-func GetPagedPolicyList(page, limit int) ([]model.GadminPolicyconfig, int) {
+func GetPagedPolicyList(page, page_size int) ([]model.GadminPolicyconfig, int) {
 	defaultName := "未命名"
 	if page < 1 {
 		page = 1
@@ -31,22 +30,23 @@ func GetPagedPolicyList(page, limit int) ([]model.GadminPolicyconfig, int) {
 			if itempc.FullPath == full {
 				p.Name = itempc.Name
 				p.Descrption = itempc.Descrption
+				p.Label = itempc.Label
 				break
 			}
 		}
 		policyList = append(policyList, p)
 	}
-	if limit == -1 {
+	if page_size == -1 {
 		return policyList, total
 	}
-	if len(policyList) < page*limit {
-		if len(policyList) < limit {
+	if len(policyList) < page*page_size {
+		if len(policyList) < page_size {
 			policyList = policyList
 		} else {
-			policyList = policyList[(page-1)*limit:]
+			policyList = policyList[(page-1)*page_size:]
 		}
 	} else {
-		policyList = policyList[(page-1)*limit : (page-1)*limit+limit]
+		policyList = policyList[(page-1)*page_size : (page-1)*page_size+page_size]
 	}
 	return policyList, total
 }
@@ -71,22 +71,14 @@ func GetPolicyByRole(role string) []model.GadminPolicyconfig {
 //
 // createTime:2019年05月06日 15:47:35
 // author:hailaz
-func UpdatePolicyByFullPath(path, name string) error {
+func UpdatePolicyByFullPath(path, name, label string) error {
 	p, err := model.GetPolicyByFullPath(path)
-	// 不存在插入新数据
 	if err != nil || p.Id == 0 {
-		p := model.GadminPolicyconfig{}
-		p.FullPath = path
-		p.Name = name
-		id, _ := p.Insert()
-		if id > 0 {
-			return nil
-		} else {
-			return errors.New("update fail")
-		}
+		return errors.New("not exist")
 	}
 	// 存在则更新
 	p.Name = name
+	p.Label = label
 	i, err := p.Update()
 	if err != nil {
 		glog.Error(err)
@@ -96,35 +88,6 @@ func UpdatePolicyByFullPath(path, name string) error {
 		return errors.New("update fail")
 	}
 	return nil
-}
-
-// AddRole 添加角色
-//
-// createTime:2019年05月07日 10:45:04
-// author:hailaz
-func AddPolicy(policy, name string) error {
-	p, err := model.GetPolicyByFullPath(policy)
-	// 不存在插入新数据
-	if err != nil || p.Id == 0 {
-		list := strings.Split(policy, ":")
-		path := list[0]
-		act := list[1]
-
-		res := model.Enforcer.AddPolicy("system", path, act)
-		if !res {
-			return errors.New("add to casbin fail")
-		}
-		r := model.GadminPolicyconfig{}
-		r.FullPath = policy
-		r.Name = name
-		id, _ := r.Insert()
-		if id > 0 {
-			return nil
-		} else {
-			return errors.New("add to db fail")
-		}
-	}
-	return errors.New("already exist")
 }
 
 // ReSetPolicy 更新路由权限
@@ -138,14 +101,14 @@ func ReSetPolicy(role string, rmap map[string]model.RolePolicy) {
 		full := fmt.Sprintf("%v %v %v", item[0], item[1], item[2])
 		if _, ok := rmap[full]; ok { //从待插入列表中删除已存在的路由
 			delete(rmap, full)
-		} else { //删除不存在的旧路由
-			model.Enforcer.DeletePermissionForUser(item[0], item[1], item[2])
-			if role == "system" {
-				p, _ := model.GetPolicyByFullPath(fmt.Sprintf("%v:%v", item[1], item[2]))
-				if p.Id > 0 {
-					_, _ = p.DeleteById(p.Id)
-				}
-			}
+			//} else { //删除不存在的旧路由
+			//	model.Enforcer.DeletePermissionForUser(item[0], item[1], item[2])
+			//	if role == "system" {
+			//		p, _ := model.GetPolicyByFullPath(fmt.Sprintf("%v:%v", item[1], item[2]))
+			//		if p.Id > 0 {
+			//			_, _ = p.DeleteById(p.Id)
+			//		}
+			//	}
 		}
 	}
 	for _, item := range rmap { //插入新路由

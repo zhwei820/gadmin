@@ -37,19 +37,19 @@ func (c *UserController) Info(r *ghttp.Request) {
 // @Description user list
 // @Tags user
 // @Param	page	query 	integer	false		"page"
-// @Param	limit	query 	integer	false		"limit"
+// @Param	page_size	query 	integer	false		"page_size"
 // @Param	search	query 	string	false		"search"
 // @Success 200 {string} string	"ok"
 // @router /rbac/user [get]
 func (c *UserController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
-	limit := r.GetInt("limit", 10)
+	page_size := r.GetInt("page_size", 10)
 	wheres := GetWhereFromRequest(r, nil, nil, []string{"user_name", "nick_name", "email"})
 	var userList struct {
 		List  []model.GadminUser `json:"items"`
 		Total int                `json:"total"`
 	}
-	userList.List, userList.Total = service.GetPagedUser(wheres, page, limit)
+	userList.List, userList.Total = service.GetPagedUser(wheres, page, page_size)
 	Success(r, userList)
 }
 
@@ -152,7 +152,7 @@ func (c *UserController) Delete(r *ghttp.Request) {
 	data := r.GetJson()
 	id := data.GetInt("id")
 	if id < 1 {
-		Fail(r, code.RESPONSE_ERROR)
+		Fail(r, code.RESPONSE_ERROR, "不存在")
 		return
 	}
 	u := new(model.GadminUser)
@@ -162,12 +162,12 @@ func (c *UserController) Delete(r *ghttp.Request) {
 		return
 	}
 	if user.UserName == model.ADMIN_NAME {
-		Fail(r, code.RESPONSE_ERROR, "无权限")
+		Fail(r, code.RESPONSE_ERROR, "无权限删除管理员")
 		return
 	}
 	res, _ := u.DeleteById(id)
 	if res <= 0 {
-		Fail(r, code.RESPONSE_ERROR)
+		Fail(r, code.RESPONSE_ERROR, "删除失败")
 		return
 	}
 	model.Enforcer.DeleteRolesForUser(user.UserName)

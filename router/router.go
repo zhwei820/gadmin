@@ -61,6 +61,9 @@ func authHook(r *ghttp.Request) {
 		AllowHeaders:     "*",
 	}) //开启跨域
 
+	if r.Request.Method == "OPTIONS" {
+		return
+	}
 	uri := strings.Split(r.Request.RequestURI, "/")
 	if len(uri) >= 3 {
 		switch uri[1] + "/" + uri[2] { //登录相关免鉴权

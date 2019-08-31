@@ -34,6 +34,6 @@ func CountRoleConfig() (int, error) {
 //
 // createTime:2019年04月30日 10:20:50
 // author:hailaz
-func GetPagedRoleConfig(limit ...int) (gdb.Result, error) {
-	return defDB.Table("gadmin_roleconfig").Limit(limit...).Select()
+func GetPagedRoleConfig(page_size ...int) (gdb.Result, error) {
+	return defDB.Table("gadmin_roleconfig").Limit(page_size...).Select()
 }
