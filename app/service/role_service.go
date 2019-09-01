@@ -26,6 +26,7 @@ func GetPagedRoleList(page, page_size int) ([]model.GadminRoleconfig, int) {
 			if itempn.RoleKey == item {
 				p.Name = itempn.Name
 				p.Descrption = itempn.Descrption
+				p.Id = itempn.Id
 				break
 			}
 		}
@@ -114,7 +115,7 @@ func AddRole(role, name string) error {
 func DeleteRole(role string) error {
 	p, err := model.GetRoleByRoleKey(role)
 	if err != nil || p.Id == 0 {
-		return errors.New("delete fail")
+		return errors.New("not exist")
 	}
 	model.Enforcer.DeleteRole(role)
 	i, _ := p.DeleteById(p.Id)

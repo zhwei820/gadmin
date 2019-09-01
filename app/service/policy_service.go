@@ -31,6 +31,7 @@ func GetPagedPolicyList(page, page_size int) ([]model.GadminPolicyconfig, int) {
 				p.Name = itempc.Name
 				p.Descrption = itempc.Descrption
 				p.Label = itempc.Label
+				p.Id = itempc.Id
 				break
 			}
 		}
@@ -88,6 +89,23 @@ func UpdatePolicyByFullPath(path, name, label string) error {
 		return errors.New("update fail")
 	}
 	return nil
+}
+
+// DeletePolicy 删除策略
+//
+// createTime:2019年05月07日 11:12:59
+// author:hailaz
+func DeletePolicy(path string) error {
+	p, err := model.GetPolicyByFullPath(path)
+	if err != nil || p.Id == 0 {
+		return errors.New("not exist")
+	}
+	model.Enforcer.DeletePermission(path)
+	i, _ := p.DeleteById(p.Id)
+	if i > 0 {
+		return nil
+	}
+	return errors.New("delete fail")
 }
 
 // ReSetPolicy 更新路由权限

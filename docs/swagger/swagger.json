@@ -79,8 +79,8 @@
                     },
                     {
                         "type": "integer",
-                        "description": "limit",
-                        "name": "limit",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query"
                     }
                 ],
@@ -109,6 +109,30 @@
                             "type": "object",
                             "$ref": "#/definitions/api_model.UpdatePolicy"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "delete policy",
+                "tags": [
+                    "policy"
+                ],
+                "summary": "delete policy",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "policy",
+                        "name": "policy",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -206,8 +230,8 @@
                     },
                     {
                         "type": "integer",
-                        "description": "limit",
-                        "name": "limit",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query"
                     },
                     {
@@ -350,8 +374,8 @@
                     },
                     {
                         "type": "integer",
-                        "description": "limit",
-                        "name": "limit",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query"
                     },
                     {
@@ -544,13 +568,13 @@
         "api_model.UpdatePolicy": {
             "type": "object",
             "properties": {
+                "full_path": {
+                    "type": "string"
+                },
                 "label": {
                     "type": "string"
                 },
                 "name": {
-                    "type": "string"
-                },
-                "path": {
                     "type": "string"
                 }
             }

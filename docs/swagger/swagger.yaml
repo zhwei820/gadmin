@@ -49,11 +49,11 @@ definitions:
     type: object
   api_model.UpdatePolicy:
     properties:
+      full_path:
+        type: string
       label:
         type: string
       name:
-        type: string
-      path:
         type: string
     type: object
   api_model.UpdateUser:
@@ -115,6 +115,22 @@ paths:
       tags:
       - auth
   /rbac/policy:
+    delete:
+      description: delete policy
+      parameters:
+      - description: policy
+        in: query
+        name: policy
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: delete policy
+      tags:
+      - policy
     get:
       description: policy list
       parameters:
@@ -122,9 +138,9 @@ paths:
         in: query
         name: page
         type: integer
-      - description: limit
+      - description: page_size
         in: query
-        name: limit
+        name: page_size
         type: integer
       responses:
         "200":
@@ -221,9 +237,9 @@ paths:
         in: query
         name: page
         type: integer
-      - description: limit
+      - description: page_size
         in: query
-        name: limit
+        name: page_size
         type: integer
       - description: username
         in: query
@@ -316,9 +332,9 @@ paths:
         in: query
         name: page
         type: integer
-      - description: limit
+      - description: page_size
         in: query
-        name: limit
+        name: page_size
         type: integer
       - description: search
         in: query

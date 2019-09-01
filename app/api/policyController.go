@@ -69,6 +69,24 @@ func (c *PolicyController) Put(r *ghttp.Request) {
 }
 
 //
+// @Summary delete policy
+// @Description delete policy
+// @Tags policy
+// @Param	policy	query 	string	true		"policy"
+// @Success 200 {string} string	"ok"
+// @router /rbac/policy [delete]
+func (c *PolicyController) Delete(r *ghttp.Request) {
+	path := r.GetString("path")
+
+	err := service.DeletePolicy(path)
+	if err != nil {
+		Fail(r, code.RESPONSE_ERROR, err.Error())
+		return
+	}
+	Success(r, "Delete")
+}
+
+//
 // @Summary GetPolicyByRole
 // @Description GetPolicyByRole
 // @Tags policy
