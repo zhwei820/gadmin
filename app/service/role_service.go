@@ -30,6 +30,8 @@ func GetPagedRoleList(page, page_size int) ([]model.GadminRoleconfig, int) {
 				break
 			}
 		}
+		policys := model.Enforcer.GetPermissionsForUser(item)
+
 		roleList = append(roleList, p)
 	}
 	if page_size == -1 {
