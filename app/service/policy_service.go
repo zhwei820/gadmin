@@ -7,6 +7,23 @@ import (
 	"github.com/hailaz/gadmin/app/model"
 )
 
+func GetAllPolicyMap() map[string]model.GadminPolicyconfig {
+	allPolicys, _ := GetPagedPolicyList(1, 99999)
+	res := make(map[string]model.GadminPolicyconfig, 0)
+	for _, item := range allPolicys {
+		res[item.FullPath] = item
+	}
+	return res
+}
+
+func GetPolicyNames(allPolicy map[string]model.GadminPolicyconfig, fullPath []string) []string {
+	res := make([]string, 0)
+	for _, path := range fullPath {
+		res = append(res, allPolicy[path].Name)
+	}
+	return res
+}
+
 // GetPolicyList 获取权限列表
 //
 // createTime:2019年05月06日 17:24:12

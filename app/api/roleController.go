@@ -6,8 +6,8 @@ import (
 	"github.com/gogf/gf/g/util/gvalid"
 	"github.com/hailaz/gadmin/app/api/api_model"
 	. "github.com/hailaz/gadmin/app/api/base"
-	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service"
+	"github.com/hailaz/gadmin/app/service/service_model"
 	"github.com/hailaz/gadmin/utils/code"
 )
 
@@ -20,22 +20,16 @@ type RoleController struct {
 // @Tags role
 // @Param	page	query 	integer	false		"page"
 // @Param	page_size	query 	integer	false		"page_size"
-// @Param	username	query 	string	false		"username"
 // @Success 200 {string} string	"ok"
 // @router /rbac/role [get]
 func (c *RoleController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
 	page_size := r.GetInt("page_size", 10)
-	username := r.GetString("username")
 	var list struct {
-		List         []model.GadminRoleconfig `json:"items"`
-		UserRoleKeys []model.GadminRoleconfig `json:"user_role_keys"`
-		Total        int                      `json:"total"`
+		List  []service_model.GadminRolePolicy `json:"items"`
+		Total int                              `json:"total"`
 	}
 	list.List, list.Total = service.GetPagedRoleList(page, page_size)
-	if username != "" {
-		list.UserRoleKeys = service.GetRoleByUserName(username)
-	}
 
 	Success(r, list)
 }

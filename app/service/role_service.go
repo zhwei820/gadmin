@@ -2,26 +2,29 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
+	"github.com/hailaz/gadmin/app/service/service_model"
 )
 
 // GetRoleList 获取权限列表
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
-func GetPagedRoleList(page, page_size int) ([]model.GadminRoleconfig, int) {
+func GetPagedRoleList(page, page_size int) ([]service_model.GadminRolePolicy, int) {
 	defaultname := "未命名"
 
-	roleList := make([]model.GadminRoleconfig, 0)
+	roleList := make([]service_model.GadminRolePolicy, 0)
 	roles := model.Enforcer.GetAllRoles()
 	total := len(roles)
 	r, _ := model.GetAllRole()
 	pn := make([]model.GadminRoleconfig, 0)
 	_ = r.ToStructs(&pn)
 
+	allPolicyMap := GetAllPolicyMap()
 	for _, item := range roles {
-		p := model.GadminRoleconfig{RoleKey: item, Name: defaultname}
+		p := service_model.GadminRolePolicy{RoleKey: item, Name: defaultname}
 		for _, itempn := range pn {
 			if itempn.RoleKey == item {
 				p.Name = itempn.Name
@@ -31,7 +34,11 @@ func GetPagedRoleList(page, page_size int) ([]model.GadminRoleconfig, int) {
 			}
 		}
 		policys := model.Enforcer.GetPermissionsForUser(item)
-
+		for _, item := range policys {
+			fullPath := fmt.Sprintf("%v:%v", item[1], item[2])
+			p.PolicyKeys = append(p.PolicyKeys, fullPath)
+		}
+		p.PolicyNames = GetPolicyNames(allPolicyMap, p.PolicyKeys)
 		roleList = append(roleList, p)
 	}
 	if page_size == -1 {
