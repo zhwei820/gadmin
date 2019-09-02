@@ -6,13 +6,13 @@ import "github.com/hailaz/gadmin/app/model"
 //
 // createTime:2019年05月07日 16:11:41
 // author:hailaz
-func GetPagedUser(where map[string]interface{}, page, limit int) ([]model.GadminUser, int) {
+func GetPagedUser(where map[string]interface{}, page, page_size int) ([]model.GadminUser, int) {
 
 	total, _ := model.CountUser()
 
 	userList := make([]model.GadminUser, 0)
 
-	r, err := model.GetPagedUser(where, (page-1)*limit, limit)
+	r, err := model.GetPagedUser(where, (page-1)*page_size, page_size)
 	if err != nil {
 		return nil, 0
 	}

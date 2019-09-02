@@ -10,7 +10,7 @@ import (
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
-func GetPagedRoleList(page, limit int) ([]model.GadminRoleconfig, int) {
+func GetPagedRoleList(page, page_size int) ([]model.GadminRoleconfig, int) {
 	defaultname := "未命名"
 
 	roleList := make([]model.GadminRoleconfig, 0)
@@ -26,22 +26,25 @@ func GetPagedRoleList(page, limit int) ([]model.GadminRoleconfig, int) {
 			if itempn.RoleKey == item {
 				p.Name = itempn.Name
 				p.Descrption = itempn.Descrption
+				p.Id = itempn.Id
 				break
 			}
 		}
+		policys := model.Enforcer.GetPermissionsForUser(item)
+
 		roleList = append(roleList, p)
 	}
-	if limit == -1 {
+	if page_size == -1 {
 		return roleList, total
 	}
-	if len(roleList) < page*limit {
-		if len(roleList) < limit {
+	if len(roleList) < page*page_size {
+		if len(roleList) < page_size {
 			roleList = roleList
 		} else {
-			roleList = roleList[(page-1)*limit:]
+			roleList = roleList[(page-1)*page_size:]
 		}
 	} else {
-		roleList = roleList[(page-1)*limit : (page-1)*limit+limit]
+		roleList = roleList[(page-1)*page_size : (page-1)*page_size+page_size]
 	}
 	return roleList, total
 }
@@ -66,17 +69,8 @@ func GetRoleByUserName(userName string) []model.GadminRoleconfig {
 // author:hailaz
 func UpdateRoleByRoleKey(role, name string) error {
 	r, err := model.GetRoleByRoleKey(role)
-	// 不存在插入新数据
 	if err != nil || r.Id == 0 {
-		r := model.GadminRoleconfig{}
-		r.RoleKey = role
-		r.Name = name
-		id, _ := r.Insert()
-		if id > 0 {
-			return nil
-		} else {
-			return errors.New("update fail")
-		}
+		return errors.New("not exist")
 	}
 	// 存在则更新
 	r.Name = name
@@ -123,7 +117,7 @@ func AddRole(role, name string) error {
 func DeleteRole(role string) error {
 	p, err := model.GetRoleByRoleKey(role)
 	if err != nil || p.Id == 0 {
-		return errors.New("delete fail")
+		return errors.New("not exist")
 	}
 	model.Enforcer.DeleteRole(role)
 	i, _ := p.DeleteById(p.Id)

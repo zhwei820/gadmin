@@ -6,6 +6,7 @@ type SetPolicyByRole struct {
 }
 
 type UpdatePolicy struct {
-	Path string `json:"path" valid:"path      @required"`
-	Name string `json:"name" valid:"name      @required"`
+	Path  string `json:"full_path" valid:"path      @required"`
+	Name  string `json:"name" valid:"name      @required"`
+	Label string `json:"label" valid:"label      @required"`
 }

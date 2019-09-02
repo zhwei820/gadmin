@@ -7,8 +7,10 @@ import (
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/utils"
+	"github.com/hailaz/gadmin/utils/userdefinedpolicy"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
+	"strings"
 	"time"
 )
 
@@ -35,7 +37,8 @@ func InitModel() {
 	defDB.SetDebug(true)
 	initUser()
 	InitCasbin()
-	initSystemAndUserDefinedPolicyConfig()
+	initSystemPolicyConfig()
+	initUserDefinedPolicyConfig()
 	initRoleConfig()
 }
 
@@ -71,8 +74,35 @@ func InitCasbin() {
 	glog.Debug("InitCasbin end ")
 }
 
-// 初始化系统权限(api接口权限) 和 用户自定义权限
-func initSystemAndUserDefinedPolicyConfig() {
+// 初始化自定义权限
+func initUserDefinedPolicyConfig() {
+	policys := userdefinedpolicy.UserDefinedPolicy
+	r, _ := GetAllPolicyConfig()
+	pcs := make([]GadminPolicyconfig, 0)
+	_ = r.ToStructs(&pcs)
+	pcd := make(map[string]GadminPolicyconfig)
+	for _, itempc := range pcs {
+		pcd[itempc.FullPath] = itempc
+	}
+	for label, policyList := range policys {
+		for _, item := range policyList {
+			full := item[0] // fmt.Sprintf("%v:%v", item[1], item[2])
+			_, ok := pcd[full]
+			if ok {
+				continue
+			}
+			p := GadminPolicyconfig{FullPath: full, Name: item[1], Label: label}
+			_, _ = p.Insert()
+			items := strings.Split(full, ":")
+			if len(items) == 2 { // 自定义权限加入casbin
+				Enforcer.AddPolicy("system", items[0], items[1])
+			}
+		}
+	}
+}
+
+// 初始化系统权限(api接口权限)
+func initSystemPolicyConfig() {
 	policys := Enforcer.GetPermissionsForUser("system")
 	r, _ := GetAllPolicyConfig()
 	pcs := make([]GadminPolicyconfig, 0)
@@ -92,6 +122,7 @@ func initSystemAndUserDefinedPolicyConfig() {
 	}
 }
 
+// 初始化角色
 func initRoleConfig() {
 	roles := Enforcer.GetAllRoles()
 	r, _ := GetAllRole()

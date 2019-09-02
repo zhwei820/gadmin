@@ -19,20 +19,20 @@ type RoleController struct {
 // @Description role list
 // @Tags role
 // @Param	page	query 	integer	false		"page"
-// @Param	limit	query 	integer	false		"limit"
+// @Param	page_size	query 	integer	false		"page_size"
 // @Param	username	query 	string	false		"username"
 // @Success 200 {string} string	"ok"
 // @router /rbac/role [get]
 func (c *RoleController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
-	limit := r.GetInt("limit", 10)
+	page_size := r.GetInt("page_size", 10)
 	username := r.GetString("username")
 	var list struct {
 		List         []model.GadminRoleconfig `json:"items"`
 		UserRoleKeys []model.GadminRoleconfig `json:"user_role_keys"`
 		Total        int                      `json:"total"`
 	}
-	list.List, list.Total = service.GetPagedRoleList(page, limit)
+	list.List, list.Total = service.GetPagedRoleList(page, page_size)
 	if username != "" {
 		list.UserRoleKeys = service.GetRoleByUserName(username)
 	}
@@ -81,7 +81,7 @@ func (c *RoleController) Put(r *ghttp.Request) {
 	}
 	glog.Debug(m)
 	if m.Name == UNDEFIND_POLICY_NAME {
-		Fail(r, code.RESPONSE_ERROR)
+		Fail(r, code.RESPONSE_ERROR, "不能设置为未命名")
 		return
 	} else {
 		err := service.UpdateRoleByRoleKey(m.Role, m.Name)

@@ -30,6 +30,6 @@ func CountPolicyConfig() (int, error) {
 //
 // createTime:2019年04月30日 10:20:50
 // author:hailaz
-func GetPagedPolicyConfig(limit ...int) (gdb.Result, error) {
-	return defDB.Table("gadmin_policyconfig").Limit(limit...).Select()
+func GetPagedPolicyConfig(page_size ...int) (gdb.Result, error) {
+	return defDB.Table("gadmin_policyconfig").Limit(page_size...).Select()
 }

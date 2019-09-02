@@ -24,45 +24,20 @@ type PolicyController struct {
 // @Description policy list
 // @Tags policy
 // @Param	page	query 	integer	false		"page"
-// @Param	limit	query 	integer	false		"limit"
+// @Param	page_size	query 	integer	false		"page_size"
 // @Success 200 {string} string	"ok"
 // @router /rbac/policy [get]
 func (c *PolicyController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
-	limit := r.GetInt("limit", 10)
+	page_size := r.GetInt("page_size", 10)
 
 	var list struct {
 		List  []model.GadminPolicyconfig `json:"items"`
 		Total int                        `json:"total"`
 	}
 
-	list.List, list.Total = service.GetPagedPolicyList(page, limit)
-
+	list.List, list.Total = service.GetPagedPolicyList(page, page_size)
 	Success(r, list)
-}
-
-//
-// @Summary create policy
-// @Description create policy
-// @Tags policy
-// @Param   UpdatePolicy  body api_model.UpdatePolicy true "UpdatePolicy"
-// @Success 200 {string} string	"ok"
-// @router /rbac/policy [post]
-func (c *PolicyController) Post(r *ghttp.Request) {
-	j := r.GetJson()
-	m := api_model.UpdatePolicy{}
-	_ = j.ToStruct(&m)
-	if e := gvalid.CheckStruct(m, nil); e != nil {
-		Fail(r, code.ERROR_INVALID_PARAM, e.String())
-		return
-	}
-	err := service.AddPolicy(m.Path, m.Name)
-	if err != nil {
-		Fail(r, code.RESPONSE_ERROR, err.Error())
-		return
-	}
-
-	Success(r, "Post")
 }
 
 //
@@ -81,16 +56,34 @@ func (c *PolicyController) Put(r *ghttp.Request) {
 		return
 	}
 	if m.Name == UNDEFIND_POLICY_NAME {
-		Fail(r, code.RESPONSE_ERROR)
+		Fail(r, code.RESPONSE_ERROR, "不能设置为未命名")
 		return
 	} else {
-		err := service.UpdatePolicyByFullPath(m.Path, m.Name)
+		err := service.UpdatePolicyByFullPath(m.Path, m.Name, m.Label)
 		if err != nil {
 			Fail(r, code.RESPONSE_ERROR, err.Error())
 			return
 		}
 	}
 	Success(r, "修改成功")
+}
+
+//
+// @Summary delete policy
+// @Description delete policy
+// @Tags policy
+// @Param	policy	query 	string	true		"policy"
+// @Success 200 {string} string	"ok"
+// @router /rbac/policy [delete]
+func (c *PolicyController) Delete(r *ghttp.Request) {
+	path := r.GetString("path")
+
+	err := service.DeletePolicy(path)
+	if err != nil {
+		Fail(r, code.RESPONSE_ERROR, err.Error())
+		return
+	}
+	Success(r, "Delete")
 }
 
 //

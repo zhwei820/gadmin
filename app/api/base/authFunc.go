@@ -1,6 +1,7 @@
 package base
 
 import (
+	"fmt"
 	"github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/g"
 	"github.com/gogf/gf/g/net/ghttp"
@@ -83,9 +84,21 @@ func HTTPStatusMessageFunc(e error, r *ghttp.Request) string {
 // LoginResponse is used to define customized login-successful callback function.
 func LoginResponse(r *ghttp.Request, code int, token string, expire time.Time) {
 	var tk struct {
-		Token  string `json:"token"`
-		Expire string `json:"expire"`
+		Token  string   `json:"token"`
+		Expire string   `json:"expire"`
+		Perms  []string `json:"perms"` // policys
 	}
+	policys := model.Enforcer.GetPermissionsForUser(r.GetParam("username").String())
+	Perms := make([]string, 0)
+	for _, item := range policys {
+		perm := fmt.Sprintf("%v:%v", item[1], item[2])
+		if perm == "*:(GET)|(POST)|(PUT)|(DELETE)|(PATCH)|(OPTIONS)|(HEAD)" {
+			perm = "superuser"
+		}
+		Perms = append(Perms, perm)
+	}
+
+	tk.Perms = Perms
 	tk.Token = GfJWTMiddleware.TokenHeadName + " " + token
 	tk.Expire = expire.Format(time.RFC3339)
 	Success(r, tk)
@@ -115,6 +128,7 @@ func SimpleAuthenticator(r *ghttp.Request) (interface{}, error) {
 			return nil, err
 		}
 		if u.Password == utils.EncryptPassword(password) {
+			r.SetParam("username", u.UserName)
 			return g.Map{
 				"username": u.UserName,
 				"id":       u.Id,

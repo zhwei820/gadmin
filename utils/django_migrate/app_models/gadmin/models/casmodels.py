@@ -26,6 +26,7 @@ class Casbinrule(models.Model):
 class PolicyConfig(models.Model):
     full_path = models.CharField(unique=True, max_length=255, db_index=True)
     name = models.CharField(max_length=255)
+    label = models.CharField(max_length=255)
     descrption = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
