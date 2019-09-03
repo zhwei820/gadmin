@@ -6,6 +6,7 @@ import (
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service/service_model"
+	"strings"
 )
 
 // GetRoleList 获取权限列表
@@ -143,4 +144,35 @@ func SetRoleByUserName(userName string, roles []string) {
 	for _, item := range roles {
 		model.Enforcer.AddRoleForUser(userName, item)
 	}
+}
+
+func SetPolicyByRole(Policys []string, RoleKey string) {
+	var routerMap = make(map[string]model.RolePolicy)
+	for _, item := range Policys {
+		list := strings.Split(item, ":")
+		path := list[0]
+		act := list[1]
+		routerMap[fmt.Sprintf("%v %v %v", RoleKey, path, act)] = model.RolePolicy{Role: RoleKey, Path: path, Act: act}
+	}
+	ReSetPolicy(RoleKey, routerMap)
+}
+
+func GetRoleByRolekey(roleKey string) (ret service_model.GadminRolePolicy, err error) {
+	res, err := model.GetRoleByRoleKey(roleKey)
+	if err != nil || res.Id == 0 {
+		return ret, errors.New("not exist")
+	}
+	allPolicyMap := GetAllPolicyMap()
+	ret = service_model.GadminRolePolicy{
+		Id:      res.Id,
+		RoleKey: res.RoleKey,
+		Name:    res.Name,
+	}
+	policys := model.Enforcer.GetPermissionsForUser(res.RoleKey)
+	for _, item := range policys {
+		fullPath := fmt.Sprintf("%v:%v", item[1], item[2])
+		ret.PolicyKeys = append(ret.PolicyKeys, fullPath)
+	}
+	ret.PolicyNames = GetPolicyNames(allPolicyMap, ret.PolicyKeys)
+	return ret, nil
 }

@@ -34,6 +34,23 @@ func (c *RoleController) Get(r *ghttp.Request) {
 	Success(r, list)
 }
 
+// @Summary role list
+// @Description role list
+// @Tags role
+// @Param	page	query 	integer	false		"page"
+// @Param	page_size	query 	integer	false		"page_size"
+// @Success 200 {string} string	"ok"
+// @router /rbac/role [get]
+func (c *RoleController) GetByRoleKey(r *ghttp.Request) {
+	roleKey := r.GetString("role_key", "")
+	ret, err := service.GetRoleByRolekey(roleKey)
+	if err != nil {
+		Fail(r, code.RESPONSE_ERROR, err.Error())
+		return
+	}
+	Success(r, ret)
+}
+
 //
 // @Summary create role
 // @Description create role
@@ -49,12 +66,12 @@ func (c *RoleController) Post(r *ghttp.Request) {
 		Fail(r, code.ERROR_INVALID_PARAM, e.String())
 		return
 	}
-	err := service.AddRole(m.Role, m.Name)
+	err := service.AddRole(m.RoleKey, m.Name)
 	if err != nil {
 		Fail(r, code.RESPONSE_ERROR, err.Error())
 		return
 	}
-
+	service.SetPolicyByRole(m.Policys, m.RoleKey)
 	Success(r, "Post")
 }
 
@@ -78,12 +95,13 @@ func (c *RoleController) Put(r *ghttp.Request) {
 		Fail(r, code.RESPONSE_ERROR, "不能设置为未命名")
 		return
 	} else {
-		err := service.UpdateRoleByRoleKey(m.Role, m.Name)
+		err := service.UpdateRoleByRoleKey(m.RoleKey, m.Name)
 		if err != nil {
 			Fail(r, code.RESPONSE_ERROR, err.Error())
 			return
 		}
 	}
+	service.SetPolicyByRole(m.Policys, m.RoleKey)
 	Success(r, "修改成功")
 }
 

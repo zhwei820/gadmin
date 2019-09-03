@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/util/gvalid"
 	"github.com/hailaz/gadmin/app/api/api_model"
@@ -9,7 +8,6 @@ import (
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service"
 	"github.com/hailaz/gadmin/utils/code"
-	"strings"
 )
 
 const (
@@ -87,50 +85,23 @@ func (c *PolicyController) Delete(r *ghttp.Request) {
 }
 
 //
-// @Summary GetPolicyByRole
-// @Description GetPolicyByRole
-// @Tags policy
-// @Param	role	query 	string	role		"role"
-// @Success 200 {string} string	"ok"
-// @router /rbac/policy/byrole [get]
-func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {
-	role := r.GetString("role")
-	var list struct {
-		List           []model.GadminPolicyconfig `json:"all_policy_items"`
-		RolePolicyList []model.GadminPolicyconfig `json:"role_policy_items"`
-		Total          int                        `json:"total"`
-	}
-
-	list.List, list.Total = service.GetPagedPolicyList(1, 999999)
-	list.RolePolicyList = service.GetPolicyByRole(role)
-
-	Success(r, list)
-}
-
+////
+//// @Summary GetPolicyByRole
+//// @Description GetPolicyByRole
+//// @Tags policy
+//// @Param	role	query 	string	role		"role"
+//// @Success 200 {string} string	"ok"
+//// @router /rbac/policy/byrole [get]
+//func (c *PolicyController) GetPolicyByRole(r *ghttp.Request) {
+//	role := r.GetString("role")
+//	var list struct {
+//		List           []model.GadminPolicyconfig `json:"all_policy_items"`
+//		RolePolicyList []model.GadminPolicyconfig `json:"role_policy_items"`
+//		Total          int                        `json:"total"`
+//	}
 //
-// @Summary SetPolicyByRole
-// @Description SetPolicyByRole
-// @Tags policy
-// @Param   SetPolicyByRole  body api_model.SetPolicyByRole true "SetPolicyByRole"
-// @Success 200 {string} string	"ok"
-// @router /rbac/policy/byrole [put]
-func (c *PolicyController) SetPolicyByRole(r *ghttp.Request) {
-	j := r.GetJson()
-	m := api_model.SetPolicyByRole{}
-	_ = j.ToStruct(&m)
-	if e := gvalid.CheckStruct(m, nil); e != nil {
-		Fail(r, code.ERROR_INVALID_PARAM, e.String())
-		return
-	}
-	var routerMap = make(map[string]model.RolePolicy)
-	for _, item := range m.Policys {
-		list := strings.Split(item, ":")
-		path := list[0]
-		act := list[1]
-		routerMap[fmt.Sprintf("%v %v %v", m.Role, path, act)] = model.RolePolicy{Role: m.Role, Path: path, Act: act}
-	}
-
-	service.ReSetPolicy(m.Role, routerMap)
-
-	Success(r, "success")
-}
+//	list.List, list.Total = service.GetPagedPolicyList(1, 999999)
+//	list.RolePolicyList = service.GetPolicyByRole(role)
+//
+//	Success(r, list)
+//}

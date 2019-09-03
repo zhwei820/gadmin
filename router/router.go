@@ -103,10 +103,12 @@ func Init(s *ghttp.Server) {
 		// 角色
 		{"REST", "/role", roleCtrl},
 		{"PUT", "/role/userrole", roleCtrl, "SetRoleByUserName"},
+		{"GET", "/role/byrolekey", roleCtrl, "GetByRoleKey"},
+
 		// 权限
 		{"REST", "/policy", policyCtrl},
-		{"GET", "/policy/byrole", policyCtrl, "GetPolicyByRole"},
-		{"PUT", "/policy/byrole", policyCtrl, "SetPolicyByRole"},
+		//{"GET", "/policy/byrole", policyCtrl, "GetPolicyByRole"},
+		//{"PUT", "/policy/byrole", policyCtrl, "SetPolicyByRole"},
 	})
 }
 

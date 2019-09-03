@@ -1,8 +1,9 @@
 package api_model
 
 type PostRole struct {
-	Name string `json:"name" valid:"name      @required"`
-	Role string `json:"role" valid:"role      @required"`
+	Name    string   `json:"name" valid:"name      @required"`
+	RoleKey string   `json:"role_key" valid:"role_key      @required"`
+	Policys []string `json:"policys" valid:"policys      @required"`
 }
 
 type SetRoleByUserName struct {
