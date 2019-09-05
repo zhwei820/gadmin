@@ -58,7 +58,7 @@ func PayloadFunc(data interface{}) jwt.MapClaims {
 func Authorizator(data interface{}, r *ghttp.Request) bool {
 	method := r.Method
 	path := r.URL.Path
-	//glog.Debugfln("user:%v ,method:%v ,path:%v", data, method, path)
+	glog.Debugf("user:%v ,method:%v ,path:%v\n", data, method, path)
 	return model.Enforcer.Enforce(data, path, method)
 }
 
