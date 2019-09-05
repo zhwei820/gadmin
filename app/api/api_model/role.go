@@ -6,7 +6,7 @@ type PostRole struct {
 	Policys []string `json:"policys" valid:"policys      @required"`
 }
 
-type SetRoleByUserName struct {
-	Username string   `json:"username" valid:"username      @required"`
-	Roles    []string `json:"roles" valid:"roles      @required"`
+type SetUserRole struct {
+	Usernames []string `json:"usernames" valid:"username      @required"`
+	RoleKeys  []string `json:"role_keys" valid:"roles      @required"`
 }

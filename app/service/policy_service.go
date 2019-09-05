@@ -58,9 +58,7 @@ func GetPagedPolicyList(page, page_size int) ([]model.GadminPolicyconfig, int) {
 		return policyList, total
 	}
 	if len(policyList) < page*page_size {
-		if len(policyList) < page_size {
-			policyList = policyList
-		} else {
+		if len(policyList) > page_size {
 			policyList = policyList[(page-1)*page_size:]
 		}
 	} else {

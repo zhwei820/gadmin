@@ -47,8 +47,8 @@ class RoleConfig(models.Model):  # 角色配置表
 
 class User(models.Model):
     status = models.IntegerField()
-    user_name = models.CharField(unique=True, max_length=255)
-    nick_name = models.CharField(max_length=255)
+    username = models.CharField(unique=True, max_length=255)
+    nickname = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     email = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)

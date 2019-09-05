@@ -145,58 +145,6 @@
                 }
             }
         },
-        "/rbac/policy/byrole": {
-            "get": {
-                "description": "GetPolicyByRole",
-                "tags": [
-                    "policy"
-                ],
-                "summary": "GetPolicyByRole",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "role",
-                        "name": "role",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "description": "SetPolicyByRole",
-                "tags": [
-                    "policy"
-                ],
-                "summary": "SetPolicyByRole",
-                "parameters": [
-                    {
-                        "description": "SetPolicyByRole",
-                        "name": "SetPolicyByRole",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api_model.SetPolicyByRole"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "ok",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/rbac/refresh_token": {
             "get": {
                 "description": "刷新token",
@@ -232,12 +180,6 @@
                         "type": "integer",
                         "description": "page_size",
                         "name": "page_size",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "username",
-                        "name": "username",
                         "in": "query"
                     }
                 ],
@@ -331,20 +273,20 @@
         },
         "/rbac/role/userrole": {
             "put": {
-                "description": "SetRoleByUserName",
+                "description": "SetUserRole",
                 "tags": [
                     "role"
                 ],
-                "summary": "SetRoleByUserName",
+                "summary": "SetUserRole",
                 "parameters": [
                     {
-                        "description": "SetRoleByUserName",
-                        "name": "SetRoleByUserName",
+                        "description": "SetUserRole",
+                        "name": "SetUserRole",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api_model.SetRoleByUserName"
+                            "$ref": "#/definitions/api_model.SetUserRole"
                         }
                     }
                 ],
@@ -532,36 +474,31 @@
                 "name": {
                     "type": "string"
                 },
-                "role": {
-                    "type": "string"
-                }
-            }
-        },
-        "api_model.SetPolicyByRole": {
-            "type": "object",
-            "properties": {
                 "policys": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "role": {
+                "role_key": {
                     "type": "string"
                 }
             }
         },
-        "api_model.SetRoleByUserName": {
+        "api_model.SetUserRole": {
             "type": "object",
             "properties": {
-                "roles": {
+                "role_keys": {
                     "type": "array",
                     "items": {
                         "type": "string"
                     }
                 },
-                "username": {
-                    "type": "string"
+                "usernames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },

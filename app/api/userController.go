@@ -2,6 +2,7 @@ package api
 
 import (
 	. "github.com/hailaz/gadmin/app/api/base"
+	"github.com/hailaz/gadmin/app/service/service_model"
 
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/net/ghttp"
@@ -44,10 +45,10 @@ func (c *UserController) Info(r *ghttp.Request) {
 func (c *UserController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
 	page_size := r.GetInt("page_size", 10)
-	wheres := GetWhereFromRequest(r, nil, nil, []string{"user_name", "nick_name", "email"})
+	wheres := GetWhereFromRequest(r, nil, nil, []string{"username", "nickname", "email"})
 	var userList struct {
-		List  []model.GadminUser `json:"items"`
-		Total int                `json:"total"`
+		List  []service_model.GadminUserOut `json:"items"`
+		Total int                           `json:"total"`
 	}
 	userList.List, userList.Total = service.GetPagedUser(wheres, page, page_size)
 	Success(r, userList)
@@ -76,9 +77,9 @@ func (c *UserController) Post(r *ghttp.Request) {
 
 	m.Password = utils.EncryptPassword(m.Password)
 	user := model.GadminUser{
-		UserName:   m.Username,
+		Username:   m.Username,
 		Password:   m.Password,
-		NickName:   m.Nickname,
+		Nickname:   m.Nickname,
 		Email:      m.Email,
 		Phone:      m.Phone,
 		AddUserId:  GetUserId(r),
@@ -161,7 +162,7 @@ func (c *UserController) Delete(r *ghttp.Request) {
 		Fail(r, code.RESPONSE_ERROR, err.Error())
 		return
 	}
-	if user.UserName == model.ADMIN_NAME {
+	if user.Username == model.ADMIN_NAME {
 		Fail(r, code.RESPONSE_ERROR, "无权限删除管理员")
 		return
 	}
@@ -170,6 +171,27 @@ func (c *UserController) Delete(r *ghttp.Request) {
 		Fail(r, code.RESPONSE_ERROR, "删除失败")
 		return
 	}
-	model.Enforcer.DeleteRolesForUser(user.UserName)
+	model.Enforcer.DeleteRolesForUser(user.Username)
+	Success(r, "success")
+}
+
+//
+// @Summary SetUserRole
+// @Description SetUserRole
+// @Tags role
+// @Param   SetUserRole  body api_model.SetUserRole true "SetUserRole"
+// @Success 200 {string} string	"ok"
+// @router /rbac/role/userrole [put]
+func (c *UserController) SetUserRole(r *ghttp.Request) {
+	j := r.GetJson()
+	m := api_model.SetUserRole{}
+	_ = j.ToStruct(&m)
+	if e := gvalid.CheckStruct(m, nil); e != nil {
+		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		return
+	}
+	for _, Username := range m.Usernames {
+		service.SetUserRole(Username, m.RoleKeys)
+	}
 	Success(r, "success")
 }

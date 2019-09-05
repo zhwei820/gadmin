@@ -1,8 +1,8 @@
 package api_model
 
 type CreateUser struct {
-	Username        string `valid:"user_name     @required"`
-	Nickname        string `valid:"nick_name     @required"`
+	Username        string `valid:"username     @required"`
+	Nickname        string `valid:"nickname     @required"`
 	Email           string `valid:"email     @required|email"`
 	Phone           string `valid:"phone     @required|phone"`
 	Password        string `valid:"password@required"`
@@ -10,8 +10,8 @@ type CreateUser struct {
 }
 
 type UpdateUser struct {
-	Username        string `valid:"user_name     @required"`
-	Nickname        string `valid:"nick_name     @required"`
+	Username        string `valid:"username     @required"`
+	Nickname        string `valid:"nickname     @required"`
 	Email           string `valid:"email     @required|email"`
 	Phone           string `valid:"phone     @required|phone"`
 	Password        string `valid:"password@"`

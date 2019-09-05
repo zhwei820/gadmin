@@ -9,11 +9,28 @@ import (
 	"strings"
 )
 
+func GetAllRoleMap() map[string]service_model.GadminRolePolicy {
+	allRoles, _ := GetPagedRoleList(1, 99999)
+	res := make(map[string]service_model.GadminRolePolicy, 0)
+	for _, item := range allRoles {
+		res[item.RoleKey] = item
+	}
+	return res
+}
+
+func GetRoleNames(allRole map[string]service_model.GadminRolePolicy, RoleKeys []string) []string {
+	res := make([]string, 0)
+	for _, RoleKey := range RoleKeys {
+		res = append(res, allRole[RoleKey].Name)
+	}
+	return res
+}
+
 // GetRoleList 获取权限列表
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
-func GetPagedRoleList(page, page_size int) ([]service_model.GadminRolePolicy, int) {
+func GetPagedRoleList(page, pageSize int) ([]service_model.GadminRolePolicy, int) {
 	defaultname := "未命名"
 
 	roleList := make([]service_model.GadminRolePolicy, 0)
@@ -25,6 +42,7 @@ func GetPagedRoleList(page, page_size int) ([]service_model.GadminRolePolicy, in
 
 	allPolicyMap := GetAllPolicyMap()
 	for _, item := range roles {
+
 		p := service_model.GadminRolePolicy{RoleKey: item, Name: defaultname}
 		for _, itempn := range pn {
 			if itempn.RoleKey == item {
@@ -34,34 +52,32 @@ func GetPagedRoleList(page, page_size int) ([]service_model.GadminRolePolicy, in
 				break
 			}
 		}
-		policys := model.Enforcer.GetPermissionsForUser(item)
-		for _, item := range policys {
+		policyList := model.Enforcer.GetPermissionsForUser(item)
+		for _, item := range policyList {
 			fullPath := fmt.Sprintf("%v:%v", item[1], item[2])
 			p.PolicyKeys = append(p.PolicyKeys, fullPath)
 		}
 		p.PolicyNames = GetPolicyNames(allPolicyMap, p.PolicyKeys)
 		roleList = append(roleList, p)
 	}
-	if page_size == -1 {
+	if pageSize == -1 {
 		return roleList, total
 	}
-	if len(roleList) < page*page_size {
-		if len(roleList) < page_size {
-			roleList = roleList
-		} else {
-			roleList = roleList[(page-1)*page_size:]
+	if len(roleList) < page*pageSize {
+		if len(roleList) > pageSize {
+			roleList = roleList[(page-1)*pageSize:]
 		}
 	} else {
-		roleList = roleList[(page-1)*page_size : (page-1)*page_size+page_size]
+		roleList = roleList[(page-1)*pageSize : (page-1)*pageSize+pageSize]
 	}
 	return roleList, total
 }
 
-// GetRoleByUserName 根据用户名获取对应角色
+// GetRoleByUsername 根据用户名获取对应角色
 //
 // createTime:2019年05月08日 15:08:19
 // author:hailaz
-func GetRoleByUserName(userName string) []model.GadminRoleconfig {
+func GetRoleByUsername(userName string) []model.GadminRoleconfig {
 	roles := model.Enforcer.GetRolesForUser(userName)
 	roleList := make([]model.GadminRoleconfig, 0)
 	for _, item := range roles {
@@ -135,11 +151,11 @@ func DeleteRole(role string) error {
 	return errors.New("delete fail")
 }
 
-// SetRoleByUserName 设置用户角色
+// SetUserRole 设置用户角色
 //
 // createTime:2019年05月08日 15:22:05
 // author:hailaz
-func SetRoleByUserName(userName string, roles []string) {
+func SetUserRole(userName string, roles []string) {
 	model.Enforcer.DeleteRolesForUser(userName)
 	for _, item := range roles {
 		model.Enforcer.AddRoleForUser(userName, item)

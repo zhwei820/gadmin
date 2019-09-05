@@ -21,10 +21,10 @@ type UserRoles struct {
 // author:hailaz
 func (u *GadminUser) GetUserRoles() UserRoles {
 	info := UserRoles{}
-	if u.UserName == ADMIN_NAME {
+	if u.Username == ADMIN_NAME {
 		info.Roles = []string{ADMIN_NAME}
 	} else {
-		info.Roles = Enforcer.GetRolesForUser(u.UserName)
+		info.Roles = Enforcer.GetRolesForUser(u.Username)
 	}
 
 	return info
@@ -34,7 +34,7 @@ func (u *GadminUser) GetUserRoles() UserRoles {
 // author:hailaz
 func GetUserByName(name string) (*GadminUser, error) {
 	u := GadminUser{}
-	err := defDB.Table("gadmin_user").Where("user_name", name).Struct(&u)
+	err := defDB.Table("gadmin_user").Where("username", name).Struct(&u)
 	if err != nil {
 		return nil, err
 	}

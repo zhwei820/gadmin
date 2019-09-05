@@ -1,6 +1,7 @@
 package base
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/g"
@@ -125,12 +126,12 @@ func SimpleAuthenticator(r *ghttp.Request) (interface{}, error) {
 	if password != "" {
 		u, err := model.GetUserByName(name)
 		if err != nil {
-			return nil, err
+			return nil, errors.New("用户名, 密码错误")
 		}
 		if u.Password == utils.EncryptPassword(password) {
-			r.SetParam("username", u.UserName)
+			r.SetParam("username", u.Username)
 			return g.Map{
-				"username": u.UserName,
+				"username": u.Username,
 				"id":       u.Id,
 			}, nil
 		}

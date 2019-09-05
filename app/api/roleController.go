@@ -122,22 +122,3 @@ func (c *RoleController) Delete(r *ghttp.Request) {
 	}
 	Success(r, "Delete")
 }
-
-//
-// @Summary SetRoleByUserName
-// @Description SetRoleByUserName
-// @Tags role
-// @Param   SetRoleByUserName  body api_model.SetRoleByUserName true "SetRoleByUserName"
-// @Success 200 {string} string	"ok"
-// @router /rbac/role/userrole [put]
-func (c *RoleController) SetRoleByUserName(r *ghttp.Request) {
-	j := r.GetJson()
-	m := api_model.SetRoleByUserName{}
-	_ = j.ToStruct(&m)
-	if e := gvalid.CheckStruct(m, nil); e != nil {
-		Fail(r, code.ERROR_INVALID_PARAM, e.String())
-		return
-	}
-	service.SetRoleByUserName(m.Username, m.Roles)
-	Success(r, "success")
-}

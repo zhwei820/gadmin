@@ -100,9 +100,10 @@ func Init(s *ghttp.Server) {
 		//// 用户
 		{"GET", "/user/info", userCtrl, "Info"},
 		{"REST", "/user", userCtrl},
+		{"PUT", "/user/userrole", userCtrl, "SetUserRole"},
+
 		// 角色
 		{"REST", "/role", roleCtrl},
-		{"PUT", "/role/userrole", roleCtrl, "SetRoleByUserName"},
 		{"GET", "/role/byrolekey", roleCtrl, "GetByRoleKey"},
 
 		// 权限

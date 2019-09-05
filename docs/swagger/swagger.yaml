@@ -26,26 +26,23 @@ definitions:
     properties:
       name:
         type: string
-      role:
-        type: string
-    type: object
-  api_model.SetPolicyByRole:
-    properties:
       policys:
         items:
           type: string
         type: array
-      role:
+      role_key:
         type: string
     type: object
-  api_model.SetRoleByUserName:
+  api_model.SetUserRole:
     properties:
-      roles:
+      role_keys:
         items:
           type: string
         type: array
-      username:
-        type: string
+      usernames:
+        items:
+          type: string
+        type: array
     type: object
   api_model.UpdatePolicy:
     properties:
@@ -168,40 +165,6 @@ paths:
       summary: UpdatePolicy
       tags:
       - policy
-  /rbac/policy/byrole:
-    get:
-      description: GetPolicyByRole
-      parameters:
-      - description: role
-        in: query
-        name: role
-        type: string
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: GetPolicyByRole
-      tags:
-      - policy
-    put:
-      description: SetPolicyByRole
-      parameters:
-      - description: SetPolicyByRole
-        in: body
-        name: SetPolicyByRole
-        required: true
-        schema:
-          $ref: '#/definitions/api_model.SetPolicyByRole'
-          type: object
-      responses:
-        "200":
-          description: ok
-          schema:
-            type: string
-      summary: SetPolicyByRole
-      tags:
-      - policy
   /rbac/refresh_token:
     get:
       description: 刷新token
@@ -241,10 +204,6 @@ paths:
         in: query
         name: page_size
         type: integer
-      - description: username
-        in: query
-        name: username
-        type: string
       responses:
         "200":
           description: ok
@@ -291,21 +250,21 @@ paths:
       - role
   /rbac/role/userrole:
     put:
-      description: SetRoleByUserName
+      description: SetUserRole
       parameters:
-      - description: SetRoleByUserName
+      - description: SetUserRole
         in: body
-        name: SetRoleByUserName
+        name: SetUserRole
         required: true
         schema:
-          $ref: '#/definitions/api_model.SetRoleByUserName'
+          $ref: '#/definitions/api_model.SetUserRole'
           type: object
       responses:
         "200":
           description: ok
           schema:
             type: string
-      summary: SetRoleByUserName
+      summary: SetUserRole
       tags:
       - role
   /rbac/user:

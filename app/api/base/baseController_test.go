@@ -156,7 +156,7 @@ func TestGetWhereFromQuery(t *testing.T) {
 			Id         int
 			Passport   string
 			Password   string
-			NickName   string
+			Nickname   string
 			CreateTime *gtime.Time
 		}
 		var users []*User

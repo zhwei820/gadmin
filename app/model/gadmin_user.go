@@ -11,8 +11,8 @@ import (
 type GadminUser struct {
 	Id           int       `json:"id" xorm:"not null pk autoincr INT(11)"`
 	Status       int       `json:"status" xorm:"not null INT(11)"`
-	UserName     string    `json:"user_name" xorm:"not null unique VARCHAR(255)"`
-	NickName     string    `json:"nick_name" xorm:"not null VARCHAR(255)"`
+	Username     string    `json:"username" xorm:"not null unique VARCHAR(255)"`
+	Nickname     string    `json:"nickname" xorm:"not null VARCHAR(255)"`
 	Password     string    `json:"password" xorm:"not null VARCHAR(255)"`
 	Email        string    `json:"email" xorm:"VARCHAR(255)"`
 	Phone        string    `json:"phone" xorm:"VARCHAR(255)"`

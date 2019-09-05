@@ -24,7 +24,7 @@ const (
 	ACTION_DELETE          = "(DELETE)"
 	ACTION_ALL             = "(GET)|(POST)|(PUT)|(DELETE)|(PATCH)|(OPTIONS)|(HEAD)"
 	ADMIN_NAME             = "admin" //超级管理员用户名
-	ADMIN_NICK_NAME        = "超级管理员" //超级管理员显示名称
+	ADMIN_nickname         = "超级管理员" //超级管理员显示名称
 	ADMIN_DEFAULT_PASSWORD = "123"   //超级管理员默认密码
 )
 
@@ -52,8 +52,8 @@ func initUser() {
 		return
 	}
 	admin := GadminUser{
-		UserName:   ADMIN_NAME,
-		NickName:   ADMIN_NICK_NAME,
+		Username:   ADMIN_NAME,
+		Nickname:   ADMIN_nickname,
 		Password:   utils.EncryptPassword(ADMIN_DEFAULT_PASSWORD),
 		CreateTime: time.Now(),
 		UpdateTime: time.Now(),
