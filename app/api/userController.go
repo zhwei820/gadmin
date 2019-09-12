@@ -1,10 +1,10 @@
 package api
 
 import (
+	"github.com/gogf/gf/g/util/gconv"
 	. "github.com/hailaz/gadmin/app/api/base"
 	"github.com/hailaz/gadmin/app/service/service_model"
 
-	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/gogf/gf/g/util/gvalid"
@@ -111,7 +111,7 @@ func (c *UserController) Put(r *ghttp.Request) {
 	m := api_model.UpdateUser{}
 	_ = j.ToStruct(&m)
 	if e := gvalid.CheckStruct(m, nil); e != nil {
-		Fail(r, code.ERROR_INVALID_PARAM, e.String())
+		Fail(r, code.ERROR_INVALID_PARAM, e.String(), GetErrorMapForValid(e.Maps()))
 		return
 	}
 	u, err := model.GetUserByName(m.Username)
@@ -119,12 +119,11 @@ func (c *UserController) Put(r *ghttp.Request) {
 		Fail(r, code.RESPONSE_ERROR, "用户不存在")
 		return
 	}
-	umap := gdb.Map{}
-	umap = j.ToMap()
+	umap := gconv.Map(m)
 	delete(umap, "password")
+	delete(umap, "passwordconfirm")
 
 	if m.Password == "" {
-		delete(umap, "password")
 		err := model.UpdateUserById(u.Id, umap)
 		if err != nil {
 			Fail(r, code.RESPONSE_ERROR, err.Error())

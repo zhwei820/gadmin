@@ -16,7 +16,6 @@ type GadminUser struct {
 	Password     string    `json:"password" xorm:"not null VARCHAR(255)"`
 	Email        string    `json:"email" xorm:"VARCHAR(255)"`
 	Phone        string    `json:"phone" xorm:"VARCHAR(255)"`
-	Sex          int       `json:"sex" xorm:"not null INT(11)"`
 	CreateTime   time.Time `json:"create_time" xorm:"not null DATETIME(6)"`
 	UpdateTime   time.Time `json:"update_time" xorm:"not null DATETIME(6)"`
 	AddUserId    int       `json:"add_user_id" xorm:"not null INT(11)"`

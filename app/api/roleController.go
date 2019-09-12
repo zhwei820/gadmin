@@ -109,13 +109,12 @@ func (c *RoleController) Put(r *ghttp.Request) {
 // @Summary delete role
 // @Description delete role
 // @Tags role
-// @Param	role	query 	string	true		"role"
+// @Param	role_key	query 	string	true		"role_key"
 // @Success 200 {string} string	"ok"
 // @router /rbac/role [delete]
 func (c *RoleController) Delete(r *ghttp.Request) {
-	role := r.GetString("role")
-
-	err := service.DeleteRole(role)
+	roleKey := r.GetString("role_key")
+	err := service.DeleteRole(roleKey)
 	if err != nil {
 		Fail(r, code.RESPONSE_ERROR, err.Error())
 		return

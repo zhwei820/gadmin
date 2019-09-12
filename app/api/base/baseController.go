@@ -19,12 +19,25 @@ type BaseResult struct {
 	Data    interface{} `json:"data"`
 }
 
+type ErrorMap map[string]string  // 后端错误信息， 放在Data里返回
+
+func GetErrorMapForValid(validErrors map[string]map[string]string) ErrorMap {
+	var res = make(ErrorMap, 0)
+	for key, item:= range validErrors {
+		for _, msg:= range item {
+			res[key] = msg
+			break
+		}
+	}
+	return res
+}
+
 // Response API返回
 //
 // createTime:2019年04月25日 11:32:47
 // author:hailaz
 func Response(r *ghttp.Request, rs BaseResult) {
-	r.Response.WriteJson(rs)
+	_ = r.Response.WriteJson(rs)
 	if rs.Code < 600 && rs.Code > 0 {
 		r.Response.Status = rs.Code
 	}
@@ -42,11 +55,14 @@ func Success(r *ghttp.Request, data interface{}) {
 //
 // createTime:2019年04月25日 11:43:34
 // author:hailaz
-func Fail(r *ghttp.Request, errCode int, msg ...string) {
-	if len(msg) > 0 {
-		Response(r, BaseResult{Code: errCode, Message: msg[0]})
+func Fail(r *ghttp.Request, errCode int, msg string, Data ...interface{}) {
+	if msg == "" {
+		msg = "fail"
+	}
+	if len(Data) > 0 {
+		Response(r, BaseResult{Code: errCode, Message: msg, Data: Data[0]})
 	} else {
-		Response(r, BaseResult{Code: errCode, Message: "fail"})
+		Response(r, BaseResult{Code: errCode, Message: msg})
 	}
 
 }
