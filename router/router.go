@@ -1,25 +1,21 @@
 package router
 
 import (
-	"fmt"
 	"github.com/gogf/gf/g"
 	"github.com/hailaz/gadmin/app/api/base"
+	"github.com/hailaz/gadmin/app/api/options"
+	"github.com/hailaz/gadmin/app/api/rbac"
 	"github.com/hailaz/gadmin/app/service"
+	"github.com/hailaz/gadmin/common"
 	"github.com/hailaz/gadmin/utils"
 	"github.com/hailaz/gadmin/utils/context_log"
-	uuid "github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 	"io"
 	"strings"
 
 	"github.com/gogf/gf/g/net/ghttp"
-	"github.com/gogf/gf/g/os/glog"
-	"github.com/gogf/gf/g/util/gconv"
-	"github.com/hailaz/gadmin/app/api"
-	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/utils/common"
 )
 
-var routerMap = make(map[string]model.RolePolicy)
 var writer io.Writer
 
 func writeLog(r *ghttp.Request) {
@@ -38,9 +34,10 @@ func InitRouter(s *ghttp.Server) {
 		ghttp.HOOK_AFTER_SERVE:  writeLog,
 	})
 
-	Init(s)
+	rbac.InitRouter(s)    // rbac router
+	options.InitRouter(s) // options router
 
-	service.ReSetPolicy("system", routerMap)
+	service.ReSetPolicy("system", common.RouterMap)
 }
 
 // authHook 鉴权钩子
@@ -79,65 +76,4 @@ func authHook(r *ghttp.Request) {
 	}
 	base.GfJWTMiddleware.MiddlewareFunc()(r) //鉴权中间件
 	// or error handling
-}
-
-// Init 初始化V1
-//
-// createTime:2019年04月25日 09:24:06
-// author:hailaz
-func Init(s *ghttp.Server) {
-	userCtrl := new(api.UserController)
-	roleCtrl := new(api.RoleController)
-	policyCtrl := new(api.PolicyController)
-
-	// user
-	BindGroup(s, "/rbac", []ghttp.GroupItem{
-		//
-		//登录
-		{"POST", "/login", base.GfJWTMiddleware.LoginHandler},          //登录
-		{"GET", "/refresh_token", base.GfJWTMiddleware.RefreshHandler}, //获取登录加密公钥
-		{"GET", "/logout", api.Logout},                                 //登出
-		//// 用户
-		{"GET", "/user/info", userCtrl, "Info"},
-		{"REST", "/user", userCtrl},
-		{"PUT", "/user/userrole", userCtrl, "SetUserRole"},
-
-		// 角色
-		{"REST", "/role", roleCtrl},
-		{"GET", "/role/byrolekey", roleCtrl, "GetByRoleKey"},
-
-		// 权限
-		{"REST", "/policy", policyCtrl},
-		//{"GET", "/policy/byrole", policyCtrl, "GetPolicyByRole"},
-		//{"PUT", "/policy/byrole", policyCtrl, "SetPolicyByRole"},
-	})
-}
-
-// BindGroup 绑定分组路由
-//
-// createTime:2019年04月29日 16:45:55
-// author:hailaz
-func BindGroup(s *ghttp.Server, path string, items []ghttp.GroupItem) {
-	g := s.Group(path)
-	g.Bind(items)
-	for _, item := range items {
-		glog.Debug(gconv.String(item[1]))
-		if gconv.String(item[0]) == "REST" { //rest api
-			addPolicy("system", path+gconv.String(item[1]), model.ACTION_GET)
-			addPolicy("system", path+gconv.String(item[1]), model.ACTION_POST)
-			addPolicy("system", path+gconv.String(item[1]), model.ACTION_PUT)
-			addPolicy("system", path+gconv.String(item[1]), model.ACTION_DELETE)
-		} else {
-			addPolicy("system", path+gconv.String(item[1]), common.GetAction(gconv.String(item[0])))
-		}
-	}
-
-}
-
-// addPolicy 记录需要系统路由
-//
-// createTime:2019年04月29日 17:18:25
-// author:hailaz
-func addPolicy(role, path, act string) {
-	routerMap[fmt.Sprintf("%v %v %v", role, path, act)] = model.RolePolicy{Role: role, Path: path, Act: act}
 }

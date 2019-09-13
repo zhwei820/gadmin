@@ -52,7 +52,6 @@ class User(models.Model):
     password = models.CharField(max_length=255)
     email = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
-    sex = models.IntegerField()
     create_time = models.DateTimeField(auto_now_add=True)
     update_time = models.DateTimeField(auto_now=True)
     add_user_id = models.IntegerField()

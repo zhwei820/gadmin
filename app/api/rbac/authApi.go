@@ -1,4 +1,4 @@
-package api
+package rbac
 
 import (
 	"github.com/gogf/gf/g/net/ghttp"

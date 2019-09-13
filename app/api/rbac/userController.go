@@ -1,9 +1,10 @@
-package api
+package rbac
 
 import (
 	"github.com/gogf/gf/g/util/gconv"
 	. "github.com/hailaz/gadmin/app/api/base"
 	"github.com/hailaz/gadmin/app/service/service_model"
+	"github.com/hailaz/gadmin/utils/crypt"
 
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
@@ -11,7 +12,6 @@ import (
 	"github.com/hailaz/gadmin/app/api/api_model"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service"
-	"github.com/hailaz/gadmin/utils"
 	"github.com/hailaz/gadmin/utils/code"
 	"time"
 )
@@ -45,12 +45,13 @@ func (c *UserController) Info(r *ghttp.Request) {
 func (c *UserController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
 	page_size := r.GetInt("page_size", 10)
+	role_key := r.GetString("role_key", "")
 	wheres := GetWhereFromRequest(r, nil, nil, []string{"username", "nickname", "email"})
 	var userList struct {
 		List  []service_model.GadminUserOut `json:"items"`
 		Total int                           `json:"total"`
 	}
-	userList.List, userList.Total = service.GetPagedUser(wheres, page, page_size)
+	userList.List, userList.Total = service.GetPagedUser(wheres, role_key, page, page_size)
 	Success(r, userList)
 }
 
@@ -75,7 +76,7 @@ func (c *UserController) Post(r *ghttp.Request) {
 		return
 	}
 
-	m.Password = utils.EncryptPassword(m.Password)
+	m.Password = crypt.EncryptPassword(m.Password)
 	user := model.GadminUser{
 		Username:   m.Username,
 		Password:   m.Password,
@@ -130,7 +131,7 @@ func (c *UserController) Put(r *ghttp.Request) {
 			return
 		}
 	} else {
-		umap["password"] = utils.EncryptPassword(m.Password)
+		umap["password"] = crypt.EncryptPassword(m.Password)
 		err := model.UpdateUserById(u.Id, umap)
 		if err != nil {
 			Fail(r, code.RESPONSE_ERROR, err.Error())

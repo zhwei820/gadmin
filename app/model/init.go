@@ -6,7 +6,7 @@ import (
 	"github.com/gogf/gf/g"
 	"github.com/gogf/gf/g/database/gdb"
 	"github.com/gogf/gf/g/os/glog"
-	"github.com/hailaz/gadmin/utils"
+	"github.com/hailaz/gadmin/utils/crypt"
 	"github.com/hailaz/gadmin/utils/userdefinedpolicy"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
@@ -54,7 +54,7 @@ func initUser() {
 	admin := GadminUser{
 		Username:   ADMIN_NAME,
 		Nickname:   ADMIN_nickname,
-		Password:   utils.EncryptPassword(ADMIN_DEFAULT_PASSWORD),
+		Password:   crypt.EncryptPassword(ADMIN_DEFAULT_PASSWORD),
 		CreateTime: time.Now(),
 		UpdateTime: time.Now(),
 	}

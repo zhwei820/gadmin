@@ -1,4 +1,4 @@
-package utils
+package crypt
 
 import "github.com/gogf/gf/g/crypto/gmd5"
 

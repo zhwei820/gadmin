@@ -8,7 +8,7 @@ import (
 	"github.com/gogf/gf/g/net/ghttp"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/utils"
+	"github.com/hailaz/gadmin/utils/crypt"
 	"time"
 )
 
@@ -128,7 +128,7 @@ func SimpleAuthenticator(r *ghttp.Request) (interface{}, error) {
 		if err != nil {
 			return nil, errors.New("用户名, 密码错误")
 		}
-		if u.Password == utils.EncryptPassword(password) {
+		if u.Password == crypt.EncryptPassword(password) {
 			r.SetParam("username", u.Username)
 			return g.Map{
 				"username": u.Username,
