@@ -131,28 +131,23 @@ func DeletePolicy(path string) error {
 	return errors.New("delete fail")
 }
 
-// ReSetPolicy 更新路由权限
+// ReSetPolicy 更新权限
 //
 // createTime:2019年04月29日 17:30:26
 // author:hailaz
 func ReSetPolicy(role string, rmap map[string]model.RolePolicy) {
 	old := model.Enforcer.GetPermissionsForUser(role)
-	for _, item := range old {
-		glog.Debug(item)
-		full := fmt.Sprintf("%v %v %v", item[0], item[1], item[2])
-		if _, ok := rmap[full]; ok { //从待插入列表中删除已存在的路由
-			delete(rmap, full)
-			//} else { //删除不存在的旧路由
-			//	model.Enforcer.DeletePermissionForUser(item[0], item[1], item[2])
-			//	if role == "system" {
-			//		p, _ := model.GetPolicyByFullPath(fmt.Sprintf("%v:%v", item[1], item[2]))
-			//		if p.Id > 0 {
-			//			_, _ = p.DeleteById(p.Id)
-			//		}
-			//	}
+
+	if role != "system" {
+
+		for _, key := range old {
+			if _, ok := rmap[fmt.Sprintf("%v:%v", key[1], key[2])]; !ok {
+				model.Enforcer.DeletePermissionForUser(role, key[1], key[2])
+			}
 		}
 	}
-	for _, item := range rmap { //插入新路由
+
+	for _, item := range rmap {
 		model.Enforcer.AddPolicy(item.Role, item.Path, item.Act)
 	}
 }

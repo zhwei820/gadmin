@@ -168,7 +168,7 @@ func SetPolicyByRole(Policys []string, RoleKey string) {
 		list := strings.Split(item, ":")
 		path := list[0]
 		act := list[1]
-		routerMap[fmt.Sprintf("%v %v %v", RoleKey, path, act)] = model.RolePolicy{Role: RoleKey, Path: path, Act: act}
+		routerMap[item] = model.RolePolicy{Role: RoleKey, Path: path, Act: act}
 	}
 	ReSetPolicy(RoleKey, routerMap)
 }

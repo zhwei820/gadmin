@@ -89,7 +89,15 @@ func LoginResponse(r *ghttp.Request, code int, token string, expire time.Time) {
 		Expire string   `json:"expire"`
 		Perms  []string `json:"perms"` // policys
 	}
-	policys := model.Enforcer.GetPermissionsForUser(r.GetParam("username").String())
+	username := r.GetParam("username").String()
+
+	policys := model.Enforcer.GetPermissionsForUser(username)
+	if len(policys) == 0 {
+		roles := model.Enforcer.GetRolesForUser(username)
+		for _, item := range roles {
+			policys = append(policys, model.Enforcer.GetPermissionsForUser(item)...)
+		}
+	}
 	Perms := make([]string, 0)
 	for _, item := range policys {
 		perm := fmt.Sprintf("%v:%v", item[1], item[2])

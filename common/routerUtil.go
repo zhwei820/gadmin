@@ -37,7 +37,7 @@ func BindGroup(s *ghttp.Server, path string, items []ghttp.GroupItem) {
 // createTime:2019年04月29日 17:18:25
 // author:hailaz
 func addPolicy(role, path, act string) {
-	RouterMap[fmt.Sprintf("%v %v %v", role, path, act)] = model.RolePolicy{Role: role, Path: path, Act: act}
+	RouterMap[fmt.Sprintf("%v:%v", path, act)] = model.RolePolicy{Role: role, Path: path, Act: act}
 }
 
 func GetAction(act string) string {
