@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
-	"golang.org/x/tools/go/ssa/interp/testdata/src/strings"
+	"strings"
 )
 
 func GetAllPolicyMap() map[string]model.GadminPolicyconfig {
@@ -36,7 +36,6 @@ func GetPagedPolicyList(search string, page, pageSize int) ([]model.GadminPolicy
 	}
 	policyList := make([]model.GadminPolicyconfig, 0)
 	policys := model.Enforcer.GetPermissionsForUser("system")
-	total := len(policys)
 	r, _ := model.GetAllPolicyConfig()
 	pcs := make([]model.GadminPolicyconfig, 0)
 	_ = r.ToStructs(&pcs)
@@ -61,6 +60,8 @@ func GetPagedPolicyList(search string, page, pageSize int) ([]model.GadminPolicy
 
 		policyList = append(policyList, p)
 	}
+	total := len(policyList)
+
 	if pageSize == -1 {
 		return policyList, total
 	}

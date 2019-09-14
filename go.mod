@@ -11,7 +11,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.10.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/stretchr/testify v1.3.0
-	github.com/swaggo/swag v1.4.0
+	github.com/swaggo/swag v1.6.2
 	github.com/zhwei820/gogf-swagger v0.0.0-20190809145810-2a2bce4d16ed
 	golang.org/x/tools v0.0.0-20190606124116-d0a3d012864b
 )
