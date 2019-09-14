@@ -40,18 +40,19 @@ func (c *UserController) Info(r *ghttp.Request) {
 // @Param	page	query 	integer	false		"page"
 // @Param	page_size	query 	integer	false		"page_size"
 // @Param	search	query 	string	false		"search"
+// @Param	role_key	query 	string	false		"role_key"
 // @Success 200 {string} string	"ok"
 // @router /rbac/user [get]
 func (c *UserController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
-	page_size := r.GetInt("page_size", 10)
-	role_key := r.GetString("role_key", "")
+	pageSize := r.GetInt("page_size", 10)
+	roleKey := r.GetString("role_key", "")
 	wheres := GetWhereFromRequest(r, nil, nil, []string{"username", "nickname", "email"})
 	var userList struct {
 		List  []service_model.GadminUserOut `json:"items"`
 		Total int                           `json:"total"`
 	}
-	userList.List, userList.Total = service.GetPagedUser(wheres, role_key, page, page_size)
+	userList.List, userList.Total = service.GetPagedUser(wheres, roleKey, page, pageSize)
 	Success(r, userList)
 }
 

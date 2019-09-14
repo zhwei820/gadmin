@@ -26,7 +26,7 @@ func BindGroup(s *ghttp.Server, path string, items []ghttp.GroupItem) {
 			addPolicy("system", path+gconv.String(item[1]), model.ACTION_PUT)
 			addPolicy("system", path+gconv.String(item[1]), model.ACTION_DELETE)
 		} else {
-			addPolicy("system", path+gconv.String(item[1]), GetAction(gconv.String(item[0])))
+			addPolicy("system", path+gconv.String(item[1])+"*", GetAction(gconv.String(item[0])))
 		}
 	}
 

@@ -9,14 +9,14 @@ import (
 //
 // createTime:2019年05月07日 16:11:41
 // author:hailaz
-func GetPagedUser(where map[string]interface{}, role_key string, page, page_size int) ([]service_model.GadminUserOut, int) {
+func GetPagedUser(where map[string]interface{}, roleKey string, page, pageSize int) ([]service_model.GadminUserOut, int) {
 	total, _ := model.CountUser()
 	userList := make([]service_model.GadminUserOut, 0)
-	if role_key != "" {
-		usernames := model.Enforcer.GetUsersForRole(role_key)
+	if roleKey != "" {
+		usernames := model.Enforcer.GetUsersForRole(roleKey)
 		where["username in (?)"] = usernames
 	}
-	r, err := model.GetPagedUser(where, (page-1)*page_size, page_size)
+	r, err := model.GetPagedUser(where, (page-1)*pageSize, pageSize)
 	if err != nil {
 		return nil, 0
 	}

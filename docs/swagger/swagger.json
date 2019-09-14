@@ -17,6 +17,23 @@
     },
     "basePath": "/",
     "paths": {
+        "/options/role-option": {
+            "get": {
+                "description": "RoleOption",
+                "tags": [
+                    "options"
+                ],
+                "summary": "RoleOption",
+                "responses": {
+                    "200": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/rbac/login": {
             "post": {
                 "description": "登陆",
@@ -81,6 +98,12 @@
                         "type": "integer",
                         "description": "page_size",
                         "name": "page_size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "search",
+                        "name": "search",
                         "in": "query"
                     }
                 ],
@@ -255,8 +278,8 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "role",
-                        "name": "role",
+                        "description": "role_key",
+                        "name": "role_key",
                         "in": "query",
                         "required": true
                     }
@@ -324,6 +347,12 @@
                         "type": "string",
                         "description": "search",
                         "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "role_key",
+                        "name": "role_key",
                         "in": "query"
                     }
                 ],
@@ -437,7 +466,13 @@
         "api_model.CreateUser": {
             "type": "object",
             "properties": {
+                "avatar": {
+                    "type": "string"
+                },
                 "email": {
+                    "type": "string"
+                },
+                "introduction": {
                     "type": "string"
                 },
                 "nickname": {
@@ -519,7 +554,13 @@
         "api_model.UpdateUser": {
             "type": "object",
             "properties": {
+                "avatar": {
+                    "type": "string"
+                },
                 "email": {
+                    "type": "string"
+                },
+                "introduction": {
                     "type": "string"
                 },
                 "nickname": {

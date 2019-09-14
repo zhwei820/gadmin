@@ -23,18 +23,20 @@ type PolicyController struct {
 // @Tags policy
 // @Param	page	query 	integer	false		"page"
 // @Param	page_size	query 	integer	false		"page_size"
+// @Param	search	query 	string	false		"search"
 // @Success 200 {string} string	"ok"
 // @router /rbac/policy [get]
 func (c *PolicyController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
-	page_size := r.GetInt("page_size", 10)
+	pageSize := r.GetInt("page_size", 10)
+	search := r.GetString("search", "")
 
 	var list struct {
 		List  []model.GadminPolicyconfig `json:"items"`
 		Total int                        `json:"total"`
 	}
 
-	list.List, list.Total = service.GetPagedPolicyList(page, page_size)
+	list.List, list.Total = service.GetPagedPolicyList(search, page, pageSize)
 	Success(r, list)
 }
 

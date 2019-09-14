@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"github.com/gogf/gf/g/os/glog"
 	"github.com/hailaz/gadmin/app/model"
+	"golang.org/x/tools/go/ssa/interp/testdata/src/strings"
 )
 
 func GetAllPolicyMap() map[string]model.GadminPolicyconfig {
-	allPolicys, _ := GetPagedPolicyList(1, 99999)
+	allPolicys, _ := GetPagedPolicyList("", 1, 99999)
 	res := make(map[string]model.GadminPolicyconfig, 0)
 	for _, item := range allPolicys {
 		res[item.FullPath] = item
@@ -28,7 +29,7 @@ func GetPolicyNames(allPolicy map[string]model.GadminPolicyconfig, fullPath []st
 //
 // createTime:2019年05月06日 17:24:12
 // author:hailaz
-func GetPagedPolicyList(page, page_size int) ([]model.GadminPolicyconfig, int) {
+func GetPagedPolicyList(search string, page, pageSize int) ([]model.GadminPolicyconfig, int) {
 	defaultName := "未命名"
 	if page < 1 {
 		page = 1
@@ -52,17 +53,23 @@ func GetPagedPolicyList(page, page_size int) ([]model.GadminPolicyconfig, int) {
 				break
 			}
 		}
+		if search != "" && !(strings.Contains(p.FullPath, search) ||
+			strings.Contains(p.Name, search) ||
+			strings.Contains(p.Label, search)) {
+			continue
+		}
+
 		policyList = append(policyList, p)
 	}
-	if page_size == -1 {
+	if pageSize == -1 {
 		return policyList, total
 	}
-	if len(policyList) < page*page_size {
-		if len(policyList) > page_size {
-			policyList = policyList[(page-1)*page_size:]
+	if len(policyList) < page*pageSize {
+		if len(policyList) > pageSize {
+			policyList = policyList[(page-1)*pageSize:]
 		}
 	} else {
-		policyList = policyList[(page-1)*page_size : (page-1)*page_size+page_size]
+		policyList = policyList[(page-1)*pageSize : (page-1)*pageSize+pageSize]
 	}
 	return policyList, total
 }

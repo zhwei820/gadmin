@@ -22,11 +22,11 @@ type OptionStruct struct {
 	Multiple bool          `json:"multiple" `
 }
 
-// @Summary user info
-// @Description user info
-// @Tags user
+// @Summary RoleOption
+// @Description RoleOption
+// @Tags options
 // @Success 200 {string} string	"ok"
-// @router /options/role [get]
+// @router /options/role-option [get]
 func (c *OptionsController) RoleOption(r *ghttp.Request) {
 	getRoleOptions := func() (innerOptions []InnerOption) {
 		allRoleMap := service.GetAllRoleMap()

@@ -24,12 +24,12 @@ type RoleController struct {
 // @router /rbac/role [get]
 func (c *RoleController) Get(r *ghttp.Request) {
 	page := r.GetInt("page", 1)
-	page_size := r.GetInt("page_size", 10)
+	pageSize := r.GetInt("page_size", 10)
 	var list struct {
 		List  []service_model.GadminRolePolicy `json:"items"`
 		Total int                              `json:"total"`
 	}
-	list.List, list.Total = service.GetPagedRoleList(page, page_size)
+	list.List, list.Total = service.GetPagedRoleList(page, pageSize)
 
 	Success(r, list)
 }

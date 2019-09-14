@@ -2,7 +2,11 @@ basePath: /
 definitions:
   api_model.CreateUser:
     properties:
+      avatar:
+        type: string
       email:
+        type: string
+      introduction:
         type: string
       nickname:
         type: string
@@ -55,7 +59,11 @@ definitions:
     type: object
   api_model.UpdateUser:
     properties:
+      avatar:
+        type: string
       email:
+        type: string
+      introduction:
         type: string
       nickname:
         type: string
@@ -81,6 +89,17 @@ info:
   title: Swagger Example API
   version: "1.0"
 paths:
+  /options/role-option:
+    get:
+      description: RoleOption
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: RoleOption
+      tags:
+      - options
   /rbac/login:
     post:
       description: 登陆
@@ -139,6 +158,10 @@ paths:
         in: query
         name: page_size
         type: integer
+      - description: search
+        in: query
+        name: search
+        type: string
       responses:
         "200":
           description: ok
@@ -180,9 +203,9 @@ paths:
     delete:
       description: delete role
       parameters:
-      - description: role
+      - description: role_key
         in: query
-        name: role
+        name: role_key
         required: true
         type: string
       responses:
@@ -298,6 +321,10 @@ paths:
       - description: search
         in: query
         name: search
+        type: string
+      - description: role_key
+        in: query
+        name: role_key
         type: string
       responses:
         "200":
