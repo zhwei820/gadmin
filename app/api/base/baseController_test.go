@@ -1,8 +1,8 @@
 package base
 
 import (
-	"github.com/gogf/gf/g"
-	"github.com/gogf/gf/g/os/gtime"
+	"github.com/gogf/gf/frame/g"
+	"github.com/gogf/gf/os/gtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

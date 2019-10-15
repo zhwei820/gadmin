@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/gogf/gf/g/os/glog"
+	"github.com/gogf/gf/os/glog"
 	"strings"
 )
 

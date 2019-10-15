@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/gogf/gf/g"
+	"github.com/gogf/gf/frame/g"
 	"github.com/hailaz/gadmin/app/api/base"
 	"github.com/hailaz/gadmin/app/api/options"
 	"github.com/hailaz/gadmin/app/api/rbac"
@@ -13,7 +13,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/gogf/gf/g/net/ghttp"
+	"github.com/gogf/gf/net/ghttp"
 )
 
 var writer io.Writer

@@ -1,7 +1,7 @@
 package timer
 
 import (
-	"github.com/gogf/gf/g/os/gtimer"
+	"github.com/gogf/gf/os/gtimer"
 	"github.com/hailaz/gadmin/app/model"
 	"time"
 )

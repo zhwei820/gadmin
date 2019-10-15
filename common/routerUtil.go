@@ -2,9 +2,9 @@ package common
 
 import (
 	"fmt"
-	"github.com/gogf/gf/g/net/ghttp"
-	"github.com/gogf/gf/g/os/glog"
-	"github.com/gogf/gf/g/util/gconv"
+	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/os/glog"
+	"github.com/gogf/gf/util/gconv"
 	"github.com/hailaz/gadmin/app/model"
 	"strings"
 )

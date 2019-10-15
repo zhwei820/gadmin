@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
-	"github.com/gogf/gf/g/os/glog"
+	"github.com/gogf/gf/os/glog"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/app/service/service_model"
 	"strings"

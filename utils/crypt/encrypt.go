@@ -1,6 +1,6 @@
 package crypt
 
-import "github.com/gogf/gf/g/crypto/gmd5"
+import "github.com/gogf/gf/crypto/gmd5"
 
 const (
 	ENCRYPTMD5 = "gadmin"

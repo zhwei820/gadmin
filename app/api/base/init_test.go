@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/gogf/gf/g"
-	"github.com/gogf/gf/g/container/garray"
+	"github.com/gogf/gf/container/garray"
+	"github.com/gogf/gf/frame/g"
 
-	"github.com/gogf/gf/g/database/gdb"
-	"github.com/gogf/gf/g/os/gtime"
-	"github.com/gogf/gf/g/test/gtest"
+	"github.com/gogf/gf/database/gdb"
+	"github.com/gogf/gf/os/gtime"
+	"github.com/gogf/gf/test/gtest"
 )
 
 const (

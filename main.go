@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/gogf/gf/g"
+	"github.com/gogf/gf-swagger" // gf-swagger middleware
+	"github.com/gogf/gf/frame/g"
 	"github.com/hailaz/gadmin/app/model"
 	_ "github.com/hailaz/gadmin/docs"
+	"github.com/hailaz/gadmin/router"
 	"github.com/hailaz/gadmin/utils/logger"
 	"github.com/hailaz/gadmin/utils/timer"
-	"github.com/hailaz/gadmin/router"
-	"github.com/zhwei820/gogf-swagger"
-	"github.com/zhwei820/gogf-swagger/swaggerFiles"
+	"github.com/swaggo/files" // swagger embed files
 )
 
 func init() {
@@ -48,8 +48,7 @@ func main() {
 	// 初始化路由
 	router.InitRouter(s)
 
-	url := gogfSwagger.URL("http://localhost:8199/swagger/doc.json") //The url pointing to API definition
-	s.BindHandler("/swagger/*any", gogfSwagger.WrapHandler(swaggerFiles.Handler, url))
+	s.BindHandler("/swagger/*any", gfSwagger.WrapHandler(swaggerFiles.Handler))
 
 	s.SetPort(g.Config().GetInt("port", 8199))
 	s.Run()

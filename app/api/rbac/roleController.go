@@ -1,9 +1,9 @@
 package rbac
 
 import (
-	"github.com/gogf/gf/g/net/ghttp"
-	"github.com/gogf/gf/g/os/glog"
-	"github.com/gogf/gf/g/util/gvalid"
+	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/os/glog"
+	"github.com/gogf/gf/util/gvalid"
 	"github.com/hailaz/gadmin/app/api/api_model"
 	. "github.com/hailaz/gadmin/app/api/base"
 	"github.com/hailaz/gadmin/app/service"

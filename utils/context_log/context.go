@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/gogf/gf/g/os/glog"
+	"github.com/gogf/gf/os/glog"
 	"io"
 	"log"
 	"time"

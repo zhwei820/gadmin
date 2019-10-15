@@ -1,6 +1,6 @@
 package model
 
-import "github.com/gogf/gf/g/database/gdb"
+import "github.com/gogf/gf/database/gdb"
 
 type RolePolicy struct {
 	Role string

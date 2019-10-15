@@ -1,7 +1,7 @@
 package options
 
 import (
-	"github.com/gogf/gf/g/net/ghttp"
+	"github.com/gogf/gf/net/ghttp"
 	. "github.com/hailaz/gadmin/app/api/base"
 	"github.com/hailaz/gadmin/app/service"
 )

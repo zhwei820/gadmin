@@ -3,9 +3,9 @@ package model
 import (
 	"fmt"
 	"github.com/casbin/casbin"
-	"github.com/gogf/gf/g"
-	"github.com/gogf/gf/g/database/gdb"
-	"github.com/gogf/gf/g/os/glog"
+	"github.com/gogf/gf/database/gdb"
+	"github.com/gogf/gf/frame/g"
+	"github.com/gogf/gf/os/glog"
 	"github.com/hailaz/gadmin/utils/crypt"
 	"github.com/hailaz/gadmin/utils/userdefinedpolicy"
 	_ "github.com/lib/pq"

@@ -2,7 +2,7 @@ package context_log
 
 import (
 	"context"
-	"github.com/gogf/gf/g/os/glog"
+	"github.com/gogf/gf/os/glog"
 	"testing"
 )
 

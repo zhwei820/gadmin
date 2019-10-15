@@ -2,7 +2,7 @@ package base
 
 import (
 	"github.com/gogf/gf-jwt"
-	"github.com/gogf/gf/g/net/ghttp"
+	"github.com/gogf/gf/net/ghttp"
 	"github.com/hailaz/gadmin/app/model"
 	"github.com/hailaz/gadmin/utils/code"
 	"github.com/hailaz/gadmin/utils/context_log"
@@ -19,12 +19,12 @@ type BaseResult struct {
 	Data    interface{} `json:"data"`
 }
 
-type ErrorMap map[string]string  // 后端错误信息， 放在Data里返回
+type ErrorMap map[string]string // 后端错误信息， 放在Data里返回
 
 func GetErrorMapForValid(validErrors map[string]map[string]string) ErrorMap {
 	var res = make(ErrorMap, 0)
-	for key, item:= range validErrors {
-		for _, msg:= range item {
+	for key, item := range validErrors {
+		for _, msg := range item {
 			res[key] = msg
 			break
 		}
