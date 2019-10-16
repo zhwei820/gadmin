@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/app/service/service_model"
+	"github.com/zhwei820/gadmin/app/model"
+	"github.com/zhwei820/gadmin/app/service/service_model"
 )
 
 // GetPagedUser 获取用户

@@ -2,8 +2,8 @@ package rbac
 
 import (
 	"github.com/gogf/gf/net/ghttp"
-	"github.com/hailaz/gadmin/app/api/base"
-	"github.com/hailaz/gadmin/common"
+	"github.com/zhwei820/gadmin/app/api/base"
+	"github.com/zhwei820/gadmin/common"
 )
 
 // Init 初始化rbac

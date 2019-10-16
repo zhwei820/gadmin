@@ -4,11 +4,11 @@ import (
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/os/glog"
 	"github.com/gogf/gf/util/gvalid"
-	"github.com/hailaz/gadmin/app/api/api_model"
-	. "github.com/hailaz/gadmin/app/api/base"
-	"github.com/hailaz/gadmin/app/service"
-	"github.com/hailaz/gadmin/app/service/service_model"
-	"github.com/hailaz/gadmin/utils/code"
+	"github.com/zhwei820/gadmin/app/api/api_model"
+	. "github.com/zhwei820/gadmin/app/api/base"
+	"github.com/zhwei820/gadmin/app/service"
+	"github.com/zhwei820/gadmin/app/service/service_model"
+	"github.com/zhwei820/gadmin/utils/code"
 )
 
 type RoleController struct {

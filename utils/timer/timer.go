@@ -2,7 +2,7 @@ package timer
 
 import (
 	"github.com/gogf/gf/os/gtimer"
-	"github.com/hailaz/gadmin/app/model"
+	"github.com/zhwei820/gadmin/app/model"
 	"time"
 )
 

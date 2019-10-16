@@ -7,8 +7,8 @@ import (
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/os/glog"
-	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/utils/crypt"
+	"github.com/zhwei820/gadmin/app/model"
+	"github.com/zhwei820/gadmin/utils/crypt"
 	"time"
 )
 

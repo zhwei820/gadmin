@@ -2,8 +2,8 @@ package options
 
 import (
 	"github.com/gogf/gf/net/ghttp"
-	. "github.com/hailaz/gadmin/app/api/base"
-	"github.com/hailaz/gadmin/app/service"
+	. "github.com/zhwei820/gadmin/app/api/base"
+	"github.com/zhwei820/gadmin/app/service"
 )
 
 type OptionsController struct {

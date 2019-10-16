@@ -5,7 +5,7 @@ import (
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/os/glog"
 	"github.com/gogf/gf/util/gconv"
-	"github.com/hailaz/gadmin/app/model"
+	"github.com/zhwei820/gadmin/app/model"
 	"strings"
 )
 

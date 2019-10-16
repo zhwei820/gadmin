@@ -1,4 +1,4 @@
-module github.com/hailaz/gadmin
+module github.com/zhwei820/gadmin
 
 go 1.12
 

@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gogf/gf/os/glog"
-	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/app/service/service_model"
+	"github.com/zhwei820/gadmin/app/model"
+	"github.com/zhwei820/gadmin/app/service/service_model"
 	"strings"
 )
 

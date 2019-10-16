@@ -3,12 +3,13 @@ package main
 import (
 	"github.com/gogf/gf-swagger" // gf-swagger middleware
 	"github.com/gogf/gf/frame/g"
-	"github.com/hailaz/gadmin/app/model"
-	_ "github.com/hailaz/gadmin/docs"
-	"github.com/hailaz/gadmin/router"
-	"github.com/hailaz/gadmin/utils/logger"
-	"github.com/hailaz/gadmin/utils/timer"
+
 	"github.com/swaggo/files" // swagger embed files
+	"github.com/zhwei820/gadmin/app/model"
+	_ "github.com/zhwei820/gadmin/docs"
+	"github.com/zhwei820/gadmin/router"
+	"github.com/zhwei820/gadmin/utils/logger"
+	"github.com/zhwei820/gadmin/utils/timer"
 )
 
 func init() {

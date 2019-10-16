@@ -3,9 +3,9 @@ package base
 import (
 	"github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/net/ghttp"
-	"github.com/hailaz/gadmin/app/model"
-	"github.com/hailaz/gadmin/utils/code"
-	"github.com/hailaz/gadmin/utils/context_log"
+	"github.com/zhwei820/gadmin/app/model"
+	"github.com/zhwei820/gadmin/utils/code"
+	"github.com/zhwei820/gadmin/utils/context_log"
 	"strconv"
 	"strings"
 )

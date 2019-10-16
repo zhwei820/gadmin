@@ -2,7 +2,7 @@ package options
 
 import (
 	"github.com/gogf/gf/net/ghttp"
-	"github.com/hailaz/gadmin/common"
+	"github.com/zhwei820/gadmin/common"
 )
 
 // Init 初始化rbac
