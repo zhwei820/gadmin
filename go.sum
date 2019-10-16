@@ -47,12 +47,12 @@ github.com/go-openapi/swag v0.17.0/go.mod h1:AByQ+nYG6gQg71GINrmuDXCPWdL640yX49/
 github.com/go-openapi/swag v0.19.2/go.mod h1:POnQmlKehdgb5mhVOsnJFsivZCEZ/vjK9gh66Z9tfKk=
 github.com/go-openapi/swag v0.19.5 h1:lTz6Ys4CmqqCQmZPBlbQENR1/GucA2bzYTE12Pw4tFY=
 github.com/go-openapi/swag v0.19.5/go.mod h1:POnQmlKehdgb5mhVOsnJFsivZCEZ/vjK9gh66Z9tfKk=
-github.com/gogf/gf v1.6.2/go.mod h1:qboeF6kS9EQu2Z1IECeApNF0/N7Sw4wc0RUAwAfT6Mg=
 github.com/gogf/gf v1.9.5/go.mod h1:Y9lg93ssLw2iVqRlIMNNptmoj6+LpkxNw1eghrqJKS4=
+github.com/gogf/gf v1.9.7/go.mod h1:sitJZHjmT9B+923N4mH5rkM19AugKG+BxI47R64bR08=
 github.com/gogf/gf v1.9.9 h1:kWX3Iecxh4he8n7S3G2id2LLywZwliljMNeKDR0Jibc=
 github.com/gogf/gf v1.9.9/go.mod h1:sitJZHjmT9B+923N4mH5rkM19AugKG+BxI47R64bR08=
-github.com/gogf/gf-jwt v1.0.5 h1:zNfnOeRSoT9p062R2DN5wkdT3BTw/K9jyf2f4axF73c=
-github.com/gogf/gf-jwt v1.0.5/go.mod h1:VlFL7YaPDbyFy96HNr0EDLGm9MyvscE3xLVEVpeyhiU=
+github.com/gogf/gf-jwt v1.0.6-0.20191010062038-a18b724811ee h1:5CMYM4y94SkVPbAc5kR3YmKr9NvfCkg1bIQ3QVQEh90=
+github.com/gogf/gf-jwt v1.0.6-0.20191010062038-a18b724811ee/go.mod h1:m4TC9GrveQM7peXcZfsgz9QUkMlacSsk39e6kYQPUQs=
 github.com/gogf/gf-swagger v0.0.0-20190926060928-7805443dc745 h1:fIoqClrsQpxxMxbRXNPMvcJHWqpav9C2Zz8cx0NqJZ4=
 github.com/gogf/gf-swagger v0.0.0-20190926060928-7805443dc745/go.mod h1:Kz/kD956qFWGE13YDxHP0o4dfVAiRPzYKe4gdgArnTM=
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=

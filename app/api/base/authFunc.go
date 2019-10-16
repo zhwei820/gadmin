@@ -3,7 +3,10 @@ package base
 import (
 	"errors"
 	"fmt"
-	"github.com/gogf/gf-jwt"
+
+	//jwt "github.com/gogf/gf-jwt"
+	jwt "github.com/gogf/gf-jwt"
+
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/os/glog"
@@ -89,7 +92,7 @@ func LoginResponse(r *ghttp.Request, code int, token string, expire time.Time) {
 		Expire string   `json:"expire"`
 		Perms  []string `json:"perms"` // policys
 	}
-	username := r.GetParam("username").String()
+	username := r.GetString("username")
 
 	policys := model.Enforcer.GetPermissionsForUser(username)
 	if len(policys) == 0 {
@@ -126,7 +129,7 @@ func RefreshResponse(r *ghttp.Request, code int, token string, expire time.Time)
 
 // 简单 Authenticator 登录验证
 func SimpleAuthenticator(r *ghttp.Request) (interface{}, error) {
-	data := r.GetJson()
+	data, _ := r.GetJson()
 	name := data.GetString("username")
 	password := data.GetString("password")
 

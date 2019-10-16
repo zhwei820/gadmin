@@ -64,7 +64,7 @@ func (c *UserController) Get(r *ghttp.Request) {
 // @Success 200 {string} string	"ok"
 // @router /rbac/user [post]
 func (c *UserController) Post(r *ghttp.Request) {
-	j := r.GetJson()
+        j, _ := r.GetJson()
 	m := api_model.CreateUser{}
 	_ = j.ToStruct(&m)
 	if e := gvalid.CheckStruct(m, nil); e != nil {
@@ -109,7 +109,7 @@ func (c *UserController) Post(r *ghttp.Request) {
 // @Success 200 {string} string	"ok"
 // @router /rbac/user [put]
 func (c *UserController) Put(r *ghttp.Request) {
-	j := r.GetJson()
+        j, _ := r.GetJson()
 	m := api_model.UpdateUser{}
 	_ = j.ToStruct(&m)
 	if e := gvalid.CheckStruct(m, nil); e != nil {
@@ -151,7 +151,7 @@ func (c *UserController) Put(r *ghttp.Request) {
 // @Success 200 {string} string	"ok"
 // @router /rbac/user [delete]
 func (c *UserController) Delete(r *ghttp.Request) {
-	data := r.GetJson()
+	data, _ := r.GetJson()
 	id := data.GetInt("id")
 	if id < 1 {
 		Fail(r, code.RESPONSE_ERROR, "不存在")
@@ -184,7 +184,7 @@ func (c *UserController) Delete(r *ghttp.Request) {
 // @Success 200 {string} string	"ok"
 // @router /rbac/role/userrole [put]
 func (c *UserController) SetUserRole(r *ghttp.Request) {
-	j := r.GetJson()
+        j, _ := r.GetJson()
 	m := api_model.SetUserRole{}
 	_ = j.ToStruct(&m)
 	if e := gvalid.CheckStruct(m, nil); e != nil {

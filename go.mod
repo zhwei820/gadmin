@@ -6,7 +6,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/casbin/casbin v1.8.2
 	github.com/gogf/gf v1.9.9
-	github.com/gogf/gf-jwt v1.0.5
+	github.com/gogf/gf-jwt v1.0.6-0.20191010062038-a18b724811ee
 	github.com/gogf/gf-swagger v0.0.0-20190926060928-7805443dc745
 	github.com/lib/pq v1.1.0
 	github.com/mattn/go-sqlite3 v1.10.0

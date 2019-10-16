@@ -19,7 +19,7 @@ import (
 var writer io.Writer
 
 func writeLog(r *ghttp.Request) {
-	r.GetParam("ctx").Val().(*context_log.Context).WriteLog()
+	r.GetParam("ctx").(*context_log.Context).WriteLog()
 }
 
 // InitRouter 初始化路由

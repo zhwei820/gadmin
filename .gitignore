@@ -16,3 +16,5 @@ mod.bat
 
 __pycache__
 *.pyc
+
+gadmin

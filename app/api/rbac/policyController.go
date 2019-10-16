@@ -48,7 +48,7 @@ func (c *PolicyController) Get(r *ghttp.Request) {
 // @Success 200 {string} string	"ok"
 // @router /rbac/policy [put]
 func (c *PolicyController) Put(r *ghttp.Request) {
-	j := r.GetJson()
+	j, _ := r.GetJson()
 	m := api_model.UpdatePolicy{}
 	_ = j.ToStruct(&m)
 	if e := gvalid.CheckStruct(m, nil); e != nil {

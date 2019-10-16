@@ -55,7 +55,7 @@ func RemoveTimeoutCryptoKey() {
 	//移除超时的加密key
 	for _, v := range kList {
 		CryptoKeyList.Remove(v)
-		glog.Debugfln("remove key:%v", v)
+		glog.Debugf("remove key:%v", v)
 	}
 }
 

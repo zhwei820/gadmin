@@ -59,7 +59,8 @@ func (c *RoleController) GetByRoleKey(r *ghttp.Request) {
 // @Success 200 {string} string	"ok"
 // @router /rbac/role [post]
 func (c *RoleController) Post(r *ghttp.Request) {
-	j := r.GetJson()
+	j, _ := r.GetJson()
+
 	m := api_model.PostRole{}
 	_ = j.ToStruct(&m)
 	if e := gvalid.CheckStruct(m, nil); e != nil {
@@ -83,7 +84,7 @@ func (c *RoleController) Post(r *ghttp.Request) {
 // @Success 200 {string} string	"ok"
 // @router /rbac/role [put]
 func (c *RoleController) Put(r *ghttp.Request) {
-	j := r.GetJson()
+        j, _ := r.GetJson()
 	m := api_model.PostRole{}
 	_ = j.ToStruct(&m)
 	if e := gvalid.CheckStruct(m, nil); e != nil {

@@ -87,19 +87,19 @@ func GetUserId(r *ghttp.Request) int {
 }
 
 func ReqDebug(r *ghttp.Request, msg string, v ...interface{}) {
-	r.GetParam("ctx").Val().(*context_log.Context).Debug(msg, v...)
+	r.GetParam("ctx").(*context_log.Context).Debug(msg, v...)
 }
 
 func ReqInfo(r *ghttp.Request, msg string, v ...interface{}) {
-	r.GetParam("ctx").Val().(*context_log.Context).Info(msg, v...)
+	r.GetParam("ctx").(*context_log.Context).Info(msg, v...)
 }
 
 func ReqWarning(r *ghttp.Request, msg string, v ...interface{}) {
-	r.GetParam("ctx").Val().(*context_log.Context).Warning(msg, v...)
+	r.GetParam("ctx").(*context_log.Context).Warning(msg, v...)
 }
 
 func ReqError(r *ghttp.Request, msg string, v ...interface{}) {
-	r.GetParam("ctx").Val().(*context_log.Context).Error(msg, v...)
+	r.GetParam("ctx").(*context_log.Context).Error(msg, v...)
 }
 
 var (
@@ -159,7 +159,7 @@ func GetWhereFromQuerys(querys map[string]interface{}) map[string]interface{} {
 
 func GetWhereFromRequest(r *ghttp.Request, strKeys, intKeys, searchKeys []string) map[string]interface{} {
 	retQuery := make(map[string]interface{}, 0)
-	query := r.GetQueryMap()
+	query := r.GetQueryMapStrStr()
 	if strKeys != nil {
 
 		for _, key := range strKeys {
